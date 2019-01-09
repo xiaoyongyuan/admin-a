@@ -1,9 +1,13 @@
 import React, { Component} from 'react';
 import {post} from "../../axios/tools";
 import BreadcrumbCustom from "../BreadcrumbCustom";
-import {Table, Row, Col, Form, Input, Button } from 'antd';
+import {Table, Row, Col, Form, Input, Button ,Icon,Modal} from 'antd';
+import '../../style/yal/home.css';
+import moment from "moment";
+import EquipDetail from './EquipDetail';
 
 const FormItem = Form.Item;
+
 class AdminEquipment extends Component {
     constructor(props){
         super(props);
@@ -42,6 +46,34 @@ class AdminEquipment extends Component {
 
     }
 
+    showModalEdit=(code,index,record)=>{ //打开弹层
+        this.setState({
+            visible: true,
+            type:code,
+            index:index,
+        },()=>{
+            console.log('code,index,record',code,index,record)
+        });
+
+    }
+    handleCancel = (e) => {//关闭弹层
+        // const forms=this.formRef.formref();
+        this.setState({
+            visible: false,
+        });
+        // forms.resetFields();
+    };
+    onRowSelect = (record, index)=>{//table 行单击
+        return {
+            onClick:(e)=>{
+                console.log(123);
+                console.log(record);
+                this.showModalEdit(record.code,index,record)
+            }
+        }
+    };
+
+
     selectopt = (e) => { //检索search
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -59,6 +91,7 @@ class AdminEquipment extends Component {
     }
     render() {
         const { getFieldDecorator } = this.props.form;
+        const data = new Date().getTime();
         const columns = [
             {
                 title: '序号',
@@ -69,6 +102,18 @@ class AdminEquipment extends Component {
             title: '设备编号',
             dataIndex: 'ecode',
             key: 'ecode',
+                render: (text, record,index) =>{
+
+
+                    return(
+                        <div>
+                            {moment().subtract('minutes',5).format('YYYY-MM-DD HH:mm:ss') > record.lastheart
+                                ? <div>{record.ecode}<Icon type="close-square" /></div>
+                                :record.ecode
+                            }
+                        </div>
+                    )
+                }
         }, {
             title: '最后一次心跳时间',
             dataIndex: 'lastheart',
@@ -129,10 +174,24 @@ class AdminEquipment extends Component {
                     <Row>
                         <Table
                             dataSource={this.state.list}
+                            onRow={this.onRowSelect}
                             columns={columns}
                             pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage}}
                         />
                     </Row>
+                    <Modal visible={this.state.visible}
+                           onOk={this.handleCreate}
+                           title='设备详细信息'
+                           okText="升级"
+                           cancelText="取消"
+                           onCancel={this.handleCancel}
+                    >
+                        <EquipDetail
+                            visible={this.state.visible}
+                                     code={this.state.type}
+
+                    />
+                    </Modal>
                 </div>
             </div>
         )
