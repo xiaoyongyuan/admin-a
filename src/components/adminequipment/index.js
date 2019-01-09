@@ -183,7 +183,7 @@ class AdminEquipment extends Component {
                            onOk={this.handleCreate}
                            title='设备详细信息'
                            okText="升级"
-                           cancelText="取消"
+                           cancelText="更新数据"
                            onCancel={this.handleCancel}
                     >
                         <EquipDetail
