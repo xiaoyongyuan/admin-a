@@ -17,7 +17,8 @@ class ModaEquipDetail extends Component{
             cname:'',
             temp:'',
             hardware:'',
-            software:''
+            software:'',
+            cid:''
         };
     }
     componentDidMount() {
@@ -49,6 +50,7 @@ class ModaEquipDetail extends Component{
 
     }
 
+
     requestdata=() => {//取数据
             post({url:"/api/equipment/getoneforadmin ",data:{code:this.state.code} }, (res)=>{
                 this.setState({
@@ -59,7 +61,8 @@ class ModaEquipDetail extends Component{
                     cname:res.data.cname,
                     temp:res.data.lastheart.temp,
                     hardware:res.data.hardware,
-                    software:res.data.software
+                    software:res.data.software,
+                    comid:res.data.cid
                 })
             })
 

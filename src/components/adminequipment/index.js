@@ -1,7 +1,7 @@
 import React, { Component} from 'react';
 import {post} from "../../axios/tools";
 import BreadcrumbCustom from "../BreadcrumbCustom";
-import {Table, Row, Col, Form, Input, Button ,Icon,Modal} from 'antd';
+import {Table, Row, Col, Form, Input, Button ,Icon,Modal,message} from 'antd';
 import '../../style/yal/home.css';
 import moment from "moment";
 import EquipDetail from './EquipDetail';
@@ -46,34 +46,62 @@ class AdminEquipment extends Component {
 
     }
 
-    showModalEdit=(code,index,record)=>{ //打开弹层
+    showModalEdit=(code,index,record,ecode)=>{ //打开弹层
         this.setState({
             visible: true,
             type:code,
+            ecode:ecode,
             index:index,
         },()=>{
             console.log('code,index,record',code,index,record)
         });
 
     }
-    handleCancel = (e) => {//关闭弹层
-        // const forms=this.formRef.formref();
-        this.setState({
-            visible: false,
-        });
-        // forms.resetFields();
-    };
+
+
     onRowSelect = (record, index)=>{//table 行单击
         return {
             onClick:(e)=>{
-                console.log(123);
                 console.log(record);
-                this.showModalEdit(record.code,index,record)
+                this.showModalEdit(record.code,index,record,record.ecode)
             }
         }
     };
 
+    e_upgrade = (e) =>{//设备升级
+        console.log("设备升级");
+        const params={
+            ecode:this.state.ecode
+        }
+        return;
+        console.log("测试return");
+        post({url:"/api/equipment/e_upgrade",data:params}, (res)=>{
+            if(res.success){
+                message.success('升级成功')
+            }
+        })
+    }
+    handleCancel = (e) => {//关闭弹出层
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
+    e_getinfo = (e) => {//更新数据
+        console.log("更新数据");
+        const params = {
+            ecode:this.state.ecode
+        }
+        return;
+        console.log("测试return");
+        post({url:"/api/equipment/e_getinfo",data:params}, (res)=>{
+            if(res.success){
+                message.success('更新成功')
+            }
+        })
 
+
+    };
     selectopt = (e) => { //检索search
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -180,15 +208,19 @@ class AdminEquipment extends Component {
                         />
                     </Row>
                     <Modal visible={this.state.visible}
-                           onOk={this.handleCreate}
                            title='设备详细信息'
-                           okText="升级"
-                           cancelText="更新数据"
                            onCancel={this.handleCancel}
+                           footer={[
+                               <Button key="back" onClick={this.e_getinfo}>数据更新</Button>,
+                               <Button key="submit" type="primary"  onClick={this.e_upgrade}>
+                                   升级
+                               </Button>,
+                           ]}
                     >
                         <EquipDetail
                             visible={this.state.visible}
                                      code={this.state.type}
+                            ecode={this.state.ecode}
 
                     />
                     </Modal>
