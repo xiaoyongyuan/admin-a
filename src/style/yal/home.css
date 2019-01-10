@@ -285,7 +285,7 @@ margin: 20px 0;
 /* 设备信息和摄像头信息页 */
 .box-padding{
     padding:2%;
-    border: 1px solid #DBDBDB;
+    /*border: 1px solid #DBDBDB;*/
 }
 .box-padding>p{
    color: #277FD0;

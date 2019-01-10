@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import {post} from "../../axios/tools";
-import {Form,Input,Radio,DatePicker,Icon,Row,Col} from 'antd';
+import {Form,Row,Col} from 'antd';
 import '../../style/yal/home.css';
-const FormItem = Form.Item;
 
 let vis=false;
 class ModaEquipDetail extends Component{
@@ -15,7 +14,10 @@ class ModaEquipDetail extends Component{
             lastheart:'',
             lastonce:'',
             lasttwice:'',
-            cname:''
+            cname:'',
+            temp:'',
+            hardware:'',
+            software:''
         };
     }
     componentDidMount() {
@@ -54,17 +56,11 @@ class ModaEquipDetail extends Component{
                     lastheart:res.data.lastheart.time,
                     lastonce:res.data.lastonce,
                     lasttwice:res.data.lasttwice,
-                    cname:res.data.cname
+                    cname:res.data.cname,
+                    temp:res.data.lastheart.temp,
+                    hardware:res.data.hardware,
+                    software:res.data.software
                 })
-
-                // this.props.form.setFieldsValue({
-                //     ecode: res.data.ecode,
-                //     lastheart:res.data.lastheart.time,
-                //     lastonce:res.data.lastonce,
-                //     lasttwice:res.data.lasttwice,
-                //     cname:res.data.cname
-                //
-                // });
             })
 
     }
@@ -86,7 +82,6 @@ class ModaEquipDetail extends Component{
                             最后一次心跳时间：
                         </Col>
                         <Col span={10} className="t_l">
-                            {/* 围界入侵 */}
                             {this.state.lastheart}
                         </Col>
                     </Row>
@@ -95,7 +90,6 @@ class ModaEquipDetail extends Component{
                             最后一次报警时间：
                         </Col>
                         <Col span={10} className="t_l">
-                            {/* 围界入侵 */}
                             {this.state.lastonce}
                         </Col>
                     </Row>
@@ -104,7 +98,6 @@ class ModaEquipDetail extends Component{
                             最后二次报警时间：
                         </Col>
                         <Col span={10} className="t_l">
-                            {/* 围界入侵 */}
                             {this.state.lasttwice}
                         </Col>
                     </Row>
@@ -113,23 +106,42 @@ class ModaEquipDetail extends Component{
                             所属公司：
                         </Col>
                         <Col span={10} className="t_l">
-                            {/* 围界入侵 */}
                             {this.state.cname}
                         </Col>
                     </Row>
-
-
-
-
-
-
-
-
+                    <Row className="equ_row">
+                        <Col span={7} className="t_r">
+                            温度：
+                        </Col>
+                        <Col span={10} className="t_l">
+                            <div>
+                                {this.state.temp < 55
+                                    ? <div>{this.state.temp}℃</div>
+                                    :<div style={{ color:'#f00' }}><div>{this.state.temp}℃</div></div>
+                                }
+                            </div>
+                        </Col>
+                    </Row>
+                    <Row className="equ_row">
+                        <Col span={7} className="t_r">
+                            硬件版本：
+                        </Col>
+                        <Col span={10} className="t_l">
+                            {this.state.hardware}
+                        </Col>
+                    </Row>
+                    <Row className="equ_row">
+                        <Col span={7} className="t_r">
+                            软件版本：
+                        </Col>
+                        <Col span={10} className="t_l">
+                            {this.state.software}
+                        </Col>
+                    </Row>
                 </div>
             </div>
         )
     }
-
 }
 
 export default ModaEquipDetail = Form.create({})(ModaEquipDetail);
