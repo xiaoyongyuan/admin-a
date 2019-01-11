@@ -1,8 +1,9 @@
 import React, { Component, propTypes } from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom';
 import ModalForm from './ModalForm';
-import {Form,Input, Row, Col, Button , Modal,Icon ,DatePicker} from 'antd';
+import {Form,Input, Row, Col, Button , Modal,Icon ,DatePicker,Pagination} from 'antd';
 import '../../style/sjg/home.css';
+import "../../style/yal/adminteam.css";
 import nodata from '../../style/imgs/nodata.png';
 import {post} from "../../axios/tools";
 const FormItem = Form.Item;
@@ -20,7 +21,8 @@ class Adminteam extends Component {
         this.state={
             visible:false,
             list:[],
-            createinfo:[]
+            createinfo:[],
+            page:1, //当前页数
         };
     }
     state = {
@@ -47,15 +49,24 @@ class Adminteam extends Component {
         })
         this.requestdata()
     }
-    requestdata=() => {//取数据
-        post({url:"/api/company/getlist_aky"},(res)=>{
+    requestdata=(params={pagesize:10,pageindex:this.state.page,cname:this.state.cname}) => {//取数据
+        post({url:"/api/company/getlist",data:params},(res)=>{
             if(res.success){
                 this.setState({
-                    list: res.data
+                    list: res.data,
+                    totalcount:res.totalcount
                 })
             }
         })
     }
+    hanlePageSize = (page) => { //翻页
+        console.log("page",page);
+        this.setState({
+            page:page
+        },()=>{
+            this.componentDidMount()
+        })
+    };
 
     showModal = () => {  //新增弹窗
         this.setState({
@@ -129,11 +140,18 @@ class Adminteam extends Component {
     handleBtnChange = (e)=>{
         let params={
             cname:e.target.value,
+            pagesize:10,
+            pageindex:this.state.page,
         };
+        this.setState({
+            cname:e.target.value,
+            page:1
+        });
         post({url:"/api/company/getlist",data:params},(res)=>{
             if(res.success){
                 this.setState({
-                    list:res.data
+                    list:res.data,
+                    totalcount:res.totalcount
                 })
             }
         })
@@ -176,9 +194,10 @@ class Adminteam extends Component {
                 <BreadcrumbCustom first="功能扩展" second="管理员首页" />
                 <div className="shange">
                     <Row>
-                        <Col xl={9} xxl={6}>
+                        <Col xl={19} xxl={19}>
                             <div className="example">
-                                <Col xl={4} xxl={3}>查找：</Col><Col xl={8} xxl={3}><Input type="text" placeholder="请搜索团队名称" onChange={this.handleBtnChange} /></Col>
+                                <Col xl={2} xxl={1}>查找：</Col>
+                                <Col xl={8} xxl={3}><Input type="text" placeholder="请搜索团队名称" onChange={this.handleBtnChange} /></Col>
                             </div>
                         </Col>
                         <Col xl={4} xxl={4}>
@@ -191,7 +210,7 @@ class Adminteam extends Component {
                             this.state.list.length
                             ?this.state.list.map(function(item,index) {
                             return(
-                                <Col span={10} className="t_t" key={index}>
+                                <Col span={10} className="t_t" key={index} offset={1}>
                                     <div className="team_item" style={bordercol}>
                                         <Row className="tit" style={titstyle}>
                                             <Col span={22}>
@@ -205,16 +224,16 @@ class Adminteam extends Component {
                                             </Col>
                                         </Row>
                                         <Row className="item_f">
-                                            <Col span={8}>
+                                            <Col span={8} pull={1}>
                                                 树莓派个人用户数：{item.smpgr}
                                             </Col>
-                                            <Col span={8}>
+                                            <Col span={8} pull={1}>
                                                 树莓派企业用户数：{item.smpqy}
                                             </Col>
-                                            <Col span={8}>
+                                            <Col span={8} pull={1}>
                                                 局域网用户数：{item.jyw}
                                             </Col>
-                                            <Col span={8}>
+                                            <Col span={8} pull={1}>
                                                 使用中的设备数目：{item.ecount}
                                             </Col>
                                         </Row>
@@ -222,13 +241,13 @@ class Adminteam extends Component {
                                             <Col span={8}>
                                                 经度：{item.clng}
                                             </Col>
-                                            <Col span={16}>
+                                            <Col span={8} >
                                                 纬度：{item.clat}
                                             </Col>
-                                            <Col span={8}>
+                                            <Col span={8} offset={6} >
                                                 联系人：{item.adminname}
                                             </Col>
-                                            <Col span={16}>
+                                            <Col span={10}>
                                                 联系电话：{item.adminaccount}
                                             </Col>
                                         </Row>
@@ -248,6 +267,7 @@ class Adminteam extends Component {
                          
                         }
                     </Row>
+                    <Pagination defaultPageSize={10} current={this.state.page} total={this.state.totalcount}  onChange={this.hanlePageSize} className="pageSize"  />
                 </div>
                 <Modal title={this.state.type?'编辑维护团队':'新增维护团队'} visible={this.state.visible} onOk={this.handleCreate}
           onCancel={this.handleCancel}>
