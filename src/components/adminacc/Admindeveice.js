@@ -15,6 +15,7 @@ class Admindeveices extends Component {
             createinfo:[],
             teamlist:[], //团队列表
             selectedcode:[],//选中的设备
+            page:1,
         };
     }
 
@@ -35,6 +36,7 @@ class Admindeveices extends Component {
             if(res){
                 this.setState({
                     teamlist:res.data,
+
                 }); 
             }   
         })
@@ -42,14 +44,23 @@ class Admindeveices extends Component {
         //取数据
         this.requestdata()
     }
-    requestdata=(params={}) => {//取数据
+    requestdata=(params={pagesize:10,pageindex:this.state.page,}) => {//取数据
         post({url:'/api/equipment/getlist',data:params},(res)=>{
             if(res){
                 this.setState({
                     list:res.data,
-
+                    total:res.totalcount
                 }); 
             }   
+        })
+
+    }
+    changePage=(page,pageSize)=>{ //分页  页码改变的回调，参数是改变后的页码及每页条数
+        console.log("page",page);
+        this.setState({
+            page: page,
+        },()=>{
+            this.componentDidMount()
         })
 
     }
@@ -269,6 +280,7 @@ class Admindeveices extends Component {
                 ),
             }];
 
+
         const rowSelection = {
             selectedRowKeys,
             onChange: this.onSelectChange,
@@ -349,7 +361,12 @@ class Admindeveices extends Component {
                     </Row>
 
                     <div>
-                        <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.list} />
+                        <Table
+                            rowSelection={rowSelection}
+                            columns={columns}
+                            dataSource={this.state.list}
+                            pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage}}
+                        />
                     </div>
                 </div>
 
