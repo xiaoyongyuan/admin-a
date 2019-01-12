@@ -73,7 +73,7 @@ class AdminEquipment extends Component {
         const params={
             ecode:this.state.ecode
         }
-        return;
+        // return;
         console.log("测试return");
         post({url:"/api/equipment/e_upgrade",data:params}, (res)=>{
             if(res.success){
