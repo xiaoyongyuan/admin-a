@@ -18,7 +18,9 @@ class ModaEquipDetail extends Component{
             temp:'',
             hardware:'',
             software:'',
-            cid:''
+            cid:'',
+            login:'',
+            upgrade:''
         };
     }
     componentDidMount() {
@@ -60,9 +62,11 @@ class ModaEquipDetail extends Component{
                     lasttwice:res.data.lasttwice,
                     cname:res.data.cname,
                     temp:res.data.lastheart.temp,
-                    hardware:res.data.hardware,
+                    hardware:res.data.login.version,
                     software:res.data.software,
-                    comid:res.data.cid
+                    comid:res.data.cid,
+                    upgrade:res.data.upgrade.time
+
                 })
             })
 
@@ -139,6 +143,14 @@ class ModaEquipDetail extends Component{
                         </Col>
                         <Col span={10} className="t_l">
                             {this.state.software}
+                        </Col>
+                    </Row>
+                    <Row className="equ_row">
+                        <Col span={7} className="t_r">
+                            最后一次升级时间：
+                        </Col>
+                        <Col span={10} className="t_l">
+                            {this.state.upgrade}
                         </Col>
                     </Row>
                 </div>
