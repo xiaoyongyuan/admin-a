@@ -40,6 +40,7 @@ class AdminEquipment extends Component {
     changePage=(page,pageSize)=>{ //分页  页码改变的回调，参数是改变后的页码及每页条数
         this.setState({
             page: page,
+            ecode:'',
         },()=>{
             this.componentDidMount()
         })
