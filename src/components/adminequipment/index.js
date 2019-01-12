@@ -136,7 +136,7 @@ class AdminEquipment extends Component {
                     return(
                         <div>
                             {moment().subtract('minutes',5).format('YYYY-MM-DD HH:mm:ss') > record.lastheart
-                                ? <div>{record.ecode}<Icon type="close-square" /></div>
+                                ? <div>{record.ecode} <Icon type="clock-circle" title='已离线' /></div>
                                 :record.ecode
                             }
                         </div>
