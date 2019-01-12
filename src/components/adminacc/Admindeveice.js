@@ -36,7 +36,6 @@ class Admindeveices extends Component {
             if(res){
                 this.setState({
                     teamlist:res.data,
-
                 }); 
             }   
         })
@@ -44,7 +43,15 @@ class Admindeveices extends Component {
         //取数据
         this.requestdata()
     }
-    requestdata=(params={pagesize:10,pageindex:this.state.page,}) => {//取数据
+    requestdata=() => {//取数据
+        const params={
+            pagesize:10,
+            ecode:this.state.ecode,
+            estatus:this.state.estatus,
+            companycode:this.state.companycode,
+            pageindex:this.state.page,
+
+        }
         post({url:'/api/equipment/getlist',data:params},(res)=>{
             if(res){
                 this.setState({
@@ -68,7 +75,14 @@ class Admindeveices extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if(!err){
-                this.requestdata(values);
+                this.setState({
+                    ecode:values.ecode,
+                    estatus: values.estatus,
+                    companycode:values.companycode,
+                    page:1
+                },()=>{
+                    this.requestdata();
+                })
             }
         })
     }
