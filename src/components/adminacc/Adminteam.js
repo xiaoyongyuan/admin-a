@@ -270,7 +270,7 @@ class Adminteam extends Component {
                     <Pagination defaultPageSize={10} current={this.state.page} total={this.state.totalcount}  onChange={this.hanlePageSize} className="pageSize"  />
                 </div>
                 <Modal title={this.state.type?'编辑维护团队':'新增维护团队'} visible={this.state.visible} onOk={this.handleCreate}
-          onCancel={this.handleCancel}>
+          onCancel={this.handleCancel} okText={"确认"} cancelText={"取消"}>
                     <ModalForm visible={this.state.visible} code={this.state.type}  wrappedComponentRef={(form) => this.formRef = form} />
                 </Modal>
                 <Modal title="提示信息" visible={this.state.deleteshow} onOk={this.deleteOk}

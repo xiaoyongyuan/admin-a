@@ -39,8 +39,8 @@ class Dashboard extends React.Component {
             LAN:[],
             alarmNumber:[],
             falseNumber:[],
-            equipmentcount:[],
-            equipmentEtotal:[]
+            equipmentcount:1,
+            equipmentEtotal:1
         }
     }
     componentDidMount() {
@@ -58,10 +58,10 @@ class Dashboard extends React.Component {
                var timeY=res.data.companyadd.map(list =>list.value);
                 if(res.success){
                     this.setState({
-                        weiHu:res.data.maintain,
-                        qiYe:res.data.smpqy,
-                        geRen:res.data.smpgr,
-                        baoJingNumber:res.data.alarmcount,
+                        weiHu:res.data.maintain, //维护团队数
+                        qiYe:res.data.smpqy, //企业用户数
+                        geRen:res.data.smpgr, //个人用户数
+                        baoJingNumber:res.data.alarmcount, //报警总数
                         recentSituation:res.data.maintainlist,
                         mapJson:res.data.company,
                         lineY:timeY,
@@ -70,8 +70,8 @@ class Dashboard extends React.Component {
                         alarmNumber:res.data.alarmcount,
                         falseNumber:res.data.afalse,
                         recentSituation:res.data.alarm,
-                        equipmentEtotal:res.data.etotal,
-                        equipmentcount:res.data.ecount
+                        equipmentEtotal:res.data.ecount, //在线设备数
+                        equipmentcount:res.data.etotal //入网设备数
                     },()=>{
                         console.log(this.state.alertIndex);
                     })
@@ -119,7 +119,7 @@ class Dashboard extends React.Component {
                                       <div className="clear y-center">
                                           <Col xl={10} lg={8}>
                                              <div className="noBorder weiHuBackround">
-                                                 <img src={weihutuandui} alt="" />
+                                                 <img src={weihutuandui} />
                                              </div>
                                           </Col>
                                           <Col xl={10} lg={5} offset={1}>
@@ -261,7 +261,7 @@ class Dashboard extends React.Component {
                                                 return(
                                                     <Row className="situation" key={index}>
                                                         <Col xl={2} xxl={2}><div className={this.classStyle(index+1)}>{index+1}</div></Col>
-                                                        <Col xl={20} xxl={20} offset={1} className="listContext">{item.name}{item.atime}入侵报警</Col>
+                                                        <Col xl={20} xxl={20} offset={1} className="listContext">{item.name }入侵报警{ item.atime}</Col>
                                                     </Row>
                                                 )
                                             })

@@ -1,6 +1,3 @@
-/**
- * Created by hao.cheng on 2017/5/5.
- */
 import React from 'react';
 import ReactEcharts from 'echarts-for-react';
 class Onlineeq extends React.Component{
@@ -28,7 +25,7 @@ class Onlineeq extends React.Component{
         }
         const option = {
             title: {
-                text: (this.props.equipmentcount/this.props.equipmentEtotal).toFixed(2)+"%",
+                text: ((this.props.equipmentEtotal/this.props.equipmentcount).toFixed(2))*100+"%",
                 x: 'center',
                 y: 'center',
                 textStyle: {
