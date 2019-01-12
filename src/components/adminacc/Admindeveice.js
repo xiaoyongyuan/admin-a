@@ -52,7 +52,7 @@ class Admindeveices extends Component {
             pageindex:this.state.page,
 
         }
-        post({url:'/api/equipment/getlist',data:params},(res)=>{
+        post({url:'/api/equipment/getlistforadmin',data:params},(res)=>{
             if(res){
                 this.setState({
                     list:res.data,
@@ -266,8 +266,8 @@ class Admindeveices extends Component {
             render: text => <span>树莓派</span>,
         },{
             title: '所属团队',
-            dataIndex: 'companycode',
-            key: 'companycode',
+            dataIndex: 'pname',
+            key: 'pname',
             render: text => <span>{text}</span>,
         },{
             title: '綁定状态',
@@ -386,7 +386,14 @@ class Admindeveices extends Component {
 
 
                 <div className="download_btn"><Button type="primary">下载导入模板</Button> </div>
-                <Modal title={this.state.type?'派发设备':'新增设备'} visible={this.state.visible} onOk={this.handleCreate} onCancel={this.handleCancel}>
+                <Modal
+                    title={this.state.type?'派发设备':'新增设备'}
+                    visible={this.state.visible}
+                    onOk={this.handleCreate}
+                    onCancel={this.handleCancel}
+                    okText={"确认"}
+                    cancelText={"取消"}
+                >
 
                     <ModaBianhao visible={this.state.visible} code={this.state.type} inputv={this.state.inputv} wrappedComponentRef={(form) => this.formRef = form} />
 
