@@ -307,7 +307,7 @@ class Admindeveices extends Component {
             hideDefaultSelections: true,
             onSelection: this.onSelection,
             getCheckboxProps: record => ({//禁用已绑定的选项
-                disabled: record.estatus === 1, // Column configuration not to be checked
+                disabled: record.estatus === 1,
                 estatus: record.estatus,
             }),
         };
