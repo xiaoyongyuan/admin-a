@@ -56,14 +56,14 @@
 }
 .item_f{
     width: 100%;
-    height: 80px;
+    height: auto!important;
     line-height:2.2;
     border-bottom: 1px #eee solid;
     padding: 6px 20px;
 }
 .item_s{
     width: 100%;
-    height: 80px;
+    height: auto!important;
     line-height:2.2;
     padding: 6px 20px;
 }

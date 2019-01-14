@@ -50,7 +50,7 @@ class Adminteam extends Component {
         this.requestdata()
     }
     requestdata=(params={pagesize:10,pageindex:this.state.page,cname:this.state.cname}) => {//取数据
-        post({url:"/api/company/getlist",data:params},(res)=>{
+        post({url:"/api/company/getlist_aky",data:params},(res)=>{
             if(res.success){
                 this.setState({
                     list: res.data,
@@ -147,7 +147,7 @@ class Adminteam extends Component {
             cname:e.target.value,
             page:1
         });
-        post({url:"/api/company/getlist",data:params},(res)=>{
+        post({url:"/api/company/getlist_aky",data:params},(res)=>{
             if(res.success){
                 this.setState({
                     list:res.data,
@@ -191,13 +191,13 @@ class Adminteam extends Component {
         const { getFieldDecorator } = this.props.form;
         return (
             <div>
-                <BreadcrumbCustom first="功能扩展" second="管理员首页" />
+                <BreadcrumbCustom first="账号管理" second="维护团队管理" />
                 <div className="shange">
                     <Row>
-                        <Col xl={19} xxl={19}>
+                        <Col xl={19} xxl={19} styel={{ background:'red' }}>
                             <div className="example">
-                                <Col xl={2} xxl={1}>查找：</Col>
-                                <Col xl={8} xxl={3}><Input type="text" placeholder="请搜索团队名称" onChange={this.handleBtnChange} /></Col>
+                                <Col xl={2} xxl={1} lg={5} className="cz" >查找：</Col>
+                                <Col xl={8} xxl={3} lg={19}><Input type="text" placeholder="请搜索团队名称" onChange={this.handleBtnChange} /></Col>
                             </div>
                         </Col>
                         <Col xl={4} xxl={4}>
@@ -205,12 +205,12 @@ class Adminteam extends Component {
                         </Col>
 
                     </Row>
-                    <Row>
+                    <Row gutter={24}>
                         {
                             this.state.list.length
                             ?this.state.list.map(function(item,index) {
                             return(
-                                <Col span={10} className="t_t" key={index} offset={1}>
+                                <Col span={11} className="t_t" key={index} >
                                     <div className="team_item" style={bordercol}>
                                         <Row className="tit" style={titstyle}>
                                             <Col span={22}>
@@ -224,30 +224,32 @@ class Adminteam extends Component {
                                             </Col>
                                         </Row>
                                         <Row className="item_f">
-                                            <Col span={8} pull={1}>
+                                            <div className="top">
+                                            <Col xl={8} lg={15}  pull={5}>
                                                 树莓派个人用户数：{item.smpgr}
                                             </Col>
-                                            <Col span={8} pull={1}>
+                                            <Col xl={{span:8,pull:1}} lg={{span:15,pull:5}}>
                                                 树莓派企业用户数：{item.smpqy}
                                             </Col>
-                                            <Col span={8} pull={1}>
+                                            <Col xl={7} lg={15} pull={5}>
                                                 局域网用户数：{item.jyw}
                                             </Col>
-                                            <Col span={8} pull={1}>
+                                            <Col xl={{span:8}}   lg={{span:15}} className="syequ">
                                                 使用中的设备数目：{item.ecount}
                                             </Col>
+                                            </div>
                                         </Row>
                                         <Row className="item_s">
-                                            <Col span={8}>
+                                            <Col xl={{span:8,pull:5}} lg={{span:15,push:2}} className="jd">
                                                 经度：{item.clng}
                                             </Col>
-                                            <Col span={8} >
+                                            <Col xl={{span:8,push:6}} lg={{span:15,push:2}} className="wd">
                                                 纬度：{item.clat}
                                             </Col>
-                                            <Col span={8} offset={6} >
+                                            <Col xl={{span:10,pull:2,offset:2}} lg={{span:15,push:1}}  className="lxr">
                                                 联系人：{item.adminname}
                                             </Col>
-                                            <Col span={10}>
+                                            <Col xl={{span:9,pull:4,offset:1}} lg={{span:15,push:2}} >
                                                 联系电话：{item.adminaccount}
                                             </Col>
                                         </Row>

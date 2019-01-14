@@ -1,5 +1,23 @@
 .pageSize{
     width:100%;
     text-align:center;
-    margin-top: 70px;
+}
+.cz{
+    margin-top: 5px;
+    width: auto;
+}
+.lxr{
+    margin-left: 19px;
+}
+.top{
+    margin-top: 15px;
+}
+.wd{
+    /*margin-left: -5px!important;*/
+}
+.jd{
+    margin-left: -7px!important;
+}
+.syequ{
+    /*margin-left: -70px;*/
 }
