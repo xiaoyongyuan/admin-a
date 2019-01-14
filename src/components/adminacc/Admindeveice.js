@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom';
-import {Form,Input, Row, Col, Button ,Table, Modal, message, Select } from 'antd';
+import {Form, Input, Row, Col, Button, Table, Modal, message, Select, Icon} from 'antd';
 import '../../style/sjg/home.css';
 import {post} from "../../axios/tools";
 import ModaBianhao from './ModaBianhao';
+import moment from "moment";
 const FormItem = Form.Item;
 const Option = Select.Option;
 class Admindeveices extends Component {
@@ -287,11 +288,16 @@ class Admindeveices extends Component {
                 title: '操作',
                 dataIndex: 'code',
                 key: 'codedel',
-                render: (text, record,index) => (
-                <span>
-                    <Button onClick={()=>this.showModaldelete(text,index)}>删除</Button>
-		        </span>
-                ),
+                render: (text, record,index) => {
+                    return(
+                        <div>
+                            {record.estatus === 1
+                                ?  null
+                                :<span><Button onClick={()=>this.showModaldelete(text,index)}>删除</Button></span>
+                            }
+                        </div>
+                    )
+                }
             }];
 
 
@@ -301,8 +307,8 @@ class Admindeveices extends Component {
             hideDefaultSelections: true,
             onSelection: this.onSelection,
             getCheckboxProps: record => ({//禁用已绑定的选项
-                disabled: record.type ===1,
-                type: record.code,
+                disabled: record.estatus === 1, // Column configuration not to be checked
+                estatus: record.estatus,
             }),
         };
 
