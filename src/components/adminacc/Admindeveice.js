@@ -382,6 +382,7 @@ class Admindeveices extends Component {
 
                     <div>
                         <Table
+                            bordered={true}
                             rowSelection={rowSelection}
                             columns={columns}
                             dataSource={this.state.list}

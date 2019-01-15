@@ -148,6 +148,15 @@ class AdminEquipment extends Component {
             title: '最后一次心跳时间',
             dataIndex: 'lastheart',
             key: 'age',
+                render:(text,record,index)=>{
+                return(
+                    <div>
+                        {
+                            text == "null"?"":text
+                        }
+                    </div>
+                )
+                }
         },
             {
             title: '最后一次报警时间',
@@ -203,6 +212,7 @@ class AdminEquipment extends Component {
                     </Row>
                     <Row>
                         <Table
+                            bordered={true}
                             dataSource={this.state.list}
                             onRow={this.onRowSelect}
                             columns={columns}
