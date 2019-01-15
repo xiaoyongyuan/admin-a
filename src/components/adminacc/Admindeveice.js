@@ -404,8 +404,12 @@ class Admindeveices extends Component {
                     <ModaBianhao visible={this.state.visible} code={this.state.type} inputv={this.state.inputv} wrappedComponentRef={(form) => this.formRef = form} />
 
                 </Modal>
-                <Modal title="提示信息" visible={this.state.deleteshow} onOk={this.deleteOk}
+                <Modal title="提示信息"
+                       visible={this.state.deleteshow}
+                       onOk={this.deleteOk}
                        onCancel={this.deleteCancel}
+                       okText={"确认"}
+                       cancelText={"取消"}
                 >
                     <p>确认删除吗？</p>
                 </Modal>
