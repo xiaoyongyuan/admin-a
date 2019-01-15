@@ -4,11 +4,10 @@ import BreadcrumbCustom from "../BreadcrumbCustom";
 import {Table, Row, Col, Form, Input, Button ,Icon,Modal,message} from 'antd';
 import '../../style/yal/home.css';
 import moment from "moment";
-import EquipDetail from './EquipDetail';
 
 const FormItem = Form.Item;
 
-class AdminEquipment extends Component {
+class Alarmsta extends Component {
     constructor(props){
         super(props);
         this.state={
@@ -16,19 +15,18 @@ class AdminEquipment extends Component {
             list:[],
             createinfo:[],
             page:1,
+            cname:'',
         };
     }
     componentDidMount() {
         const params={
             pagesize:10,
-            ecode:this.state.ecode,
             cname:this.state.cname,
             pageindex:this.state.page,
-            estatus:1,
 
         }
 
-        post({url:"/api/equipment/getlistforadmin",data:params}, (res)=>{
+        post({url:"/api/alarm/getlist_report",data:params}, (res)=>{
             if(res.success){
                 this.setState({
                     list: res.data,
@@ -41,7 +39,6 @@ class AdminEquipment extends Component {
     changePage=(page,pageSize)=>{ //分页  页码改变的回调，参数是改变后的页码及每页条数
         this.setState({
             page: page,
-            ecode:'',
         },()=>{
             this.componentDidMount()
         })
@@ -71,7 +68,6 @@ class AdminEquipment extends Component {
     };
 
     e_upgrade = (e) =>{//设备升级
-        console.log("设备升级");
         const params={
             ecode:this.state.ecode
         }
@@ -109,7 +105,6 @@ class AdminEquipment extends Component {
         this.props.form.validateFields((err, values) => {
             if(!err){
                 this.setState({
-                    ecode: values.ecode,
                     cname:values.cname,
                     page:1
                 },()=>{
@@ -128,61 +123,33 @@ class AdminEquipment extends Component {
                 dataIndex: 'index',
                 key: 'index',
                 render: (text, record,index) => (index+1)
-            },{
-            title: '设备编号',
-            dataIndex: 'ecode',
-            key: 'ecode',
-                render: (text, record,index) =>{
-
-
-                    return(
-                        <div>
-                            {moment().subtract('minutes',5).format('YYYY-MM-DD HH:mm:ss') > record.lastheart
-                                ? <div>{record.ecode} <Icon type="clock-circle" title='已离线' /></div>
-                                :record.ecode
-                            }
-                        </div>
-                    )
-                }
-        }, {
-            title: '最后一次心跳时间',
-            dataIndex: 'lastheart',
-            key: 'age',
-        },
-            {
-            title: '最后一次报警时间',
-            dataIndex: 'lastonce',
-            key: 'lastonce',
-        },
-            {
-            title:'最后二次报警时间',
-                dataIndex:'lasttwice',
-            key:'lasttwice',
-            },{
-            title:'所属公司',
+            },
+            {   title:'所属公司',
                 dataIndex:'cname',
                 key:'cname'
+            },
+            {   title:'报警日期',
+                dataIndex:'adate',
+                key:'adate'
+            },
+            {   title:'报警总数',
+                dataIndex:'alarmcount',
+                key:'alarmcount'
+            },
+            {   title:'二次确认报警数',
+                dataIndex:'confirmcount',
+                key:'confirmcount'
             }
             ];
 
 
         return (
-            <div className="AdminEquipment">
-                <BreadcrumbCustom first="设备信息"/>
+            <div className="Alarmsta">
+                <BreadcrumbCustom first="报警统计"/>
                 <div className="shange">
                     <Row>
                         <Col span={14}>
                             <Form layout="inline" onSubmit={this.selectopt}>
-                                <FormItem label="设备编号">
-                                    {getFieldDecorator('ecode', {
-                                        rules: [{
-                                            required: false,
-                                            message: '请输入设备编号!',
-                                        }],
-                                    })(
-                                        <Input />
-                                    )}
-                                </FormItem>
                                 <FormItem label="公司名称">
                                     {getFieldDecorator('cname', {
                                         rules: [{
@@ -209,27 +176,11 @@ class AdminEquipment extends Component {
                             pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage}}
                         />
                     </Row>
-                    <Modal visible={this.state.visible}
-                           title='设备详细信息'
-                           onCancel={this.handleCancel}
-                           footer={[
-                               <Button key="back" onClick={this.e_getinfo}>数据更新</Button>,
-                               <Button key="submit" type="primary"  onClick={this.e_upgrade}>
-                                   升级
-                               </Button>,
-                           ]}
-                    >
-                        <EquipDetail
-                            visible={this.state.visible}
-                                     code={this.state.type}
-                            ecode={this.state.ecode}
-
-                    />
-                    </Modal>
+                    
                 </div>
             </div>
         )
     }
 }
 
-export default AdminEquipment= Form.create({})(AdminEquipment);
+export default Alarmsta= Form.create({})(Alarmsta);

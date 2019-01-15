@@ -9,8 +9,9 @@ export default {
                 { key: '/app/adminacc/admindeveice', title: '设备管理', component: 'Admindeveice'},
             ],
         },
-        { key: '/app/adminequipment/index', identi:['comp','user'], title: '设备信息', icon: 'camera', component: 'AdminEquipment' },
-       
+        { key: '/app/adminequipment/index', title: '设备信息', icon: 'camera', component: 'AdminEquipment' },
+        { key: '/app/alarmsta/index', title: '报警统计', icon: 'camera', component: 'Alarmsta' },
+        
     ],
     // 非菜单相关路由
     others: [

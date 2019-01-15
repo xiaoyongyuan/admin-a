@@ -12,7 +12,8 @@ import Admindeveice from './adminacc/Admindeveice';
 //管理员查看设备
 import AdminEquipment from './adminequipment/index';
 
-
+//报警统计
+import Alarmsta from './alarmsta/index';
 
 const WysiwygBundle = Loadable({ // 按需加载富文本配置
     loader: () => import('./ui/Wysiwyg'),
@@ -26,6 +27,7 @@ export default {
     
     , Adminteam, Admindeveice
     , AdminEquipment
+    ,Alarmsta
    
 
 
