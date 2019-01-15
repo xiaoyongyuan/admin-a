@@ -79,7 +79,7 @@ class AdminEquipment extends Component {
         console.log("测试return");
         post({url:"/api/equipment/e_upgrade",data:params}, (res)=>{
             if(res.success){
-                message.success('升级成功')
+                message.success('设备正在升级中，请稍后...')
             }
         })
     }
