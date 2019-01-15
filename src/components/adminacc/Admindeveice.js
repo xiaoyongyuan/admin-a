@@ -102,6 +102,7 @@ class Admindeveices extends Component {
         let codelist=[];
         selectedRows.map((item) => {
             console.log('item.code',item.code)
+            console.log('item.ecode',item.ecode)
             codelist.push(item.code)
         })
         
@@ -109,6 +110,7 @@ class Admindeveices extends Component {
            return item.code
         }))
             console.log('selectedcode',this.state.codelist)
+        console.log('ecode',this.state.codelist)
             this.setState({
                 selectedRowKeys:rowKeys,
                 selectedcode:selectedRows
@@ -162,10 +164,14 @@ class Admindeveices extends Component {
             if (!err) {
                 if(this.state.type){
                     let codelist=[]
+                    let ecodelist=[]
                     this.state.selectedcode.map((item)=>{
                         codelist.push(item.code)
+                        ecodelist.push(item.ecode)
                     })
-                    post({url:'/api/equipment/update',data:{companycode:values.companycode,code:codelist[0]}},(res)=>{
+                    const ecode = ecodelist.join(',');
+                    const code = codelist.join(',')+',';
+                    post({url:'/api/equipment/update',data:{companycode:values.companycode,code:code}},(res)=>{
                         if(res){
                             this.setState({
                                 visible: false,
@@ -246,11 +252,6 @@ class Admindeveices extends Component {
         const { selectedRowKeys } = this.state;
         const { getFieldDecorator } = this.props.form;
         const columns = [{
-            title: '',
-            render: (text, record) => (
-                record
-            ),
-        },{
             title: '序号',
             dataIndex: 'index',
             key: 'index',
