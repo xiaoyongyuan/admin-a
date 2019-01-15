@@ -170,6 +170,7 @@ class Alarmsta extends Component {
                     </Row>
                     <Row>
                         <Table
+                            bordered={true}
                             dataSource={this.state.list}
                             onRow={this.onRowSelect}
                             columns={columns}
