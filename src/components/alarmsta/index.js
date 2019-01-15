@@ -140,7 +140,7 @@ class Alarmsta extends Component {
                 dataIndex:'confirmcount',
                 key:'confirmcount'
             },
-            {   title:'百分比（%）',
+            {   title:'报警确认百分比（%）',
                 dataIndex:'',
                 key:'index',
                 render: (text, record,index) => {
