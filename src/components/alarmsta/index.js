@@ -139,6 +139,21 @@ class Alarmsta extends Component {
             {   title:'二次确认报警数',
                 dataIndex:'confirmcount',
                 key:'confirmcount'
+            },
+            {   title:'百分比（%）',
+                dataIndex:'',
+                key:'index',
+                render: (text, record,index) => {
+                let bili = (record.confirmcount/record.alarmcount)*100;
+                    return(
+                        <div>
+                            {
+
+                                bili.toFixed(0)
+                            }
+                        </div>
+                    )
+                }
             }
             ];
 
