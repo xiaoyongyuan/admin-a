@@ -134,7 +134,7 @@ class ModaEquipDetail extends Component{
                             硬件版本：
                         </Col>
                         <Col span={10} className="t_l">
-                            {this.state.hardware}
+                            {}
                         </Col>
                     </Row>
                     <Row className="equ_row">
@@ -142,7 +142,7 @@ class ModaEquipDetail extends Component{
                             软件版本：
                         </Col>
                         <Col span={10} className="t_l">
-                            {this.state.software}
+                            {this.state.hardware}
                         </Col>
                     </Row>
                     <Row className="equ_row">
