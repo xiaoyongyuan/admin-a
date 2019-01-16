@@ -192,10 +192,9 @@ class Admindeveices extends Component {
                                 this.setState({
                                     list:list,
                                     visible: false,
-                                }); 
-                                forms.resetFields() //清空
+                                });
                             }
-                             
+                            forms.resetFields() //清空
                         })
 
                     }
@@ -255,6 +254,7 @@ class Admindeveices extends Component {
             title: '序号',
             dataIndex: 'index',
             key: 'index',
+            width:'8%',
             render: (text, record,index) => (index+1),
         },{
             title: '设备编号',
