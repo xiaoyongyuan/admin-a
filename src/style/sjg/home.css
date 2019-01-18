@@ -225,3 +225,48 @@ margin: 20px 0;
 .clearInfo row col{
     text-align: center;
 }
+
+/* //服务器信息 */
+.serve_list .serve_item{
+    
+    flex-direction: column;
+    justify-content:space-around;
+    /* margin: 50px 50px 80px 50px; */
+}
+.serve_item_b{
+    padding: 0 50px;
+    display:flex;
+    flex-direction: row;
+    justify-content:space-around;
+}
+.serve_row{
+    display:inline-block;
+    float: left;
+    width: 1px;
+    height: 236px;
+    border-left: 1px #999 dashed;
+}
+.it_text{
+    width: 100%;
+    height:40px;
+    line-height: 40px;
+    text-align: center;
+}
+.serve_type{
+    width: 100%;
+    height:40px;
+    padding-left: 50px;
+    line-height: 40px;
+    margin-bottom:30px; 
+}
+.circle{
+    display:inline-block;
+    width: 13px;
+    height:13px;
+    border-radius: 50%;
+    background:#2E75E4;
+    margin-right: 5px;
+}
+.serve_state{
+    margin-top: 60px;
+}
