@@ -259,6 +259,24 @@ margin: 20px 0;
     line-height: 40px;
     margin-bottom:30px; 
 }
+@media screen and (min-width: 1280px) {
+    .serve_type{
+        width: 100%;
+        height:40px;
+        padding-left: 50px;
+        line-height: 40px;
+        margin-bottom:30px; 
+    }
+}
+@media screen and (max-width: 1280px) {
+    .serve_type{
+        width: 100%;
+        height:40px;
+        padding-left: 20px;
+        line-height: 40px;
+        margin-bottom:10px; 
+    }
+}
 .circle{
     display:inline-block;
     width: 13px;
@@ -269,4 +287,22 @@ margin: 20px 0;
 }
 .serve_state{
     margin-top: 60px;
+}
+.ServerInfo .ant-card-head{
+background: #313653;
+color:#fff;
+}
+
+.firstcard .ant-card-body{
+   padding: 24px 0;
+}
+
+
+ .serve_state .ant-table-thead{
+    padding: 24px 40px;
+  
+ }
+ 
+.progress_t{
+    padding-left:10px; 
 }

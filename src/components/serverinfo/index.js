@@ -6,130 +6,129 @@ import '../../style/sjg/home.css';
 
   
 class ServerInfo extends Component {
-    
     constructor(props){
         super(props);
         this.state={
         };
     }
-    componentDidMount() {
+    componentDidMount() {        
+        post({url:'/api/company/getsysinfo'},(res)=>{ //获取团队列表
+            if(res){
+                this.setState({
+                    disk_all:res.sys.websys.disk_all,//web硬盘总容量
+                    disk_use:res.sys.websys.disk_use,//web硬盘使用容量
+                    memories_all:res.sys.websys.memories_all,//web内存总容量
+                    memories_use:res.sys.websys.memories_use,//web内存使用容量
+                    ftpdisk_use:res.sys.ftpsys.disk_use,//ftp硬盘使用容量
+                    ftpdisk_all:res.sys.ftpsys.disk_all,//ftp硬盘总容量
+                    ftpmemories_all:res.sys.ftpsys.memories_all,//ftp内存总容量
+                    ftpmemories_use:res.sys.ftpsys.memories_use,//ftp内存使用容量
+                    gpudisk_use:res.sys.gpusys.disk_use,//gpu硬盘使用容量
+                    gpudisk_all:res.sys.gpusys.disk_all,//gpu硬盘总容量
+                    gpumemories_all:res.sys.gpusys.memories_all,//gpu内存总容量
+                    gpumemories_use:res.sys.gpusys.memories_use,//gpu内存使用容量
+                    progressftp:res.sys.ftpsys,
+                    progressgup:res.sys.gpusys,
+                    tablelist:res.service,//服务器状态表格数据
+                },()=>{
+                    console.log('******************',typeof(this.state.tablelist),this.state.tablelist);
+                }); 
+            }   
+        })
     }
 
     render() {
         const columns = [{
-            title: '',
+            title: '服务器名称',
             dataIndex: 'name',
           }, {
-            title: 'GPU二次',
-            dataIndex: 'gpu',
+            title: '当前状态',
+            dataIndex: 'laststatus',
           }, {
-            title: 'small pic',
-            dataIndex: 'pic',
+            title: '最后一次信息',
+            dataIndex: 'lastinfo',
           }, {
-            title: 'Web',
-            dataIndex: 'web',
-          }, {
-            title: '通讯rasp',
-            dataIndex: 'rasp',
-          }];
-          const data = [{
-            key: '1',
-            name: '服务名称',
-            gpu: '',
-            pic: '',
-            web:'',
-            rasp:'',
-          }, {
-            key: '2',
-            name: '当前状态',
-            gpu: '',
-            pic: '',
-            web:'',
-            rasp:'',
-          }, {
-            key: '3',
-            name: '最后一次信息',
-            gpu: 32,
-            pic: '',
-            web:'',
-            rasp:'',
-          }, {
-            key: '3',
-            name: '最后一次时间',
-            gpu: '',
-            pic: '',
-            web:'',
-            rasp:'111',
+            title: '最后一次时间',
+            dataIndex: 'lasttime',
           }];
         return (
             <div className="ServerInfo">
-                <BreadcrumbCustom first="服务器状态" />
-                <Card className=""
+                <BreadcrumbCustom first="服务器信息" />
+                <div className="firstcard">
+                <Card 
                     title="服务器状态"
-                    // extra={<a href="#">More</a>}
-                    
                 >
                    <div className="serve_list">
                       <Row>
                         <Col span={8} className="serve_item" >
                            <div className="serve_type"><div className="circle"></div> Web</div>
-                           <div className="serve_item_b"  >
-                                <div> 
-                                    <Progress type="circle" percent={75} />
+                           <div className="serve_item_b" >
+                                <div className="progress_t"> 
+                                    <Progress type="circle" 
+                                        strokeColor={this.state.disk_use/this.state.disk_all<0.3?"red":""}
+                                        percent={this.state.disk_use/this.state.disk_all*100}
+                                    />
                                     <div className="it_text">空闲硬盘</div>
                                 </div>
-                                <div>
-                                        <Progress type="circle" percent={30} status="exception" />
-                                        <div className="it_text">内存</div>
-                                </div>
-                           </div>
-                           
-                        </Col>
-                        <div className="serve_row"></div>
-                        <Col span={7} className="serve_item">
-                          <div className="serve_type"> <div className="circle"></div> FTP</div>
-                           <div className="serve_item_b"  >
-                                <div> 
-                                    <Progress type="circle" percent={75} />
-                                    <div className="it_text">空闲硬盘</div>
-                                </div>
-                                <div>
-                                        <Progress type="circle" percent={30} status="exception" />
-                                        <div className="it_text">内存</div>
+                                <div className="progress_t">
+                                    <Progress type="circle"
+                                        percent={this.state.memories_use/this.state.memories_all*100}
+                                        strokeColor={this.state.memories_use/this.state.memories_all<0.3?"red":""}
+                                    />
+                                    <div className="it_text">内存</div>
                                 </div>
                            </div>
                         </Col>
                         <div className="serve_row"></div>
                         <Col span={8} className="serve_item">
-                           <div className="serve_type"><div className="circle"></div>GPU</div>
-                            <div className="serve_item_b"  >
-                                <div> 
-                                    <Progress type="circle" percent={75} />
+                          <div className="serve_type"> <div className="circle"></div> FTP</div>
+                           <div className="serve_item_b">
+                                <div className="progress_t"> 
+                                    <Progress type="circle"
+                                     percent={this.state.ftpdisk_use/this.state.ftpdisk_all*100}
+                                     strokeColor={this.state.ftpdisk_use/this.state.ftpdisk_all<0.3?"red":""}
+                                    />
                                     <div className="it_text">空闲硬盘</div>
                                 </div>
-                                <div>
-                                        <Progress type="circle" percent={30} status="exception" />
-                                        <div className="it_text">内存</div>
+                                <div className="progress_t">
+                                    <Progress type="circle"
+                                        percent={this.state.ftpmemories_use/this.state.ftpmemories_all*100}
+                                        strokeColor={this.state.ftpmemories_use/this.state.ftpmemories_all<0.3?"red":""}
+                                    />
+                                    <div className="it_text">内存</div>
+                                </div>
+                           </div>
+                        </Col>
+                        <div className="serve_row"></div>
+                        <Col span={7} className="serve_item">
+                           <div className="serve_type"><div className="circle"></div>GPU</div>
+                            <div className="serve_item_b"  >
+                                <div className="progress_t"> 
+                                    <Progress type="circle" 
+                                        percent={this.state.gpudisk_use/this.state.gpudisk_all*100} 
+                                        strokeColor={this.state.gpudisk_use/this.state.gpudisk_all<0.3?"red":""}
+                                    />
+                                    <div className="it_text">空闲硬盘</div>
+                                </div>
+                                <div className="progress_t">
+                                    <Progress type="circle"
+                                        percent={this.state.gpumemories_use/this.state.gpumemories_all*100} 
+                                        strokeColor={this.state.gpumemories_use/this.state.gpumemories_all<0.3?"red":""}
+                                    />
+                                    <div className="it_text">内存</div>
                                 </div>
                            </div>
                         </Col>
                       </Row>
                    </div>
                  </Card>
-
-
-
-
-
-
-
-
+                 </div>
                  <div className="serve_state">
                     <Card className=""
                     title="服务器状态"
                     >
-                        <div className="">
-                            <Table columns={columns} dataSource={data} size="middle" />
+                        <div>
+                            <Table columns={columns} dataSource={this.state.tablelist} size="middle" />
                         </div>
                     </Card>
 
