@@ -15,6 +15,9 @@ import AdminEquipment from './adminequipment/index';
 //报警统计
 import Alarmsta from './alarmsta/index';
 
+//服务器信息
+import ServerInfo from './serverinfo/index';
+
 const WysiwygBundle = Loadable({ // 按需加载富文本配置
     loader: () => import('./ui/Wysiwyg'),
     loading: Loading,
@@ -28,6 +31,7 @@ export default {
     , Adminteam, Admindeveice
     , AdminEquipment
     ,Alarmsta
+    ,ServerInfo
    
 
 

@@ -11,6 +11,7 @@ export default {
         },
         { key: '/app/adminequipment/index', title: '设备信息', icon: 'camera', component: 'AdminEquipment' },
         { key: '/app/alarmsta/index', title: '报警统计', icon: 'camera', component: 'Alarmsta' },
+        { key: '/app/serverinfo/index', title: '服务器信息', icon: 'camera', component: 'ServerInfo' },
         
     ],
     // 非菜单相关路由
