@@ -61,7 +61,7 @@ class ServerInfo extends Component {
                    <div className="serve_list">
                       <Row>
                         <Col span={8} className="serve_item" >
-                           <div className="serve_type"><div className="circle"></div> Web</div>
+                           <div className="serve_type"><div className="circle"></div> WEB</div>
                            <div className="serve_item_b" >
                                 <div className="progress_t"> 
                                     <Progress type="circle" 
@@ -127,7 +127,7 @@ class ServerInfo extends Component {
                     <Card className=""
                     title="服务器状态"
                     >
-                        <div>
+                        <div className="tabborder">
                             <Table columns={columns} dataSource={this.state.tablelist} size="middle" />
                         </div>
                     </Card>

@@ -306,3 +306,6 @@ color:#fff;
 .progress_t{
     padding-left:10px; 
 }
+.tabborder{
+    border: 1px #eee solid;
+}
