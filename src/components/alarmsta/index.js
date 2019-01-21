@@ -51,8 +51,6 @@ class Alarmsta extends Component {
             type:code,
             ecode:ecode,
             index:index,
-        },()=>{
-            console.log('code,index,record',code,index,record)
         });
 
     }
@@ -61,7 +59,6 @@ class Alarmsta extends Component {
     onRowSelect = (record, index)=>{//table 行单击
         return {
             onClick:(e)=>{
-                console.log(record);
                 this.showModalEdit(record.code,index,record,record.ecode)
             }
         }
@@ -71,8 +68,6 @@ class Alarmsta extends Component {
         const params={
             ecode:this.state.ecode
         }
-        // return;
-        console.log("测试return");
         post({url:"/api/equipment/e_upgrade",data:params}, (res)=>{
             if(res.success){
                 message.success('升级成功')
@@ -80,18 +75,15 @@ class Alarmsta extends Component {
         })
     }
     handleCancel = (e) => {//关闭弹出层
-        console.log(e);
         this.setState({
             visible: false,
         });
     };
     e_getinfo = (e) => {//更新数据
-        console.log("更新数据");
         const params = {
             ecode:this.state.ecode
         }
         return;
-        console.log("测试return");
         post({url:"/api/equipment/e_getinfo",data:params}, (res)=>{
             if(res.success){
                 message.success('更新成功')
@@ -142,7 +134,7 @@ class Alarmsta extends Component {
             },
             {   title:'报警确认百分比（%）',
                 dataIndex:'',
-                key:'index',
+                key:'sure',
                 render: (text, record,index) => {
                 let bili = (record.confirmcount/record.alarmcount)*100;
                     return(

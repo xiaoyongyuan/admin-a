@@ -348,7 +348,7 @@ class Admindeveices extends Component {
                                         <Option value="">所有</Option>
                                     {
                                             this.state.teamlist.map((item, index) => (
-                                                <Option value={item.code}>{item.cname}</Option>
+                                                <Option value={item.code} key={index}>{item.cname}</Option>
                                             ))  
                                         
                                     }

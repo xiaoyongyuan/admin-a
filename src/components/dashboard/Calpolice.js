@@ -3,6 +3,30 @@
  */
 import React from 'react';
 import ReactEcharts from 'echarts-for-react';
+var dataStyle = {
+    normal: {
+        label: {
+            show: false
+        },
+        labelLine: {
+            show: false
+        }
+    }
+};
+var placeHolderStyle = {
+    normal: {
+        color: 'rgba(240,240,240,0.4)',//未完成的圆环的颜色
+        label: {
+            show: false
+        },
+        labelLine: {
+            show: false
+        }
+    },
+    emphasis: {
+        color: 'rgba(240,240,240,0.4)',//未完成的圆环的颜色
+    }
+};
 class Calpolice extends React.Component{
     render(){
         if(rate!==0 && alarmNumber!==0){
@@ -14,70 +38,95 @@ class Calpolice extends React.Component{
             x: 0,
             y: 0,
             x2: 0,
-            y2: 1,
-            colorStops: [{
-                offset: 0,
-                color: '#18CBFF'
-            }, {
-                offset: 1,
-                color: '#ede0ff'
-            }]
+            y2: 1
         };
         const option = {
             title: {
+                text: (rate/alarmNumber*100).toFixed(2)+"%",
+                x: 'center',
+                y: 'center',
                 textStyle: {
-                    color: '#000000',
-                    fontSize: 20,
-                    fontWeight: 'bold'
-                },
-                left: 'center',
-                bottom: '3%'
+                    fontWeight: 'normal',
+                    color: '#EF5545',
+                    fontSize: 20
+                }
             },
-        
+            color: ['#18CBFF'],
+            tooltip: {
+                show: false,
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                show: false,
+                itemGap: 12,
+                data: ['01', '02']
+            },
+            toolbox: {
+                show: false,
+                feature: {
+                    mark: {
+                        show: true
+                    },
+                    dataView: {
+                        show: true,
+                        readOnly: false
+                    },
+                    restore: {
+                        show: true
+                    },
+                    saveAsImage: {
+                        show: true
+                    }
+                }
+            },
             series: [{
+                name: 'Line 1',
                 type: 'pie',
+                clockWise: false,
+                radius: [50, 60],
+                itemStyle: dataStyle,
                 hoverAnimation: false,
-                radius: ['70%', '70%'],
-                startAngle: 225,
-                labelLine: {
+
+                data: [{
+                    value: rate,
+                    name: '01'
+                }, {
+                    value: alarmNumber,
+                    name: 'invisible',
+                    itemStyle: placeHolderStyle
+                }
+
+                ]
+            }, {
+                name: 'Line 2',
+                type: 'pie',
+                animation: false,
+                clockWise: false,
+                radius: [50, 50],
+                itemStyle: dataStyle,
+                hoverAnimation: false,
+                tooltip: {
                     show: false
                 },
                 data: [{
-                    value: rate * 70,
-                    label: {
-                        normal: {
-                            show: true,
-                            position: 'center',
-                            formatter: (rate/alarmNumber).toFixed(2) + '%',
-                            textStyle: {
-                                color: '#000000',
-                                fontSize: 15
-                            }
-                        }
-                    },
+                    value: 100,
+                    name: '02',
                     itemStyle: {
-                        normal: {
-                            borderColor: linear_color,
-                            borderWidth: 20
+                        emphasis: {
+                            color: '#313443'
                         }
                     }
                 }, {
-                    value: alarmNumber - rate * alarmNumber,
-                    itemStyle: {
-                        normal: {
-                            borderColor: 'rgba(250,250,250,1)',
-                            borderWidth: 5
-                        }
-                    }
-                }, {
-                    value: alarmNumber,
-                    itemStyle: {
-                        normal: {
-                            color: "rgba(0,0,0,0)"
-                        }
-                    }
-                }]
-            }]
+                    value: 0,
+                    name: 'invisible',
+                    itemStyle: placeHolderStyle
+                }
+
+                ]
+            },
+
+
+            ]
         };
         return(
             <ReactEcharts

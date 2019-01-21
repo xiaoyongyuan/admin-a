@@ -55,25 +55,22 @@ class Dashboard extends React.Component {
                     var dayd=moment(a[i]).format('MM.DD');
                     this.state.timeX.push(dayd);
                 }
-               var timeY=res.data.companyadd.map(list =>list.value);
+               var timeY=res.data.companyadd.map(list =>list.value).reverse();
                 if(res.success){
                     this.setState({
                         weiHu:res.data.maintain, //维护团队数
                         qiYe:res.data.smpqy, //企业用户数
                         geRen:res.data.smpgr, //个人用户数
                         baoJingNumber:res.data.alarmcount, //报警总数
-                        recentSituation:res.data.maintainlist,
-                        mapJson:res.data.company,
-                        lineY:timeY,
-                        raspberryTotal:res.data.smpqy+res.data.smpgr,
-                        LAN:res.data.jwy,
-                        alarmNumber:res.data.alarmcount,
-                        falseNumber:res.data.afalse,
-                        recentSituation:res.data.alarm,
+                        mapJson:res.data.company,//地图坐标
+                        lineY:timeY,//月入网数的y轴
+                        raspberryTotal:res.data.smpqy+res.data.smpgr,//树莓派总数
+                        LAN:res.data.jwy,//局域网
+                        alarmNumber:res.data.alarmcount,//报警总数
+                        falseNumber:res.data.afalse,//虚报数
+                        recentSituation:res.data.alarm,//最近情况
                         equipmentEtotal:res.data.ecount, //在线设备数
                         equipmentcount:res.data.etotal //入网设备数
-                    },()=>{
-                        console.log(this.state.alertIndex);
                     })
                 }
             }
@@ -89,23 +86,10 @@ class Dashboard extends React.Component {
         }else if(index===4){
             return "camera situationFont4";
         }else if(index===5){
-            return "camera situationFont5";
+            return "camera situationFont4";
         }
         
     }
-    //最近情况
-    // last = ()=>{
-    //     post({url:"/api/homeinfo/getlimit"},(res)=>{
-    //         if(res.success){
-    //             this.setState({
-    //                 recentSituation:res.data
-    //             },()=>{
-    //                 console.log(this.state.recentSituation);
-    //             });
-    //         }
-    //     })
-    // }
-
     render() {
         return (
             <div className="gutter-example button-demo">
@@ -261,7 +245,7 @@ class Dashboard extends React.Component {
                                                 return(
                                                     <Row className="situation" key={index}>
                                                         <Col xl={2} xxl={2}><div className={this.classStyle(index+1)}>{index+1}</div></Col>
-                                                        <Col xl={20} xxl={20} offset={1} className="listContext">{item.name }入侵报警{ item.atime}</Col>
+                                                        <Col xl={20} xxl={20} offset={1} className="listContext" title={item.name+"入侵报警"+item.atime}>{item.name }&nbsp;入侵报警&nbsp;{ item.atime}</Col>
                                                     </Row>
                                                 )
                                             })

@@ -30,9 +30,7 @@ class ServerInfo extends Component {
                     progressftp:res.sys.ftpsys,
                     progressgup:res.sys.gpusys,
                     tablelist:res.service,//服务器状态表格数据
-                },()=>{
-                    console.log('******************',typeof(this.state.tablelist),this.state.tablelist);
-                }); 
+                });
             }   
         })
     }
@@ -41,15 +39,19 @@ class ServerInfo extends Component {
         const columns = [{
             title: '服务器名称',
             dataIndex: 'name',
+            key:"name"
           }, {
             title: '当前状态',
             dataIndex: 'laststatus',
+            key:"laststatus"
           }, {
             title: '最后一次信息',
             dataIndex: 'lastinfo',
+            key:"lastinfo"
           }, {
             title: '最后一次时间',
             dataIndex: 'lasttime',
+            key:"lasttime"
           }];
         return (
             <div className="ServerInfo">
