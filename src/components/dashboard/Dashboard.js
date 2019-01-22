@@ -71,7 +71,7 @@ class Dashboard extends React.Component {
                         recentSituation:res.data.alarm,//最近情况
                         equipmentEtotal:res.data.ecount, //在线设备数
                         equipmentcount:res.data.etotal //入网设备数
-                    })
+                    )
                 }
             }
         });

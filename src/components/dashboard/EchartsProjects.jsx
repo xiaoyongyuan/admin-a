@@ -7,20 +7,6 @@ import echarts from 'echarts';
 require('echarts/map/js/china.js');
 
 class EchartsEffectScatter extends Component {
-    constructor(props){
-        super(props);
-        this.state={
-            datasMap:[]
-        };
-    }
-    componentDidUpdate() {
-        if(this.props.datasMap && this.props.datasMap != this.state.datasMap){
-            this.setState({
-                    datasMap:this.props.datasMap
-                })
-        }
-    }
-
     render() {
         const option={
             /*backgroundColor: '#1F5D9A',*/
@@ -54,6 +40,7 @@ class EchartsEffectScatter extends Component {
                     type:"effectScatter",// series图表类型
                     coordinateSystem:"geo",// series坐标系类型
                     data:this.props.datasMap, // series数据内容
+                    //data:[{name:"兵马俑",value:[109.28242, 109.28242]}],
                     effectType:"ripple",
                     itemStyle: {
                         normal: {
@@ -84,7 +71,6 @@ class EchartsEffectScatter extends Component {
                 }
             ]
         }
-
         return (
             <ReactEcharts
                 option={option}

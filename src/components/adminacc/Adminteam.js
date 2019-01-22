@@ -9,12 +9,6 @@ import {post} from "../../axios/tools";
 const FormItem = Form.Item;
 const {RangePicker } = DatePicker;
 const dateFormat = 'YYYY/MM/DD';
-function onChange(date, dateString) {
-    console.log(date, dateString);
-}
-function onChange_time(date, dateString) {
-    console.log(date,dateString[0]);
-}
 class Adminteam extends Component {
     constructor(props){
         super(props);
@@ -110,7 +104,7 @@ class Adminteam extends Component {
                     var data={
                         cname:values.title,
                         clng:values.clng,
-                        clat:values.clng,
+                        clat:values.clat,
                         adminname:values.linkname,
                         adminaccount:values.tel,
                         ctype:2,
