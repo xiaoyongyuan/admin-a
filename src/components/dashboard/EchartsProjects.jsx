@@ -74,7 +74,7 @@ class EchartsEffectScatter extends Component {
         return (
             <ReactEcharts
                 option={option}
-                style={{height: '485px', width: '100%'}}
+                style={{height: '430px', width: '100%'}}
                 className={'react_for_echarts'}
             />
         )
