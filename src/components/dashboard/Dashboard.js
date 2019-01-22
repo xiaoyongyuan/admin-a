@@ -70,8 +70,8 @@ class Dashboard extends React.Component {
                         falseNumber:res.data.afalse,//虚报数
                         recentSituation:res.data.alarm,//最近情况
                         equipmentEtotal:res.data.ecount, //在线设备数
-                        equipmentcount:res.data.etotal //入网设备数
-                    )
+                        equipmentcount:res.data.etotal,//入网设备数
+                    })
                 }
             }
         });
