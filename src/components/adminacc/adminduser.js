@@ -23,7 +23,6 @@ class AdmindUser extends Component {
     requestdata=(params) => {//取数据
         post({url:"/api/company/getlist"}, (res)=>{
             if(res.success){
-                console.log("列表数据：",res.data);
                 this.setState({
                     list: res.data
                 })
@@ -51,9 +50,6 @@ class AdmindUser extends Component {
     this.onChangeDate('startValue',dateString1);
     this.setState({
         bdate:dateString1
-    },()=>{
-        console.log('******************bdate',this.state.bdate.format('YYYY-MM-DD'));
-        
     })
 };
 //结束时间
@@ -61,9 +57,6 @@ onChange2 =(dateString2)=> {
     this.onChangeDate("endValue",dateString2);
     this.setState({
         edate:dateString2
-    },()=>{
-        console.log('******************edate',this.state.edate.format('YYYY-MM-DD'));
-        
     })
 };
 onChangeDate = (field, value) => {
@@ -72,10 +65,8 @@ onChangeDate = (field, value) => {
     });
 };
     selectopt = (e) => { //检索search
-       
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
-            console.log('******************values.cteam',values.cteam);
             if(values.range_picker1==undefined&&values.range_picker2==undefined &&values.name==undefined &&values.cteam==undefined){
                 this.setState({
                     deleteshow: true,
