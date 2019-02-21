@@ -5,15 +5,17 @@
 import Loadable from 'react-loadable';
 import Loading from './widget/Loading';
 import Dashboard from './dashboard/Dashboard';
-//超级管理员
+//账号管理
 import Adminteam from './adminacc/Adminteam';
 import Admindeveice from './adminacc/Admindeveice';
+import AdmindUser from './adminacc/adminduser';
 
-//管理员查看设备
+//查看设备
 import AdminEquipment from './adminequipment/index';
 
 //报警统计
 import Alarmsta from './alarmsta/index';
+import OneAlarm from './alarmsta/onealarm';
 
 //服务器信息
 import ServerInfo from './serverinfo/index';
@@ -27,10 +29,9 @@ export default {
     Dashboard, 
     WysiwygBundle
 
-    
-    , Adminteam, Admindeveice
+    , Adminteam, Admindeveice, AdmindUser
     , AdminEquipment
-    ,Alarmsta
+    ,Alarmsta, OneAlarm
     ,ServerInfo
    
 
