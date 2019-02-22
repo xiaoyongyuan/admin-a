@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import '../../style/sjg/home.css';
-import {Form,Table, DatePicker,Input, Row, Col, Button,Modal,LocaleProvider} from 'antd';
+import {Form,Table, DatePicker,Input, Row, Col, Button,message,LocaleProvider} from 'antd';
 import BreadcrumbCustom from "../BreadcrumbCustom";
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import 'moment/locale/zh-cn';
@@ -13,20 +13,34 @@ class AdmindUser extends Component {
         this.state={
             list:[],
             value: 1,
+            page:1, //当前页
         };
     }
     componentDidMount() {
         this.requestdata()
     }
-    requestdata=(params) => {//取数据
-        post({url:"/api/company/getlist_user"}, (res)=>{
+    requestdata=(params) => { //取数据
+        this.props.form.validateFields((err, values) => {
+        const pageset={
+            pagesize:10,
+            pageindex:this.state.page,
+            bdate:this.state.bdate?this.state.bdate.format('YYYY-MM-DD'):'',
+            edate:this.state.edate?this.state.edate.format('YYYY-MM-DD'):'',
+            cname:values.name,
+            pname:values.cteam, 
+        }
+        post({url:"/api/company/getlist_user",data:pageset}, (res)=>{
             if(res.success){
                 this.setState({
-                    list: res.data
+                    list: res.data,
+                    total:res.totalcount,
                 })
             }
         })
+    })
     }
+
+    
     //禁止的开始时间
     disabledStartDate = (startValue) => {
         const endValue = this.state.endValue;
@@ -66,35 +80,27 @@ onChangeDate = (field, value) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if(values.range_picker1==undefined&&values.range_picker2==undefined &&values.name==undefined &&values.cteam==undefined){
-                this.setState({
-                    deleteshow: true,
-                })
-                return false ;
+                message.error('搜索内容不能为空');
             }
             if(!err){
-                const data={
-                    bdate:this.state.bdate?this.state.bdate.format('YYYY-MM-DD'):'',
-                    edate:this.state.edate?this.state.edate.format('YYYY-MM-DD'):'',
-                    cname:values.name,
-                    pname:values.cteam,   
-                }
- 
-                post({url:"/api/company/getlist",data:data}, (res)=>{
-                    if(res.success){
-                        this.setState({
-                            list: res.data
-                        })
-                    }
+                this.setState({
+                    page:1,
+                },()=>{
+                    this.requestdata()
                 })
+               
             }
         })
     }
+    changePage=(page,pageSize)=>{ //分页  页码改变的回调，参数是改变后的页码及每页条数
+        this.setState({
+            page: page,
+        },()=>{
+            this.requestdata()  
+        })
 
-searchOk= () =>{//删除取消
-    this.setState({
-        deleteshow: false,
-    });
-};
+    }
+
 searchCancel = () =>{//删除取消
     this.setState({
         deleteshow: false,
@@ -230,13 +236,10 @@ searchCancel = () =>{//删除取消
                         </LocaleProvider>
                     </Col>
                 </Row>
-
-                <Table columns={columns} dataSource={this.state.list} />
-                <Modal title="提示信息" visible={this.state.deleteshow} onOk={this.searchOk}
-                       onCancel={this.searchCancel}
-                >
-                    <p>请选择查询的内容 </p>
-                </Modal>
+                <Table 
+                     columns={columns} dataSource={this.state.list}
+                     pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage}}
+                />
             </div>
 
         )
