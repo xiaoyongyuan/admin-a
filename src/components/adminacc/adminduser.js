@@ -5,9 +5,7 @@ import {Form,Table, DatePicker,Input, Row, Col, Button,Modal,LocaleProvider} fro
 import BreadcrumbCustom from "../BreadcrumbCustom";
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import 'moment/locale/zh-cn';
-import moment from 'moment';
 import {post} from "../../axios/tools";
-const {RangePicker } = DatePicker;
 const FormItem = Form.Item;
 class AdmindUser extends Component {
     constructor(props){
@@ -21,7 +19,7 @@ class AdmindUser extends Component {
         this.requestdata()
     }
     requestdata=(params) => {//取数据
-        post({url:"/api/company/getlist"}, (res)=>{
+        post({url:"/api/company/getlist_user"}, (res)=>{
             if(res.success){
                 this.setState({
                     list: res.data
@@ -74,11 +72,13 @@ onChangeDate = (field, value) => {
                 return false ;
             }
             if(!err){
+                console.log('******************values.cteam',values.cteam);
+                
                 const data={
                     bdate:this.state.bdate?this.state.bdate.format('YYYY-MM-DD'):'',
                     edate:this.state.edate?this.state.edate.format('YYYY-MM-DD'):'',
                     cname:values.name,
-                    pname:values.cteam,    //不能搜索
+                    pname:values.cteam,   
                 }
  
                 post({url:"/api/company/getlist",data:data}, (res)=>{
