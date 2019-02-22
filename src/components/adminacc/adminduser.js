@@ -72,8 +72,6 @@ onChangeDate = (field, value) => {
                 return false ;
             }
             if(!err){
-                console.log('******************values.cteam',values.cteam);
-                
                 const data={
                     bdate:this.state.bdate?this.state.bdate.format('YYYY-MM-DD'):'',
                     edate:this.state.edate?this.state.edate.format('YYYY-MM-DD'):'',
