@@ -78,15 +78,15 @@ class Dashboard extends React.Component {
     }
     classStyle = (index)=>{
         if(index===1){
-            return "camera situationFont1";
+            return "cameraLately situationFont1";
         }else if(index===2){
-            return "camera situationFont2";
+            return "cameraLately situationFont2";
         }else if(index===3){
-            return "camera situationFont3";
+            return "cameraLately situationFont3";
         }else if(index===4){
-            return "camera situationFont4";
+            return "cameraLately situationFont4";
         }else if(index===5){
-            return "camera situationFont4";
+            return "cameraLately situationFont4";
         }
         
     }
