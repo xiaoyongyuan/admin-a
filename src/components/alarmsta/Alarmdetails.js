@@ -1,9 +1,11 @@
 import React from 'react';
-import {Button, Switch, Icon } from 'antd';
+import {Button, Switch, Icon, Popconfirm } from 'antd';
 import {post} from "../../axios/tools";
 import "../../style/ztt/css/police.css";
 const ButtonGroup = Button.Group;
 let vis=false;
+ var ex;
+ var ey;
 class Alarmdetails extends React.Component{
 	constructor(props){
       super(props);
@@ -16,6 +18,7 @@ class Alarmdetails extends React.Component{
             atime:'',
       		field:[],
           finalresult:[],
+      
       	},
       	field:true, //是否显示围界信息
       	obj:true, //是否显示报警对象
@@ -34,32 +37,9 @@ class Alarmdetails extends React.Component{
     });
   }
   componentDidMount() {
-    post({url:"/api/alarm/getone_foradmin",data:Object.assign(this.state.faths,{passivecode:this.state.activecompcode})},(res)=>{
-      let data={
-          src:res.data.picpath,
-          field:res.data.field,
-          name:res.data.name,
-          alarmtype:res.data.alarmtype,
-          finalresult:res.data.finalresult1,
-          atime:res.data.atime,
-          type:res.data.status,   
-          tags:res.data.tags, 
-          pic_width:res.data.pic_width, //报警宽
-          pic_height:res.data.pic_height, //报警高  
-
-        }
-        this.setState({
-          data:data,
-          prev:res.data.last,
-          next:res.data.next, 
-      },()=>{
-        this.draw();
-        this.typetext()
-      });
-    })
-
-    
-    } 
+       this.request();
+       
+    } ;
   componentWillReceiveProps(nextProps){ //此处修改父页面参数
       if( nextProps.visible !== vis){
           vis=nextProps.visible;
@@ -73,7 +53,54 @@ class Alarmdetails extends React.Component{
           }
       }        
   }
-
+  request=()=>{
+    var x0, y0, xw ,yh;
+    post({url:"/api/alarm/getone_foradmin",data:Object.assign(this.state.faths,{passivecode:this.state.activecompcode})},(res)=>{
+      console.log('******************x0',res.data.finalresult1[0].x);
+      console.log('******************y0',res.data.finalresult1[0].y);
+      console.log('******************x+w',res.data.finalresult1[0].x+res.data.finalresult1[0].w);
+      console.log('******************y+h',res.data.finalresult1[0].y+res.data.finalresult1[0].h);
+      document.onclick=function(e){
+        e=e? e:window.event;
+          ex=e.screenX-1700;
+          ey=e.screenY-136;
+          if(ex > x0 && ex< xw && ey > y0 && ey<yh){
+            alert('里面了',ex,ey,x0,xw,y0,yh);
+           }
+           console.log('222',ex,ey,x0,xw,y0,yh);
+        }
+        
+        
+           x0=res.data.finalresult1[0].x;
+           y0=res.data.finalresult1[0].y;
+           xw=res.data.finalresult1[0].x+res.data.finalresult1[0].w;
+           yh=res.data.finalresult1[0].y+res.data.finalresult1[0].h;
+         
+       
+          
+      let data={
+          src:res.data.picpath,
+          field:res.data.field,
+          name:res.data.name,
+          alarmtype:res.data.alarmtype,
+          finalresult:res.data.finalresult1,
+          atime:res.data.atime,
+          type:res.data.status,   
+          tags:res.data.tags, 
+          pic_width:res.data.pic_width, //报警宽
+          pic_height:res.data.pic_height, //报警高  
+  
+        }
+        this.setState({
+          data:data,
+          prev:res.data.last,
+          next:res.data.next, 
+      },()=>{
+        this.draw();
+        this.typetext()
+      });
+    })
+  }
   typetext=()=>{//处理状态显示
   	let text=''; 
     let color=''; 
@@ -160,6 +187,9 @@ class Alarmdetails extends React.Component{
     render(){      
         return(
             <div className="alarmDetails">
+            {/* <Popconfirm title="确认为误报吗？" okText="确认" cancelText="取消">
+              <a href="#"  onClick={()=>this.wubao('w')}>222222222222222222</a>
+            </Popconfirm> */}
             	<div className="alarmflex">
             		<div className="flexleft">
             			<canvas id="canvasobj" width="604px" height="476px" style={{backgroundImage:'url('+this.state.data.src+')',backgroundSize:"100% 100%"}} />
