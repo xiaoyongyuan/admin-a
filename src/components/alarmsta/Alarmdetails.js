@@ -34,7 +34,7 @@ class Alarmdetails extends React.Component{
     });
   }
   componentDidMount() {
-    post({url:"/api/alarm/getone",data:Object.assign(this.state.faths,{passivecode:this.state.activecompcode})},(res)=>{
+    post({url:"/api/alarm/getone_foradmin",data:Object.assign(this.state.faths,{passivecode:this.state.activecompcode})},(res)=>{
       let data={
           src:res.data.picpath,
           field:res.data.field,
@@ -124,8 +124,6 @@ class Alarmdetails extends React.Component{
     let area = ele.getContext("2d");
     area.clearRect(0,0,704,576);//清除之前的绘图
     area.lineWidth=1;
-
-    
     const datafield=this.state.data.field;
   	if(this.state.field && datafield.length){
       const xi=604/704, yi=476/576;
@@ -159,40 +157,6 @@ class Alarmdetails extends React.Component{
   		
   	}
   }
-  alarmdeal=(type)=>{ //报警处理
-  	post({url:'/api/alarm/update',data:{code:this.state.code,status:type}},(res)=>{
-  		if(res){
-        let data=this.state.data;
-        data.type=type;
-				this.setState({
-		  		data:data,
-		    },()=>{
-		    	this.typetext()
-		    })
-  		}
-  	})
-  }
-  delete=()=>{ //删除报警
-  	post({url:'/api/alarm/delete',data:{code:this.state.code}},(res)=>{
-  		if(res){
-        let data=this.state.data;
-				this.setState({
-		  		data:data,
-		    })
-  		}
-  	})
-  }
-  doCollection=()=>{ //收藏报警
-  	post({url:'/api/alarm/collection',data:{code:this.state.code}},(res)=>{
-  		if(res){
-        let data=this.state.data;
-				this.setState({
-		  		data:data,
-		    })
-  		}
-  	})
-  }
-    
     render(){      
         return(
             <div className="alarmDetails">
@@ -203,7 +167,7 @@ class Alarmdetails extends React.Component{
             				<ButtonGroup>
       							  <Button type="primary" onClick={()=>this.looknew('prev')} disabled={this.state.prev?false:true}>
       								<Icon type="left" />上一条
-      							  </Button>
+      							  </Button>&nbsp;&nbsp;&nbsp;
       							  <Button type="primary" onClick={()=>this.looknew('next')} disabled={this.state.next?false:true}>
       								下一条<Icon type="right" />
       							  </Button>
@@ -216,8 +180,6 @@ class Alarmdetails extends React.Component{
             				<p><label>围界信息: <Switch size="small" checked={this.state.field} onChange={(checked)=>this.onChange(checked,'field')} /></label></p>
             				<p><label>报警信息: <Switch size="small" checked={this.state.obj} onChange={(checked)=>this.onChange(checked,'obj')} /></label></p>
             				<p><label>报警时间：<span>{this.state.data.atime}</span></label></p>
-                   
-                    
             		</div>
             	</div>
             </div>

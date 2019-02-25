@@ -1,7 +1,7 @@
 
 
 import React from 'react';
-import { DatePicker, Row, Col, Select, Button, Modal, Pagination, Form, message,LocaleProvider,Spin } from "antd";
+import { DatePicker, Row, Col, Button, Modal, Pagination, Form,LocaleProvider,Spin } from "antd";
 import "../../style/ztt/css/police.css";
 import "../../style/publicStyle/publicStyle.css";
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
@@ -9,8 +9,6 @@ import 'moment/locale/zh-cn';
 import {post} from "../../axios/tools";
 import Alarmdetails from "./Alarmdetails";
 import nodata from "../../style/imgs/nodata.png";
-// import "../../style/ztt/img/plioce/iconfont.css";
-const Option = Select.Option;
 const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
@@ -68,7 +66,6 @@ class OneAlarm extends React.Component{
             data.cid=this.state.propsid;
             data.status=0
         }
-        this.handleEquipment();//设备select
         this.handleAlerm(data);//报警信息列表
     }
     handleCancelAlarmImg =()=>{
@@ -76,28 +73,7 @@ class OneAlarm extends React.Component{
             alarmImgType:false
         })
     };
-    //一键处理
-    handleProcessing = ()=>{
-        this.setState({
-            alarm:true
-        });
-    };
-    handleCamera = ()=>{
-        this.setState({
-            visible: true,
-        });
-    };
-    //摄像头
-    handleOk = () => {
-        this.setState({
-            visible: false,
-        });
-    };
-    handleCancel = () => {
-        this.setState({
-            visible: false,
-        });
-    };
+
     //查看报警详情
     alarmImg =(code)=>{
         const toson={
@@ -128,8 +104,7 @@ class OneAlarm extends React.Component{
     };
     //报警信息列表
     handleAlerm = (data={})=>{
-        
-        post({url:'/api/alarm/getlist',data:Object.assign(data,{pageindex:this.state.page,pagesize:18,passivecode:this.state.activecompcode})},(res)=>{
+        post({url:'/api/alarm/getlist_foradmin',data:Object.assign(data,{pageindex:this.state.page,pagesize:18,passivecode:this.state.activecompcode})},(res)=>{
             if(res.success){
                 this.setState({
                     displaysearch:true,
@@ -137,8 +112,12 @@ class OneAlarm extends React.Component{
                 if(res.data.length===0){
                     this.setState({
                       nodatapic:false,
-                  })
-              }
+                    })
+                }else{
+                    this.setState({
+                        nodatapic:true,
+                    })
+                }
                 if(res.data.length){
                     this.setState({
                         policeList:res.data,
@@ -160,16 +139,7 @@ class OneAlarm extends React.Component{
             }
         })
     };
-    //设备select
-    handleEquipment = ()=>{
-        post({url:"/api/camera/get_cameralist"},(res)=>{
-            if(res.success){
-                this.setState({
-                    equipment:res.data,
-                })
-            }
-        })
-    };
+
     /*
     * 检索
     * 开始时间、结束时间、设备cid
@@ -197,14 +167,6 @@ class OneAlarm extends React.Component{
                 })
         
     };
-
-    //搜索设备选中的值
-    handleChange =(value)=>{
-        this.setState({
-            cid:value
-        })
-    };
-  
     onChangeDate = (field, value) => {
         this.setState({
             [field]: value,
@@ -248,55 +210,6 @@ class OneAlarm extends React.Component{
             edate:dateString2
         })
     };
-
- 
-
-    redgreenblue = (status)=>{
-        if(status === 0){
-            return("typeOrange");
-        }else if(status === 1){
-            return("typegreen");
-        }else if(status === 2){
-            return("typeblue");
-        }else if(status === 3){
-            return("typered");
-        }
-    };
-    //报警状态
-    handleState = (code)=>{
-        if(code === 0){
-            return "未处理";
-        }else if(code === 1){
-            return "确认";
-        }else if(code === 2){
-            return "忽略";
-        }else if(code === 3){
-            return "虚警";
-        }
-    };
-    sanjiaose = (status)=>{
-        if(status === 0){
-            return("triangle-topright-green triangleOrange");
-        }else if(status === 1){
-            return("triangle-topright-green trianglegreen");
-        }else if(status === 2){
-            return("triangle-topright-green triangleblue");
-        }else if(status === 3){
-            return("triangle-topright-green trianglered");
-        }
-    }
-    changeredgreenblue =(type,index,code)=>{
-        if(this.state.activecompcode) return;
-        post({url:'/api/alarm/update',data:{code:code,status:type}},(res)=>{
-            if(res.success){
-                const policeList=this.state.policeList;
-                policeList[index].status=type;
-                this.setState({
-                    policeList:policeList
-                })
-            }
-        });
-    }
     render(){
         const { getFieldDecorator } = this.props.form;
         return(
@@ -304,7 +217,7 @@ class OneAlarm extends React.Component{
                 <LocaleProvider locale={zh_CN}>
                     <Row style={{marginTop:"20px"}}>
                         <Form onSubmit={this.handleSubmit}>
-                            <Col xl={6} xxl={5} lg={10}>
+                            <Col xl={4} xxl={4} lg={6}>
                                 <Form.Item
                                     {...formItemLayout}
                                     label="日期"
@@ -323,7 +236,7 @@ class OneAlarm extends React.Component{
                                     )}
                                 </Form.Item>
                             </Col>
-                            <Col xl={5} xxl={4} lg={10}>
+                            <Col xl={3} xxl={3} lg={3}>
                                 <Form.Item>
                                     {getFieldDecorator('range-picker2')(
                                         <DatePicker
@@ -339,44 +252,24 @@ class OneAlarm extends React.Component{
                                     )}
                                 </Form.Item>
                             </Col>
-                            <Col xl={4} xxl={3} lg={8}>
-                                <Form.Item
-                                    {...formItemLayout}
-                                    label="设备"
-                                >
-                                    {getFieldDecorator('residence',{
-                                        initialValue:""
-                                    } )(
-                                        <Select style={{ width: 120 }} onChange={this.handleChange}>
-                                            <Option value="" >所有</Option>
-                                            {
-                                                this.state.equipment.map((v,i)=>(
-                                                    <Option value={v.code} key={i}>{v.name}</Option>
-                                                ))
-                                            }
-                                        </Select>
-                                    )}
-                                </Form.Item>
-                            </Col>
-                            <Col xl={2} xxl={2} lg={6} className="mt">
+                            <Col xl={2} xxl={2} lg={4} className="mt">
                                 <Button type="primary" htmlType="submit" className="queryBtn">查询</Button>
                             </Col>
-                           
                         </Form>
                     </Row>
                 </LocaleProvider>
                 <Spin size="large" spinning={this.state.loadding} tip="Loading..." className="loadding" />
-                {/* {this.state.nodatapic?"":
+                {this.state.nodatapic?"":
                 <Row style={{marginTop:"70px",}}>
                      <Col style={{width:"100%",textAlign:"center"}}><div className="backImg"><img src={nodata} alt="" /></div></Col>
-                </Row>} */}
-{/*                 
+                </Row>}
+               
                 <Row style={{marginLeft:"10px",display:this.state.type===0?"none":"block",}}>
                     {
                         this.state.policeList.map((v,i)=>(
-                            <Col xm={11} sm={11} md={11} lg={11} xl={11} xxl={7} key={i} style={{margin:"0px 10px",display:this.state.displaysearch=== true?" block":"none"}}>
+                            <Col xm={11} sm={11} md={11} lg={11} xl={11} xxl={7} key={v.code} style={{margin:"0px 10px",display:this.state.displaysearch=== true?" block":"none"}}>
                                 <div className="listmargintop">
-                                    <div className={this.redgreenblue(v.status)} >
+                                    <div >
                                         <Row>
                                             <Col span={8}>
                                                 <div className="pliceImgyal" onClick={()=>this.alarmImg(v.code)}>
@@ -416,161 +309,7 @@ class OneAlarm extends React.Component{
                         ))
                     }
                 </Row>
-               */}
-              {/* //修改 */}
-               <Row style={{marginLeft:"10px"}}>
-                            <Col xm={11} sm={11} md={11} lg={11} xl={11} xxl={7} style={{margin:"0px 10px",display:this.state.displaysearch=== true?" block":"none"}}>
-                                <div className="listmargintop">
-                                    <div>
-                                        <Row>
-                                        <Col span={8}>
-                                                <div className="pliceImgyal" onClick={()=>this.alarmImg()}>
-                                                    <img src={nodata} alt="" />
-                                                </div>
-                                            </Col>
-                                           
-                                            <Col span={16} className="r_flex">
-                                                <Row className="row-alarmlist-detail">
-                                                    <Col span={20}>
-                                                        <Row className="word-row">
-                                                            <Col span={18}>
-                                                                <Row>
-                                                                    <Col span={14} style={{marginLeft:'5px'}} push={1}>
-                                                                        <p className="fontstyle">yy</p>
-                                                                    </Col>
-                                                                    <Col span={9} push={4} style={{textAlign:'right' }}>
-                                                                        <p className="fontstyle time-col">入侵检测</p>
-                                                                    </Col>
-                                                                </Row>
-                                                            </Col>
-                                                        </Row>
-                                                        <Row className="word-row">
-                                                            <Col span={13} push={1}>
-                                                                <p className="time-col fontstyle fontstyletime">2019-01-19 11:15:59</p>
-                                                            </Col>
-                                                            <Col span={9} push={1} style={{marginLeft:'13px'}}>
-                                                                <p className="fontstyle time-col">报警对象：人</p>
-                                                            </Col>
-                                                        </Row>
-                                                    </Col>
-                                                </Row>
-                                            </Col>
-                                        </Row>
-                                    </div>
-                                </div>
-                            </Col>
-                            <Col xm={11} sm={11} md={11} lg={11} xl={11} xxl={7} style={{margin:"0px 10px",display:this.state.displaysearch=== true?" block":"none"}}>
-                                <div className="listmargintop">
-                                    <div>
-                                        <Row>
-                                        <Col span={8}>
-                                                <div className="pliceImgyal" onClick={()=>this.alarmImg()}>
-                                                    <img src={nodata} alt="" />
-                                                </div>
-                                            </Col>
-                                           
-                                            <Col span={16} className="r_flex">
-                                                <Row className="row-alarmlist-detail">
-                                                    <Col span={20}>
-                                                        <Row className="word-row">
-                                                            <Col span={18}>
-                                                                <Row>
-                                                                    <Col span={14} style={{marginLeft:'5px'}} push={1}>
-                                                                        <p className="fontstyle">yy</p>
-                                                                    </Col>
-                                                                    <Col span={9} push={4} style={{textAlign:'right' }}>
-                                                                        <p className="fontstyle time-col">入侵检测</p>
-                                                                    </Col>
-                                                                </Row>
-                                                            </Col>
-                                                        </Row>
-                                                        <Row className="word-row">
-                                                            <Col span={13} push={1}>
-                                                                <p className="time-col fontstyle fontstyletime">2019-01-19 11:15:59</p>
-                                                            </Col>
-                                                            <Col span={9} push={1} style={{marginLeft:'13px'}}>
-                                                                <p className="fontstyle time-col">报警对象：人</p>
-                                                            </Col>
-                                                        </Row>
-                                                    </Col>
-                                                </Row>
-                                            </Col>
-                                        </Row>
-                                    </div>
-                                </div>
-                            </Col>
-                            <Col xm={11} sm={11} md={11} lg={11} xl={11} xxl={7} style={{margin:"0px 10px",display:this.state.displaysearch=== true?" block":"none"}}>
-                                <div className="listmargintop">
-                                    <div>
-                                        <Row>
-                                        <Col span={8}>
-                                                <div className="pliceImgyal" onClick={()=>this.alarmImg()}>
-                                                    <img src={nodata} alt="" />
-                                                </div>
-                                            </Col>
-                                           
-                                            <Col span={16} className="r_flex">
-                                                <Row className="row-alarmlist-detail">
-                                                    <Col span={20}>
-                                                        <Row className="word-row">
-                                                            <Col span={18}>
-                                                                <Row>
-                                                                    <Col span={14} style={{marginLeft:'5px'}} push={1}>
-                                                                        <p className="fontstyle">yy</p>
-                                                                    </Col>
-                                                                    <Col span={9} push={4} style={{textAlign:'right' }}>
-                                                                        <p className="fontstyle time-col">入侵检测</p>
-                                                                    </Col>
-                                                                </Row>
-                                                            </Col>
-                                                        </Row>
-                                                        <Row className="word-row">
-                                                            <Col span={13} push={1}>
-                                                                <p className="time-col fontstyle fontstyletime">2019-01-19 11:15:59</p>
-                                                            </Col>
-                                                            <Col span={9} push={1} style={{marginLeft:'13px'}}>
-                                                                <p className="fontstyle time-col">报警对象：人</p>
-                                                            </Col>
-                                                        </Row>
-                                                    </Col>
-                                                </Row>
-                                            </Col>
-                                        </Row>
-                                    </div>
-                                </div>
-                            </Col>
-                   </Row>
-                   
-              {/* 修改结束 */}
                 <Pagination defaultCurrent={this.state.page} current={this.state.page} total={this.state.totalcount} pageSize={this.state.pageSize} onChange={this.hanlePageSize} className="pageSize" style={{display:this.state.type===1?"block":"none"}} />
-                <Modal
-                    title="播放视频"
-                    visible={this.state.visible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
-                    okText="确认"
-                    cancelText="取消"
-                />
-                <Modal
-                    title="报警批量处理"
-                    visible={this.state.alarm}
-                    onOk={this.handleOkalarm}
-                    onCancel={this.handleCancelalarm}
-                    okText="确认"
-                    cancelText="取消"
-                >
-                    <div>
-                        摄像头选择：
-                        <Select defaultValue="请选择摄像头" style={{ width: 180 }} onChange={this.handleOnekey}>
-                            {
-                                this.state.equipment.map((v,i)=>(
-                                    <Option value={v.code} key={i}>{v.name}</Option>
-                                ))
-                            }
-                        </Select>
-
-                    </div>
-                </Modal>
                 <div>
                     <Modal
                         width={1200}

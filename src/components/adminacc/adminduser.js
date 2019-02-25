@@ -79,7 +79,7 @@ onChangeDate = (field, value) => {
     selectopt = (e) => { //检索search
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
-            if(values.range_picker1==undefined&&values.range_picker2==undefined &&values.name==undefined &&values.cteam==undefined){
+            if(values.range_picker1===undefined&&values.range_picker2===undefined){
                 message.error('搜索内容不能为空');
             }
             if(!err){
@@ -108,15 +108,8 @@ searchCancel = () =>{//删除取消
 };
 
     render() {
-        const _this=this;
         const { getFieldDecorator } = this.props.form;
-        function onChange_time(date, dateString) {
-            _this.setState({
-                timeString1:dateString[0],
-                timeString2:dateString[1]
-            });
-        }
-        const dateFormat = 'YYYY/MM/DD';
+        
         const columns = [
             {
                 title: '序号',
@@ -154,10 +147,10 @@ searchCancel = () =>{//删除取消
                 dataIndex: 'ctype',
                 key: 'ctype',
                 render: (text, record) => {
-                 if(text==4){
+                 if(text===4){
                     return ('树莓派企业用户');
 
-                 }if (text==5) {
+                 }if (text===5) {
                     return ('局域网企业用户');
                  } else {
                     return ('树莓派个人用户');

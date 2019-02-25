@@ -306,7 +306,6 @@
     flex-wrap:wrap;
     justify-content:space-between;
     height: 100%;
-    border: 1px solid #ccc;
     border-left: 0;
 }
 .time-col{
