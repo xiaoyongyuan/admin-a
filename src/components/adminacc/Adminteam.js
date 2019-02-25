@@ -1,14 +1,12 @@
-import React, { Component, propTypes } from 'react';
+import React, { Component} from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom';
 import ModalForm from './ModalForm';
-import {Form,Input, Row, Col, Button , Modal,Icon ,DatePicker,Pagination} from 'antd';
+import {Form,Input, Row, Col, Button , Modal,Icon ,Pagination} from 'antd';
 import '../../style/sjg/home.css';
 import "../../style/yal/adminteam.css";
 import nodata from '../../style/imgs/nodata.png';
 import {post} from "../../axios/tools";
-const FormItem = Form.Item;
-const {RangePicker } = DatePicker;
-const dateFormat = 'YYYY/MM/DD';
+
 class Adminteam extends Component {
     constructor(props){
         super(props);
@@ -62,13 +60,13 @@ class Adminteam extends Component {
         })
     };
 
-    showModal = () => {  //新增弹窗
+    showModal = () => { //新增弹窗
         this.setState({
             visible: true,
             type:0,
         });
     };
-    showModalEdit= (code,index) => {  //编辑弹窗
+    showModalEdit= (code,index) => { //编辑弹窗
         this.setState({
             visible: true,
             type:code,
@@ -123,7 +121,7 @@ class Adminteam extends Component {
             }
         });
     };
-    handleCancel = (e) => {  //modal取消
+    handleCancel = (e) => { //modal取消
        const forms=this.formRef.formref();
        forms.resetFields();
         e.preventDefault();
@@ -150,7 +148,7 @@ class Adminteam extends Component {
             }
         })
     }
-    showModaldelete = (code) =>{  //删除弹层
+    showModaldelete = (code) =>{ //删除弹层
         this.setState({
             deleteshow: true,
             type:code
@@ -181,8 +179,7 @@ class Adminteam extends Component {
     render() {
         const {titstyle,bordercol }=this.state;
         const _this=this;
-        const { form } = this.props;
-        const { getFieldDecorator } = this.props.form;
+        
         return (
             <div>
                 <BreadcrumbCustom first="账号管理" second="维护团队管理" />
@@ -214,12 +211,12 @@ class Adminteam extends Component {
                                                 <Icon className="del_con" onClick={_this.showModalEdit.bind(item,item.code,index)} type="edit" />
                                             </Col>
                                             <Col span={1} className="del">
-                                                <Icon className="del_con" type="delete" onClick={()=>_this.showModaldelete(item.code)}/>
+                                                <Icon className="del_con" type="delete" onClick={()=>_this.showModaldelete(item.code)} />
                                             </Col>
                                         </Row>
                                         <Row className="item_f">
                                             <div className="top">
-                                            <Col xl={8} lg={15}  pull={5}>
+                                            <Col xl={8} lg={15} pull={5}>
                                                 树莓派个人用户数：{item.smpgr}
                                             </Col>
                                             <Col xl={{span:8,pull:1}} lg={{span:15,pull:5}}>
@@ -228,7 +225,7 @@ class Adminteam extends Component {
                                             <Col xl={7} lg={15} pull={5}>
                                                 局域网用户数：{item.jyw}
                                             </Col>
-                                            <Col xl={{span:8}}   lg={{span:15}} className="syequ">
+                                            <Col xl={{span:8}} lg={{span:15}} className="syequ">
                                                 使用中的设备数目：{item.ecount}
                                             </Col>
                                             </div>
@@ -240,7 +237,7 @@ class Adminteam extends Component {
                                             <Col xl={{span:8,push:6}} lg={{span:15,push:2}} className="wd">
                                                 纬度：{item.clat}
                                             </Col>
-                                            <Col xl={{span:10,pull:2,offset:2}} lg={{span:15,push:1}}  className="lxr">
+                                            <Col xl={{span:10,pull:2,offset:2}} lg={{span:15,push:1}} className="lxr">
                                                 联系人：{item.adminname}
                                             </Col>
                                             <Col xl={{span:9,pull:4,offset:1}} lg={{span:15,push:2}} >
@@ -257,20 +254,22 @@ class Adminteam extends Component {
                         : 
                             <Col offset={10} span={4}>
                                 <p style={{marginTop:"150px"}}></p>
-                                <img src={nodata}  width="200px"/>
+                                <img src={nodata} width="200px"/>
                                 <p style={{marginTop:"150px"}}></p>
                             </Col>
                          
                         }
                     </Row>
-                    <Pagination defaultPageSize={10} current={this.state.page} total={this.state.totalcount}  onChange={this.hanlePageSize} className="pageSize"  />
+                    <Pagination defaultPageSize={10} current={this.state.page} total={this.state.totalcount} onChange={this.hanlePageSize} className="pageSize" />
                 </div>
                 <Modal title={this.state.type?'编辑维护团队':'新增维护团队'} visible={this.state.visible} onOk={this.handleCreate}
-          onCancel={this.handleCancel} okText={"确认"} cancelText={"取消"}>
-                    <ModalForm visible={this.state.visible} code={this.state.type}  wrappedComponentRef={(form) => this.formRef = form} />
+                    onCancel={this.handleCancel} okText={"确认"} cancelText={"取消"} 
+                >
+                    <ModalForm visible={this.state.visible} code={this.state.type} wrappedComponentRef={(form) => this.formRef = form} />
                 </Modal>
                 <Modal title="提示信息" visible={this.state.deleteshow} onOk={this.deleteOk}
-                       onCancel={this.deleteCancel}>
+                       onCancel={this.deleteCancel}
+                >
                     <p>确认删除吗？</p>
                 </Modal>
             </div>
