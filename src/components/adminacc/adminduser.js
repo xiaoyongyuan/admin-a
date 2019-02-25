@@ -79,9 +79,6 @@ onChangeDate = (field, value) => {
     selectopt = (e) => { //检索search
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
-            if(values.range_picker1===undefined&&values.range_picker2===undefined){
-                message.error('搜索内容不能为空');
-            }
             if(!err){
                 this.setState({
                     page:1,
