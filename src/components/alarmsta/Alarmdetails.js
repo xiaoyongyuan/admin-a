@@ -54,30 +54,7 @@ class Alarmdetails extends React.Component{
       }        
   }
   request=()=>{
-    var x0, y0, xw ,yh;
-    post({url:"/api/alarm/getone_foradmin",data:Object.assign(this.state.faths,{passivecode:this.state.activecompcode})},(res)=>{
-      console.log('******************x0',res.data.finalresult1[0].x);
-      console.log('******************y0',res.data.finalresult1[0].y);
-      console.log('******************x+w',res.data.finalresult1[0].x+res.data.finalresult1[0].w);
-      console.log('******************y+h',res.data.finalresult1[0].y+res.data.finalresult1[0].h);
-      document.onclick=function(e){
-        e=e? e:window.event;
-          ex=e.screenX-1700;
-          ey=e.screenY-136;
-          if(ex > x0 && ex< xw && ey > y0 && ey<yh){
-            alert('里面了',ex,ey,x0,xw,y0,yh);
-           }
-           console.log('222',ex,ey,x0,xw,y0,yh);
-        }
-        
-        
-           x0=res.data.finalresult1[0].x;
-           y0=res.data.finalresult1[0].y;
-           xw=res.data.finalresult1[0].x+res.data.finalresult1[0].w;
-           yh=res.data.finalresult1[0].y+res.data.finalresult1[0].h;
-         
-       
-          
+    post({url:"/api/alarm/getone_foradmin",data:Object.assign(this.state.faths,{passivecode:this.state.activecompcode})},(res)=>{        
       let data={
           src:res.data.picpath,
           field:res.data.field,
@@ -97,36 +74,10 @@ class Alarmdetails extends React.Component{
           next:res.data.next, 
       },()=>{
         this.draw();
-        this.typetext()
       });
     })
   }
-  typetext=()=>{//处理状态显示
-  	let text=''; 
-    let color=''; 
-  	switch(this.state.data.type){
-  		case 1:
-  			text='确认';
-        color='#2A8E39'
-  			break;
-  		case 2:
-  			text='忽略';
-        color='#00B5D0'
-  			break;
-  		case 3:
-  			text='虚警';
-        color='#F22727 '
-  			break;
-      default:
-        text='未处理';
-        color='rgb(247, 195, 93)'
-        break;
-  	}
-  	this.setState({
-  		typetext:text,
-      color:color,
-  	})
-  }
+
   onChange=(checked,text)=>{ //控制显示围界与对象
   	this.setState({
         [text]: checked,
@@ -149,6 +100,46 @@ class Alarmdetails extends React.Component{
   draw = ()=>{ //画围界
   	let ele = document.getElementById("canvasobj");
     let area = ele.getContext("2d");
+
+
+//开始
+    var x0, y0, xw ,yh, i;
+    post({url:"/api/alarm/getone_foradmin",data:Object.assign(this.state.faths,{passivecode:this.state.activecompcode})},(res)=>{
+            console.log('res.data',res.data.finalresult1);
+            for(i in res.data.finalresult1){
+              console.log('第'+i+'个********x0',res.data.finalresult1[i].x);
+              console.log('第'+i+'个********y0',res.data.finalresult1[i].y);
+              console.log('第'+i+'个********x+w',res.data.finalresult1[i].x+res.data.finalresult1[i].w);
+              console.log('第'+i+'个********y+h',res.data.finalresult1[i].y+res.data.finalresult1[i].h);
+
+              x0=res.data.finalresult1[i].x;
+              y0=res.data.finalresult1[i].y;
+              xw=res.data.finalresult1[i].x+res.data.finalresult1[i].w;
+              yh=res.data.finalresult1[i].y+res.data.finalresult1[i].h;
+
+              console.log('第'+i+'个坐标', x0,y0,xw,yh);
+            }
+            
+            ele.onclick=function(e){
+              e=e? e:window.event;
+                ex=e.clientX-ele.offsetLeft;
+                ey=e.clientY-ele.offsetTop;
+                if(ex > x0 && ex< xw && ey > y0 && ey<yh){
+                  console.log('选中了',ex,ey,x0,xw,y0,yh);
+                }
+                console.log('坐标','ex:'+ex,'ey:'+ey,'x0:'+x0,'xw:'+xw,'y0:'+y0,'yh:'+yh);
+              }
+          
+            x0=res.data.finalresult1[0].x;
+            y0=res.data.finalresult1[0].y;
+            xw=res.data.finalresult1[0].x+res.data.finalresult1[0].w;
+            yh=res.data.finalresult1[0].y+res.data.finalresult1[0].h;
+       
+        })
+        //结束
+
+
+
     area.clearRect(0,0,704,576);//清除之前的绘图
     area.lineWidth=1;
     const datafield=this.state.data.field;
@@ -191,7 +182,7 @@ class Alarmdetails extends React.Component{
               <a href="#"  onClick={()=>this.wubao('w')}>222222222222222222</a>
             </Popconfirm> */}
             	<div className="alarmflex">
-            		<div className="flexleft">
+            		<div className="flexleft" id="flexleft">
             			<canvas id="canvasobj" width="604px" height="476px" style={{backgroundImage:'url('+this.state.data.src+')',backgroundSize:"100% 100%"}} />
             			<div style={{textAlign:'center'}}>
             				<ButtonGroup>
