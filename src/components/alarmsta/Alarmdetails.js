@@ -112,12 +112,7 @@ class Alarmdetails extends React.Component{
               console.log('第'+i+'个********x+w',res.data.finalresult1[i].x+res.data.finalresult1[i].w);
               console.log('第'+i+'个********y+h',res.data.finalresult1[i].y+res.data.finalresult1[i].h);
 
-              x0=res.data.finalresult1[i].x;
-              y0=res.data.finalresult1[i].y;
-              xw=res.data.finalresult1[i].x+res.data.finalresult1[i].w;
-              yh=res.data.finalresult1[i].y+res.data.finalresult1[i].h;
-
-              console.log('第'+i+'个坐标', x0,y0,xw,yh);
+              
             }
             
             ele.onclick=function(e){
