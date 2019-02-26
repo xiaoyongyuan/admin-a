@@ -4,8 +4,7 @@ import {post} from "../../axios/tools";
 import "../../style/ztt/css/police.css";
 const ButtonGroup = Button.Group;
 let vis=false;
- var ex;
- var ey;
+
 class Alarmdetails extends React.Component{
 	constructor(props){
       super(props);
@@ -98,7 +97,7 @@ class Alarmdetails extends React.Component{
   draw = ()=>{ //画围界
   	let ele = document.getElementById("canvasobj");
     let area = ele.getContext("2d");
-    area.clearRect(0,0,704,576);//清除之前的绘图
+    area.clearRect(0,0,604,476);//清除之前的绘图
     area.lineWidth=1;
     const datafield=this.state.data.field;
   	if(this.state.field && datafield.length){
@@ -134,6 +133,7 @@ class Alarmdetails extends React.Component{
   	}
   }
   drawSelectObj=(el)=>{ //画出当前选中的围界
+    console.log('dddd')
     const x=604/this.state.data.pic_width, y=476/this.state.data.pic_height;
     let ele = document.getElementById("canvasobj");
     let area = ele.getContext("2d");
@@ -154,6 +154,7 @@ class Alarmdetails extends React.Component{
         return pre;
     }
   clickgetcorrd =(e)=>{ //点击
+    e.preventDefault();
     const finalresult=this.state.data.finalresult;
         if(finalresult.length){
           let getcord=this.getcoord(e); //获取点击的坐标
@@ -161,11 +162,12 @@ class Alarmdetails extends React.Component{
           let x=parseInt(getcord[0]/xi),y=parseInt(getcord[1]/yi);
           const crut=this.selectObj(x,y);
           if(crut){
+            console.log(crut);
             this.setState({crut})
             this.drawSelectObj(crut);
             this.openNotification();
           } 
-          console.log(crut);
+          
         }
         
   }
@@ -196,7 +198,9 @@ class Alarmdetails extends React.Component{
                 确认将此条报警对象置为误报？
             </div>
         ),
-        onClose:_this.selectobjCancel(),
+        onClose:function(){
+          _this.selectobjCancel()
+        },
         btn,
         duration: 0,
         placement:'topLeft',
