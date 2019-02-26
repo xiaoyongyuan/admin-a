@@ -12,12 +12,12 @@ class Onlineeq extends React.Component{
             }
             if(i>30&&i<=60){
                 data.push({
-                    value: 1,
+                    value: 5,
                     name: 'aaa'
                 })}
             if(i>30&&i<=60){
                 data.push({
-                    value:1,
+                    value:5,
                     name: 'bbcc'
                 })
             }
