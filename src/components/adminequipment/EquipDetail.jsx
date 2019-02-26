@@ -32,18 +32,15 @@ class ModaEquipDetail extends Component{
 
     }
     componentWillReceiveProps(nextProps){
-        console.log("componentWillReceiveProps")
-
         if( nextProps.visible != vis){
             vis=nextProps.visible;
 
             if(nextProps.visible){
-                console.log("nextProps", nextProps);
-                // return;
                 vis=nextProps.visible;
                 this.setState({
                     code: nextProps.code,
                 },()=>{
+                  
                     this.requestdata()
                 })
 

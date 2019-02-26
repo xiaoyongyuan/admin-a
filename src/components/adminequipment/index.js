@@ -5,7 +5,7 @@ import {Table, Row, Col, Form, Input, Button ,Icon,Modal,message} from 'antd';
 import '../../style/yal/home.css';
 import moment from "moment";
 import EquipDetail from './EquipDetail';
-
+import CanForm from './CanForm';
 const FormItem = Form.Item;
 
 class AdminEquipment extends Component {
@@ -13,9 +13,11 @@ class AdminEquipment extends Component {
         super(props);
         this.state={
             visible:false,
+            block:false,
             list:[],
             createinfo:[],
             page:1,
+            toson:{}, //传给详情页面的值
         };
     }
     componentDidMount() {
@@ -119,9 +121,64 @@ class AdminEquipment extends Component {
             }
         })
     }
+    
+    viewdetails = (text,record) =>{ //查看设备信息
+        console.log('111',record.code);
+        this.showModalEdit(record.code)
+       
+    }
+    canequip = (text,record) =>{ 
+        //获取设备信息接口
+        this.setState({
+            coded:record.code,
+            block:true,
+        })
+        post({url:"/api/equipment/get_equipmentinfo",data:{cid:record.cid,eid:record.ecode}}, (res)=>{
+            this.setState({
+                adta:res.data
+            })
+            if(res.success){
+                console.log('获取设备信息接口',res);
+                        //获取异步任务列表
+                          console.log('*******code',this.state.adta);
+                        const _this=this;
+                        let inter=setInterval(function(){
+                            post({url:"/api/smptask/getone",data:{code:_this.state.adta}}, (res)=>{
+                                console.log('*11111**********res',res);
+                                if(moment()-moment(res.data.createon)>10000){ //点名10秒无结果
+                                    message.warn('系统繁忙，请稍后再试');
+                                    clearInterval(inter);
+                                }
+                                if(res.success){
+                                     console.log('*********************res',res);
+                                     _this.setState({
+                                        cidA:res.data.cid,
+                                        codeA:res.data.code,
+                                        companycodeA: res.data.companycode,
+                                        createonA: res.data.createon,
+                                        eidA:res.data.eid,
+                                        memoA:res.data.memo,
+                                        rediskeyA:res.data.rediskey,
+                                        taskmemoA: res.data.taskmemo,
+                                        taskresultA:res.data.taskresult,
+                                        taskstatusA: res.data.taskstatus,
+                                        tasktimeA:res.data.tasktime,
+               
+                                        },()=>{
+                                            console.log('cidA', _this.state.cidA);
+                                            
+                                        })
+                                    clearInterval(inter);
+                                }
+                            })
+                        },2000)
+
+            }
+        })
+       
+    }
     render() {
         const { getFieldDecorator } = this.props.form;
-        const data = new Date().getTime();
         const columns = [
             {
                 title: '序号',
@@ -171,7 +228,23 @@ class AdminEquipment extends Component {
             title:'所属公司',
                 dataIndex:'cname',
                 key:'cname'
-            }
+            },{
+                title:'操作',
+                    dataIndex:'data',
+                    key:'data',
+                    render: (text, record) => {
+                        return(
+                            <div>
+                                {
+                                    <span>
+                                        <Button onClick={()=>this.viewdetails(text,record)}>查看详情</Button>
+                                        <Button onClick={()=>this.canequip(text,record)}>获取当前设备信息</Button>
+                                    </span>
+                                }
+                            </div>
+                        )
+                    }
+                }
             ];
 
 
@@ -214,27 +287,45 @@ class AdminEquipment extends Component {
                         <Table
                             bordered={true}
                             dataSource={this.state.list}
-                            onRow={this.onRowSelect}
+                            // onRow={this.onRowSelect}
                             columns={columns}
                             pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage}}
                         />
                     </Row>
-                    <Modal visible={this.state.visible}
+                    <Modal visible={this.state.visible} width={660}
                            title='设备详细信息'
                            onCancel={this.handleCancel}
                            footer={[
                                <Button key="back" onClick={this.e_getinfo}>数据更新</Button>,
-                               <Button key="submit" type="primary"  onClick={this.e_upgrade}>
+                               <Button key="submit" type="primary" onClick={this.e_upgrade}>
                                    升级
                                </Button>,
                            ]}
                     >
-                        <EquipDetail
+                        <EquipDetail style={{width:'660px',background:"green"}}
                             visible={this.state.visible}
                                      code={this.state.type}
                             ecode={this.state.ecode}
 
                     />
+                    </Modal>
+                    <Modal visible={this.state.block} width={660}
+                           title='设备'
+                           onCancel={this.handleCancel}
+                           footer={[]}
+                    >
+                          <div>cid：<span> {this.state.cidA} </span></div>
+                          <div>code：<span> {this.state.codeA}</span></div>
+                          <div>companycode：<span> {this.state.companycodeA}</span></div>
+                          <div>createon：<span> {this.state.createonA}</span></div>
+                          <div>eid：<span> {this.state.eidA}</span></div>
+                          <div>memo：<span> {this.state.memoA}</span></div>
+                          <div>rediskey：<span> {this.state.rediskeyA}</span></div>
+                          <div>taskmemo：<span> {this.state.taskmemo}A</span></div>
+                          <div>taskresult：<span> {this.state.taskresultA}</span></div>
+                          <div>taskstatus：<span> {this.state.taskstatusA}</span></div>
+                          <div>tasktime：<span> {this.state.tasktimeA}</span></div>
+
                     </Modal>
                 </div>
             </div>
