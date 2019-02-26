@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Switch, Icon, Popconfirm } from 'antd';
+import {Button, Switch, Icon, notification, message } from 'antd';
 import {post} from "../../axios/tools";
 import "../../style/ztt/css/police.css";
 const ButtonGroup = Button.Group;
@@ -28,17 +28,14 @@ class Alarmdetails extends React.Component{
       };
   }
   componentWillMount() {
-    const activecompcode=localStorage.getItem('activecompcode');
   	//此处拿到父页面参数
     this.setState({
       faths:this.props.toson,
       code:this.props.toson.code,
-      activecompcode:activecompcode && activecompcode !='undefined'?activecompcode:''
     });
   }
   componentDidMount() {
        this.request();
-       
     } ;
   componentWillReceiveProps(nextProps){ //此处修改父页面参数
       if( nextProps.visible !== vis){
@@ -54,8 +51,9 @@ class Alarmdetails extends React.Component{
       }        
   }
   request=()=>{
-    post({url:"/api/alarm/getone_foradmin",data:Object.assign(this.state.faths,{passivecode:this.state.activecompcode})},(res)=>{        
+    post({url:"/api/alarm/getone_foradmin",data:this.state.faths},(res)=>{        
       let data={
+          cid:res.data.cid,
           src:res.data.picpath,
           field:res.data.field,
           name:res.data.name,
@@ -100,41 +98,6 @@ class Alarmdetails extends React.Component{
   draw = ()=>{ //画围界
   	let ele = document.getElementById("canvasobj");
     let area = ele.getContext("2d");
-
-
-//开始
-    var x0, y0, xw ,yh, i;
-    post({url:"/api/alarm/getone_foradmin",data:Object.assign(this.state.faths,{passivecode:this.state.activecompcode})},(res)=>{
-            console.log('res.data',res.data.finalresult1);
-            for(i in res.data.finalresult1){
-              console.log('第'+i+'个********x0',res.data.finalresult1[i].x);
-              console.log('第'+i+'个********y0',res.data.finalresult1[i].y);
-              console.log('第'+i+'个********x+w',res.data.finalresult1[i].x+res.data.finalresult1[i].w);
-              console.log('第'+i+'个********y+h',res.data.finalresult1[i].y+res.data.finalresult1[i].h);
-
-              
-            }
-            
-            ele.onclick=function(e){
-              e=e? e:window.event;
-                ex=e.clientX-ele.offsetLeft;
-                ey=e.clientY-ele.offsetTop;
-                if(ex > x0 && ex< xw && ey > y0 && ey<yh){
-                  console.log('选中了',ex,ey,x0,xw,y0,yh);
-                }
-                console.log('坐标','ex:'+ex,'ey:'+ey,'x0:'+x0,'xw:'+xw,'y0:'+y0,'yh:'+yh);
-              }
-          
-            x0=res.data.finalresult1[0].x;
-            y0=res.data.finalresult1[0].y;
-            xw=res.data.finalresult1[0].x+res.data.finalresult1[0].w;
-            yh=res.data.finalresult1[0].y+res.data.finalresult1[0].h;
-       
-        })
-        //结束
-
-
-
     area.clearRect(0,0,704,576);//清除之前的绘图
     area.lineWidth=1;
     const datafield=this.state.data.field;
@@ -170,15 +133,112 @@ class Alarmdetails extends React.Component{
   		
   	}
   }
+  drawSelectObj=(el)=>{ //画出当前选中的围界
+    const x=604/this.state.data.pic_width, y=476/this.state.data.pic_height;
+    let ele = document.getElementById("canvasobj");
+    let area = ele.getContext("2d");
+    area.clearRect(0,0,604,476);//清除之前的绘图
+    area.lineWidth=1;
+    area.strokeStyle='#ff0';
+    area.beginPath();
+    area.rect(parseInt(el.x*x),parseInt(el.y*y),parseInt(el.w*x),parseInt(el.h*y));
+    area.stroke();
+    area.closePath();
+  }
+  getcoord = (coords) => { //获取坐标
+        let ele = document.getElementById("canvasobj");
+        let canvsclent = ele.getBoundingClientRect();
+        let x= coords.clientX - canvsclent.left * (ele.width / canvsclent.width);
+        let y= coords.clientY - canvsclent.top * (ele.height / canvsclent.height)
+        let pre=[x,y]
+        return pre;
+    }
+  clickgetcorrd =(e)=>{ //点击
+    const finalresult=this.state.data.finalresult;
+        if(finalresult.length){
+          let getcord=this.getcoord(e); //获取点击的坐标
+          const xi=604/this.state.data.pic_width, yi=476/this.state.data.pic_height;
+          let x=parseInt(getcord[0]/xi),y=parseInt(getcord[1]/yi);
+          const crut=this.selectObj(x,y);
+          if(crut){
+            this.setState({crut})
+            this.drawSelectObj(crut);
+            this.openNotification();
+          } 
+          console.log(crut);
+        }
+        
+  }
+  selectObj=(x,y)=>{
+    var crut='';
+    const finalresult=this.state.data.finalresult;
+    finalresult.some((el,i)=>{
+      if(el.x<=x && x<=(el.x+el.w) && el.y<=y && y<=(el.y+el.h) ){
+        return crut=el;
+      }
+    })
+    return crut;
+  }
+
+  openNotification = () => { //确认误报弹层
+    const _this=this;
+     const btn = (
+        <div>
+          <Button type="primary" size="small"  onClick={() => _this.selectobjOk('newalarm')}>确认</Button>
+          <Button type="primary" size="small" onClick={() => _this.selectobjCancel('newalarm')}>取消</Button>
+        </div>      
+    );
+      notification.open({
+          key:'newalarm',
+          message: '信息',
+          description: (
+            <div>
+                确认将此条报警对象置为误报？
+            </div>
+        ),
+        onClose:_this.selectobjCancel(),
+        btn,
+        duration: 0,
+        placement:'topLeft',
+        left:100,
+        top:300,
+      });
+  };
+  selectobjOk =(key)=>{ //误报提交
+    const _this=this;
+    const data={
+      finalinfo:'',
+      aid:_this.state.code,
+      cid:_this.state.data.cid,
+      finalarea:JSON.stringify(_this.state.crut),
+      picpath:_this.state.data.src,
+      pic_width:_this.state.data.pic_width,
+      pic_height:_this.state.data.pic_height
+    }
+     post({url:"/api/Misinformation/add",data:data},(res)=>{
+      if(res.success){
+        notification.close(key);
+        message.success('操作成功');
+        _this.draw();
+      }
+     })
+    
+  }
+  selectobjCancel =(key)=>{ //误报确认取消
+    this.setState({
+      crut:{}
+    },()=>{
+      this.draw();
+      notification.close(key);
+    })
+    
+  }
     render(){      
         return(
             <div className="alarmDetails">
-            {/* <Popconfirm title="确认为误报吗？" okText="确认" cancelText="取消">
-              <a href="#"  onClick={()=>this.wubao('w')}>222222222222222222</a>
-            </Popconfirm> */}
             	<div className="alarmflex">
             		<div className="flexleft" id="flexleft">
-            			<canvas id="canvasobj" width="604px" height="476px" style={{backgroundImage:'url('+this.state.data.src+')',backgroundSize:"100% 100%"}} />
+            			<canvas id="canvasobj" width="604px" height="476px" onClick={this.clickgetcorrd} style={{backgroundImage:'url('+this.state.data.src+')',backgroundSize:"100% 100%"}} />
             			<div style={{textAlign:'center'}}>
             				<ButtonGroup>
       							  <Button type="primary" onClick={()=>this.looknew('prev')} disabled={this.state.prev?false:true}>
