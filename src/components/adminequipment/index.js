@@ -1,7 +1,7 @@
 import React, { Component} from 'react';
 import {post} from "../../axios/tools";
 import BreadcrumbCustom from "../BreadcrumbCustom";
-import {Table, Row, Col, Form, Input, Button ,Icon,Modal,message} from 'antd';
+import {Table, Row, Col, Form, Input, Button ,Icon,Modal,message,Spin} from 'antd';
 import '../../style/yal/home.css';
 import moment from "moment";
 import EquipDetail from './EquipDetail';
@@ -18,6 +18,7 @@ class AdminEquipment extends Component {
             createinfo:[],
             page:1,
             toson:{}, //传给详情页面的值
+            loading: true,//加载状态
         };
     }
     componentDidMount() {
@@ -34,7 +35,7 @@ class AdminEquipment extends Component {
             if(res.success){
                 this.setState({
                     list: res.data,
-                    total:res.totalcount
+                    total:res.totalcount,loading: false,//加载状态
                 })
             }
         })
@@ -129,28 +130,31 @@ class AdminEquipment extends Component {
         //获取设备信息接口
         this.setState({
             coded:record.code,
-           
+            loading: true,//加载状态
         })
         post({url:"/api/equipment/get_equipmentinfo",data:{cid:record.cid,eid:record.ecode}}, (res)=>{
             this.setState({
                 adta:res.data
             })
             if(res.success){
-              
                         //获取异步任务列表
-                         
                         const _this=this;
                         let inter=setInterval(function(){
                             post({url:"/api/smptask/getone",data:{code:_this.state.adta}}, (res)=>{
-                              
                                 if(moment()-moment(res.data.createon)>10000){ //点名10秒无结果
+                                    _this.setState({
+                                        loading: false,//加载状态
+                                    });
                                     message.warn('请求超时，请稍后再试');
                                     clearInterval(inter);
+                                    
                                 }
                                 if(res.success){
+                                    
                                   
                                      if(res.data.taskstatus){
                                             _this.setState({
+                                                loading: false,//加载状态
                                                 block:true,
                                                 cidA:res.data.cid,
                                                 codeA:res.data.code,
@@ -245,9 +249,11 @@ class AdminEquipment extends Component {
             ];
 
 
-        return (
+        return ( 
             <div className="AdminEquipment">
+            
                 <BreadcrumbCustom first="设备信息"/>
+               
                 <div className="shange">
                     <Row>
                         <Col span={14}>
@@ -280,15 +286,20 @@ class AdminEquipment extends Component {
                             </Form>
                         </Col>
                     </Row>
+                    
                     <Row>
-                        <Table
-                            bordered={true}
-                            dataSource={this.state.list}
-                            // onRow={this.onRowSelect}
-                            columns={columns}
-                            pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage}}
-                        />
+                        <Spin spinning={this.state.loading} size="large" className="spin" tip="Loading...">  
+                            <Table
+                                bordered={true}
+                                dataSource={this.state.list}
+                                // onRow={this.onRowSelect}
+                                columns={columns}
+                                pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage}}
+                            />
+                        </Spin>
+
                     </Row>
+                    
                     <Modal visible={this.state.visible} width={660}
                            title='设备详细信息'
                            onCancel={this.handleCancel}
@@ -304,7 +315,7 @@ class AdminEquipment extends Component {
                                      code={this.state.type}
                             ecode={this.state.ecode}
 
-                    />
+                        />
                     </Modal>
                     <Modal visible={this.state.block} width={660}
                            title='设备'
@@ -326,7 +337,9 @@ class AdminEquipment extends Component {
                             </div>
                     </Modal>
                 </div>
+              
             </div>
+          
         )
     }
 }

@@ -453,3 +453,9 @@ margin: 20px 0;
     right: 0;
     
 }
+
+.spin {
+    width: 100%;
+    margin: 30px auto;
+    margin-top: 100px;
+}
