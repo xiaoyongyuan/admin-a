@@ -5,7 +5,7 @@ import {Table, Row, Col, Form, Input, Button ,Icon,Modal,message} from 'antd';
 import '../../style/yal/home.css';
 import moment from "moment";
 import EquipDetail from './EquipDetail';
-import CanForm from './CanForm';
+
 const FormItem = Form.Item;
 
 class AdminEquipment extends Component {
@@ -89,6 +89,7 @@ class AdminEquipment extends Component {
         console.log(e);
         this.setState({
             visible: false,
+            block: false,
         });
     };
     e_getinfo = (e) => {//更新数据
@@ -312,20 +313,21 @@ class AdminEquipment extends Component {
                     <Modal visible={this.state.block} width={660}
                            title='设备'
                            onCancel={this.handleCancel}
-                           footer={[]}
+                           footer={[ <Button key="back" onClick={this.handleCancel} >确认</Button>]}
                     >
-                          <div>cid：<span> {this.state.cidA} </span></div>
-                          <div>code：<span> {this.state.codeA}</span></div>
-                          <div>companycode：<span> {this.state.companycodeA}</span></div>
-                          <div>createon：<span> {this.state.createonA}</span></div>
-                          <div>eid：<span> {this.state.eidA}</span></div>
-                          <div>memo：<span> {this.state.memoA}</span></div>
-                          <div>rediskey：<span> {this.state.rediskeyA}</span></div>
-                          <div>taskmemo：<span> {this.state.taskmemo}A</span></div>
-                          <div>taskresult：<span> {this.state.taskresultA}</span></div>
-                          <div>taskstatus：<span> {this.state.taskstatusA}</span></div>
-                          <div>tasktime：<span> {this.state.tasktimeA}</span></div>
-
+                            <div style={{marginLeft:'60px',}}>
+                                <div>cid：<span> {this.state.cidA} </span></div>
+                                <div>code：<span> {this.state.codeA}</span></div>
+                                <div>companycode：<span> {this.state.companycodeA}</span></div>
+                                <div>createon：<span> {this.state.createonA}</span></div>
+                                <div>eid：<span> {this.state.eidA}</span></div>
+                                <div>memo：<span> {this.state.memoA}</span></div>
+                                <div>rediskey：<span> {this.state.rediskeyA}</span></div>
+                                <div>taskmemo：<span> {this.state.taskmemo}A</span></div>
+                                <div>taskresult：<span> {this.state.taskresultA}</span></div>
+                                <div>taskstatus：<span> {this.state.taskstatusA}</span></div>
+                                <div>tasktime：<span> {this.state.tasktimeA}</span></div>
+                            </div>
                     </Modal>
                 </div>
             </div>
