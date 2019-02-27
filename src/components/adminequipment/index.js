@@ -56,29 +56,26 @@ class AdminEquipment extends Component {
             type:code,
             ecode:ecode,
             index:index,
-        },()=>{
-            console.log('code,index,record',code,index,record)
         });
-
     }
 
 
     onRowSelect = (record, index)=>{//table 行单击
         return {
             onClick:(e)=>{
-                console.log(record);
+                
                 this.showModalEdit(record.code,index,record,record.ecode)
             }
         }
     };
 
     e_upgrade = (e) =>{//设备升级
-        console.log("设备升级");
+    
         const params={
             ecode:this.state.ecode
         }
         // return;
-        console.log("测试return");
+ 
         post({url:"/api/equipment/e_upgrade",data:params}, (res)=>{
             if(res.success){
                 message.success('设备正在升级中，请稍后...')
@@ -86,19 +83,19 @@ class AdminEquipment extends Component {
         })
     }
     handleCancel = (e) => {//关闭弹出层
-        console.log(e);
+        
         this.setState({
             visible: false,
             block: false,
         });
     };
     e_getinfo = (e) => {//更新数据
-        console.log("更新数据");
+       
         const params = {
             ecode:this.state.ecode
         }
         return;
-        console.log("测试return");
+   
         post({url:"/api/equipment/e_getinfo",data:params}, (res)=>{
             if(res.success){
                 message.success('更新成功')
@@ -124,7 +121,7 @@ class AdminEquipment extends Component {
     }
     
     viewdetails = (text,record) =>{ //查看设备信息
-        console.log('111',record.code);
+        
         this.showModalEdit(record.code)
        
     }
@@ -132,45 +129,46 @@ class AdminEquipment extends Component {
         //获取设备信息接口
         this.setState({
             coded:record.code,
-            block:true,
+           
         })
         post({url:"/api/equipment/get_equipmentinfo",data:{cid:record.cid,eid:record.ecode}}, (res)=>{
             this.setState({
                 adta:res.data
             })
             if(res.success){
-                console.log('获取设备信息接口',res);
+              
                         //获取异步任务列表
-                          console.log('*******code',this.state.adta);
+                         
                         const _this=this;
                         let inter=setInterval(function(){
                             post({url:"/api/smptask/getone",data:{code:_this.state.adta}}, (res)=>{
-                                console.log('*11111**********res',res);
+                              
                                 if(moment()-moment(res.data.createon)>10000){ //点名10秒无结果
-                                    message.warn('系统繁忙，请稍后再试');
+                                    message.warn('请求超时，请稍后再试');
                                     clearInterval(inter);
                                 }
                                 if(res.success){
-                                     console.log('*********************res',res);
-                                     _this.setState({
-                                        cidA:res.data.cid,
-                                        codeA:res.data.code,
-                                        companycodeA: res.data.companycode,
-                                        createonA: res.data.createon,
-                                        eidA:res.data.eid,
-                                        memoA:res.data.memo,
-                                        rediskeyA:res.data.rediskey,
-                                        taskmemoA: res.data.taskmemo,
-                                        taskresultA:res.data.taskresult,
-                                        taskstatusA: res.data.taskstatus,
-                                        tasktimeA:res.data.tasktime,
-               
-                                        },()=>{
-                                            console.log('cidA', _this.state.cidA);
-                                            
-                                        })
-                                    clearInterval(inter);
-                                }
+                                  
+                                     if(res.data.taskstatus){
+                                            _this.setState({
+                                                block:true,
+                                                cidA:res.data.cid,
+                                                codeA:res.data.code,
+                                                companycodeA: res.data.companycode,
+                                                createonA: res.data.createon,
+                                                eidA:res.data.eid,
+                                                memoA:res.data.memo,
+                                                rediskeyA:res.data.rediskey,
+                                                taskmemoA: res.data.taskmemo,
+                                                taskresultA:res.data.taskresult,
+                                                taskstatusA: res.data.taskstatus,
+                                                tasktimeA:res.data.tasktime,
+                    
+                                                })
+                                                clearInterval(inter);
+                                            }
+                                     }
+                                    
                             })
                         },2000)
 
@@ -191,8 +189,6 @@ class AdminEquipment extends Component {
             dataIndex: 'ecode',
             key: 'ecode',
                 render: (text, record,index) =>{
-
-
                     return(
                         <div>
                             {moment().subtract('minutes',5).format('YYYY-MM-DD HH:mm:ss') > record.lastheart
@@ -237,9 +233,9 @@ class AdminEquipment extends Component {
                         return(
                             <div>
                                 {
-                                    <span>
+                                    <span style={{marginLeft:'10%'}}>
                                         <Button onClick={()=>this.viewdetails(text,record)}>查看详情</Button>
-                                        <Button onClick={()=>this.canequip(text,record)}>获取当前设备信息</Button>
+                                        <Button style={{marginLeft:'10%'}} onClick={()=>this.canequip(text,record)}>获取当前设备信息</Button>
                                     </span>
                                 }
                             </div>
@@ -323,7 +319,7 @@ class AdminEquipment extends Component {
                                 <div>eid：<span> {this.state.eidA}</span></div>
                                 <div>memo：<span> {this.state.memoA}</span></div>
                                 <div>rediskey：<span> {this.state.rediskeyA}</span></div>
-                                <div>taskmemo：<span> {this.state.taskmemo}A</span></div>
+                                <div>taskmemo：<span> {this.state.taskmemo}</span></div>
                                 <div>taskresult：<span> {this.state.taskresultA}</span></div>
                                 <div>taskstatus：<span> {this.state.taskstatusA}</span></div>
                                 <div>tasktime：<span> {this.state.tasktimeA}</span></div>
