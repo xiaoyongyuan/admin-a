@@ -159,7 +159,8 @@ searchCancel = () =>{//删除取消
             <div className="AdmindUser">
               
                 <BreadcrumbCustom first="账号管理" second="用户管理" />
-                <Row className="margin_top80 margin_bottom40">
+                <div className="shange">
+                <Row style={{marginBottom:'20px'}}>
                     <Col span={18}>
                     <LocaleProvider locale={zh_CN}>
                         <Form layout="inline"onSubmit={this.selectopt}>
@@ -226,10 +227,12 @@ searchCancel = () =>{//删除取消
                         </LocaleProvider>
                     </Col>
                 </Row>
+                
                 <Table 
-                     columns={columns} dataSource={this.state.list}
+                     columns={columns} dataSource={this.state.list} bordered={true}
                      pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage}}
                 />
+                </div>
             </div>
 
         )
