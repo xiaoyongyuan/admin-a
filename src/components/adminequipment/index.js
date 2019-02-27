@@ -5,9 +5,7 @@ import {Table, Row, Col, Form, Input, Button ,Icon,Modal,message,Spin} from 'ant
 import '../../style/yal/home.css';
 import moment from "moment";
 import EquipDetail from './EquipDetail';
-
 const FormItem = Form.Item;
-
 class AdminEquipment extends Component {
     constructor(props){
         super(props);

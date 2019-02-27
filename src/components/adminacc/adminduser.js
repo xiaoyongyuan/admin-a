@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import '../../style/sjg/home.css';
-import {Form,Table, DatePicker,Input, Row, Col, Button,message,LocaleProvider} from 'antd';
+import {Form,Table, DatePicker,Input, Row, Col, Button,LocaleProvider} from 'antd';
 import BreadcrumbCustom from "../BreadcrumbCustom";
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import 'moment/locale/zh-cn';
