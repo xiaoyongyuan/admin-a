@@ -10,8 +10,10 @@ import Adminteam from './adminacc/Adminteam';
 import Admindeveice from './adminacc/Admindeveice';
 import AdmindUser from './adminacc/adminduser';
 
-//查看设备
+//设备管理
 import AdminEquipment from './adminequipment/index';
+import AsynHistory from './adminequipment/AsynHistory';
+
 
 //报警统计
 import Alarmsta from './alarmsta/index';
@@ -30,7 +32,7 @@ export default {
     WysiwygBundle
 
     , Adminteam, Admindeveice, AdmindUser
-    , AdminEquipment
+    , AdminEquipment, AsynHistory
     ,Alarmsta, OneAlarm
     ,ServerInfo
    
