@@ -289,7 +289,7 @@ class AdminEquipment extends Component {
                     
                     <Row>
                         <Spin spinning={this.state.loading} size="large" className="spin" tip="Loading...">  
-                            <Table
+                            <Table style={{marginTop:'24px'}}
                                 bordered={true}
                                 dataSource={this.state.list}
                                 // onRow={this.onRowSelect}
