@@ -1,7 +1,7 @@
 import React, { Component} from 'react';
 import {post} from "../../axios/tools";
 import BreadcrumbCustom from "../BreadcrumbCustom";
-import {Table, Row, Col, Form, Input, Button ,Icon,Modal,message,Spin} from 'antd';
+import {Table, Row, Col, Form, Input, Button ,Icon,Modal,message,Spin,Slider, Switch} from 'antd';
 import '../../style/yal/home.css';
 import moment from "moment";
 import EquipDetail from './EquipDetail';
@@ -17,9 +17,15 @@ class AdminEquipment extends Component {
             page:1,
             toson:{}, //传给详情页面的值
             loading: true,//加载状态
+            disabled: false,
+  
         };
     }
     componentDidMount() {
+        this.getlist();
+        
+    }
+    getlist=()=>{
         const params={
             pagesize:10,
             ecode:this.state.ecode,
@@ -28,17 +34,17 @@ class AdminEquipment extends Component {
             estatus:1,
 
         }
-
         post({url:"/api/equipment/getlistforadmin",data:params}, (res)=>{
             if(res.success){
                 this.setState({
                     list: res.data,
-                    total:res.totalcount,loading: false,//加载状态
+                    total:res.totalcount,
+                    loading: false,//加载状态
+                    // bshold:res.data.threshold,
                 })
             }
         })
     }
-
     changePage=(page,pageSize)=>{ //分页  页码改变的回调，参数是改变后的页码及每页条数
         this.setState({
             page: page,
@@ -48,7 +54,6 @@ class AdminEquipment extends Component {
         })
 
     }
-
     showModalEdit=(code,index,record,ecode)=>{ //打开弹层
         this.setState({
             visible: true,
@@ -57,8 +62,6 @@ class AdminEquipment extends Component {
             index:index,
         });
     }
-
-
     onRowSelect = (record, index)=>{//table 行单击
         return {
             onClick:(e)=>{
@@ -67,14 +70,11 @@ class AdminEquipment extends Component {
             }
         }
     };
-
     e_upgrade = (e) =>{//设备升级
-    
         const params={
             ecode:this.state.ecode
         }
         // return;
- 
         post({url:"/api/equipment/e_upgrade",data:params}, (res)=>{
             if(res.success){
                 message.success('设备正在升级中，请稍后...')
@@ -82,14 +82,12 @@ class AdminEquipment extends Component {
         })
     }
     handleCancel = (e) => {//关闭弹出层
-        
         this.setState({
             visible: false,
             block: false,
         });
     };
     e_getinfo = (e) => {//更新数据
-       
         const params = {
             ecode:this.state.ecode
         }
@@ -100,8 +98,6 @@ class AdminEquipment extends Component {
                 message.success('更新成功')
             }
         })
-
-
     };
     selectopt = (e) => { //检索search
         e.preventDefault();
@@ -114,15 +110,12 @@ class AdminEquipment extends Component {
                 },()=>{
                     this.componentDidMount()
                 })
-
             }
         })
     }
     
     viewdetails = (text,record) =>{ //查看设备信息
-        
         this.showModalEdit(record.code)
-       
     }
     canequip = (text,record) =>{ 
         //获取设备信息接口
@@ -135,50 +128,81 @@ class AdminEquipment extends Component {
                 adta:res.data
             })
             if(res.success){
-                        //获取异步任务列表
-                        const _this=this;
-                        let inter=setInterval(function(){
-                            post({url:"/api/smptask/getone",data:{code:_this.state.adta}}, (res)=>{
-                                if(moment()-moment(res.data.createon)>10000){ //点名10秒无结果
-                                    _this.setState({
-                                        loading: false,//加载状态
-                                    });
-                                    message.warn('请求超时，请稍后再试');
+                //获取异步任务列表
+                const _this=this;
+                let inter=setInterval(function(){
+                    post({url:"/api/smptask/getone",data:{code:_this.state.adta}}, (res)=>{
+                        if(moment()-moment(res.data.createon)>10000){ //点名10秒无结果
+                            _this.setState({
+                                loading: false,//加载状态
+                            });
+                            message.warn('请求超时，请稍后再试');
+                            clearInterval(inter);
+                            
+                        }
+                        if(res.success){
+                            if(res.data.taskstatus){
+                                _this.setState({
+                                    loading: false,//加载状态
+                                    block:true,
+                                    cidA:res.data.cid,
+                                    codeA:res.data.code,
+                                    companycodeA: res.data.companycode,
+                                    createonA: res.data.createon,
+                                    eidA:res.data.eid,
+                                    memoA:res.data.memo,
+                                    rediskeyA:res.data.rediskey,
+                                    taskmemoA: res.data.taskmemo,
+                                    taskresultA:res.data.taskresult,
+                                    taskstatusA: res.data.taskstatus,
+                                    tasktimeA:res.data.tasktime,
+        
+                                    })
                                     clearInterval(inter);
-                                    
                                 }
-                                if(res.success){
-                                    
-                                  
-                                     if(res.data.taskstatus){
-                                            _this.setState({
-                                                loading: false,//加载状态
-                                                block:true,
-                                                cidA:res.data.cid,
-                                                codeA:res.data.code,
-                                                companycodeA: res.data.companycode,
-                                                createonA: res.data.createon,
-                                                eidA:res.data.eid,
-                                                memoA:res.data.memo,
-                                                rediskeyA:res.data.rediskey,
-                                                taskmemoA: res.data.taskmemo,
-                                                taskresultA:res.data.taskresult,
-                                                taskstatusA: res.data.taskstatus,
-                                                tasktimeA:res.data.tasktime,
-                    
-                                                })
-                                                clearInterval(inter);
-                                            }
-                                     }
-                                    
-                            })
-                        },2000)
+                            }
+                    })
+                },2000)
 
             }
         })
        
     }
+    threshold = (e) => {//阈值改变
+    //   let fazhi=( e/10).toFixed(0)
+        this.setState({
+            eHold:e
+        })
+      }
+    remove = (text,record) => {//阈值改变
+    // this.myRef.current.blur();
+    this.setState({
+        record:record.code
+    },()=>{
+        this.requerthreshold();
+    })
+    }
+    requerthreshold=()=>{ 
+        this.setState({
+            loading: true,//加载状态
+        })
+        const params={
+            threshold:this.state.eHold,
+            code:this.state.record,
+        }
+        post({url:"/api/camera/update_threshold",data:params}, (res)=>{
+            if(res.success){
+                this.setState({
+                    list: res.data,
+                    
+                })
+                this.getlist();
+            }
+        })
+
+    }
     render() {
+        
         const { getFieldDecorator } = this.props.form;
         const columns = [
             {
@@ -200,6 +224,18 @@ class AdminEquipment extends Component {
                         </div>
                     )
                 }
+        }, {
+            title: '阈值',
+            dataIndex: 'threshold',
+            key: 'threshold',
+            render:(text,record,index)=>{
+                const { disabled } = this.state;
+                return(
+                    <div>
+                        {<Slider blur={1} onAfterChange={()=>this.remove(text,record)} onChange={this.threshold}min={1} max={9} defaultValue={record.threshold} disabled={disabled} />}
+                    </div>
+                )
+            }
         }, {
             title: '最后一次心跳时间',
             dataIndex: 'lastheart',
