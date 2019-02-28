@@ -183,21 +183,11 @@ class AdminEquipment extends Component {
     })
     }
     requerthreshold=()=>{ 
-        this.setState({
-            loading: true,//加载状态
-        })
         const params={
             threshold:this.state.eHold,
             code:this.state.record,
         }
         post({url:"/api/camera/update_threshold",data:params}, (res)=>{
-            if(res.success){
-                this.setState({
-                    list: res.data,
-                    
-                })
-                this.getlist();
-            }
         })
 
     }
