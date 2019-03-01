@@ -1,7 +1,7 @@
 import React, { Component} from 'react';
 import {post} from "../../axios/tools";
 import BreadcrumbCustom from "../BreadcrumbCustom";
-import {Table, Row, Col, Form, Input, Button ,Icon,Modal,message,Spin,Slider, Switch} from 'antd';
+import {Table, Row, Col, Form, Input, Button ,Icon,Modal,message,Spin,Slider, InputNumber,} from 'antd';
 import '../../style/yal/home.css';
 import moment from "moment";
 import EquipDetail from './EquipDetail';
@@ -23,7 +23,7 @@ class AdminEquipment extends Component {
     }
     componentDidMount() {
         this.getlist();
-        
+     
     }
     getlist=()=>{
         const params={
@@ -40,7 +40,7 @@ class AdminEquipment extends Component {
                     list: res.data,
                     total:res.totalcount,
                     loading: false,//加载状态
-                    // bshold:res.data.threshold,
+                   
                 })
             }
         })
@@ -131,7 +131,7 @@ class AdminEquipment extends Component {
                 //获取异步任务列表
                 const _this=this;
                 let inter=setInterval(function(){
-                    post({url:"/api/smptask/getone",data:{code:_this.state.adta}}, (res)=>{
+                    post({url:"/api/smptaskresult/getone",data:{code:_this.state.adta}}, (res)=>{
                         if(moment()-moment(res.data.createon)>10000){ //点名10秒无结果
                             _this.setState({
                                 loading: false,//加载状态
@@ -169,18 +169,17 @@ class AdminEquipment extends Component {
        
     }
     threshold = (e) => {//阈值改变
-    //   let fazhi=( e/10).toFixed(0)
         this.setState({
             eHold:e
         })
       }
     remove = (text,record) => {//阈值改变
-    // this.myRef.current.blur();
-    this.setState({
-        record:record.code
-    },()=>{
-        this.requerthreshold();
-    })
+        this.setState({
+            record:record.code,
+            threshold:record.threshold,
+        },()=>{
+            this.requerthreshold();
+        })
     }
     requerthreshold=()=>{ 
         const params={
@@ -189,10 +188,9 @@ class AdminEquipment extends Component {
         }
         post({url:"/api/camera/update_threshold",data:params}, (res)=>{
         })
-
     }
     render() {
-        
+        const { eHold } = this.state;
         const { getFieldDecorator } = this.props.form;
         const columns = [
             {
@@ -204,6 +202,7 @@ class AdminEquipment extends Component {
             title: '设备编号',
             dataIndex: 'ecode',
             key: 'ecode',
+           
                 render: (text, record,index) =>{
                     return(
                         <div>
@@ -218,11 +217,28 @@ class AdminEquipment extends Component {
             title: '阈值',
             dataIndex: 'threshold',
             key: 'threshold',
+            width: 260,
             render:(text,record,index)=>{
                 const { disabled } = this.state;
                 return(
                     <div>
-                        {<Slider blur={1} onAfterChange={()=>this.remove(text,record)} onChange={this.threshold}min={1} max={9} defaultValue={record.threshold} disabled={disabled} />}
+                        {<Slider 
+                            onFocus={()=>this.remove(text,record)}
+                            style={{width:'76%',float:'left'}} 
+                            // onAfterChange={()=>this.remove(text,record)}
+                            onChange={this.threshold}
+                            min={1} 
+                            max={9} 
+                            defaultValue={record.threshold} 
+                            disabled={disabled} 
+                         />
+                        } 
+                        <InputNumber
+                            style={{width:'16%',float:'left'}} 
+                            min={1}
+                            max={9}
+                            value={record.code==this.state.record?this.state.eHold:record.threshold}
+                        />
                     </div>
                 )
             }
