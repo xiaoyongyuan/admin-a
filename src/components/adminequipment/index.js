@@ -169,11 +169,15 @@ class AdminEquipment extends Component {
        
     }
     threshold = (e) => {//阈值改变
+        console.log('******************',e);
+        
         this.setState({
             eHold:e
         })
       }
     remove = (text,record) => {//阈值改变
+        console.log('******************',record.code);
+        
         this.setState({
             record:record.code,
             threshold:record.threshold,
@@ -223,7 +227,7 @@ class AdminEquipment extends Component {
                 return(
                     <div>
                         {<Slider 
-                            onFocus={()=>this.remove(text,record)}
+                             onBlur={()=>this.remove(text,record)}
                             style={{width:'76%',float:'left'}} 
                             // onAfterChange={()=>this.remove(text,record)}
                             onChange={this.threshold}
