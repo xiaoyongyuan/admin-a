@@ -223,9 +223,9 @@ class AdminEquipment extends Component {
                 return(
                     <div>
                         {<Slider 
-                             onBlur={()=>this.remove(text,record)}
+                            //  onBlur={()=>this.remove(text,record)}
                             style={{width:'76%',float:'left'}} 
-                            // onAfterChange={()=>this.remove(text,record)}
+                            onAfterChange={()=>this.remove(text,record)}
                             onChange={this.threshold}
                             min={1} 
                             max={9} 
