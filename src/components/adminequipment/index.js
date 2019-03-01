@@ -169,15 +169,11 @@ class AdminEquipment extends Component {
        
     }
     threshold = (e) => {//阈值改变
-        console.log('******************',e);
-        
         this.setState({
             eHold:e
         })
       }
     remove = (text,record) => {//阈值改变
-        console.log('******************',record.code);
-        
         this.setState({
             record:record.code,
             threshold:record.threshold,
