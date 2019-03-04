@@ -168,9 +168,12 @@ class AdminEquipment extends Component {
         })
        
     }
-    threshold = (e) => {//阈值改变
+    threshold = (value,index) => {//阈值改变
+        let list=this.state.list;
+        list[index].threshold=value;
         this.setState({
-            eHold:e
+             eHold:value,
+             list:list
         })
       }
     remove = (text,record) => {//阈值改变
@@ -179,6 +182,7 @@ class AdminEquipment extends Component {
             threshold:record.threshold,
         },()=>{
             this.requerthreshold();
+            // this.getlist();
         })
     }
     requerthreshold=()=>{ 
@@ -190,7 +194,6 @@ class AdminEquipment extends Component {
         })
     }
     render() {
-        const { eHold } = this.state;
         const { getFieldDecorator } = this.props.form;
         const columns = [
             {
@@ -226,19 +229,17 @@ class AdminEquipment extends Component {
                             //  onBlur={()=>this.remove(text,record)}
                             style={{width:'76%',float:'left'}} 
                             onAfterChange={()=>this.remove(text,record)}
-                            onChange={this.threshold}
+                            onChange={(value)=>this.threshold(value,index)}
                             min={1} 
                             max={9} 
                             defaultValue={record.threshold} 
                             disabled={disabled} 
                          />
                         } 
-                        <InputNumber
-                            style={{width:'16%',float:'left'}} 
-                            min={1}
-                            max={9}
-                            value={record.code==this.state.record?this.state.eHold:record.threshold}
-                        />
+                         <div className="rednum">
+                           {record.code===this.state.record?this.state.eHold:record.threshold}
+                         </div>
+                     
                     </div>
                 )
             }

@@ -346,3 +346,11 @@
     border-color: transparent;
     box-shadow:none;
 }
+
+.rednum{
+    width:12%;
+    float:left;
+    border:1px  solid #ccc;
+    text-align:center;
+    margin-top: 6px;
+}
