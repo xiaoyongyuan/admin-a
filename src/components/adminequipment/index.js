@@ -1,7 +1,7 @@
 import React, { Component} from 'react';
 import {post} from "../../axios/tools";
 import BreadcrumbCustom from "../BreadcrumbCustom";
-import {Table, Row, Col, Form, Input, Button ,Icon,Modal,message,Spin,Slider, InputNumber,} from 'antd';
+import {Table, Row, Col, Form, Input, Button ,Icon,Modal,message,Spin,Slider, } from 'antd';
 import '../../style/yal/home.css';
 import moment from "moment";
 import EquipDetail from './EquipDetail';
@@ -181,6 +181,9 @@ class AdminEquipment extends Component {
             code:record.code,
         }
         post({url:"/api/camera/update_threshold",data:params}, (res)=>{
+            if(res.success){
+                message.success('修改成功');
+            }
         })
        
     }
