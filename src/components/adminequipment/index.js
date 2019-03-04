@@ -172,26 +172,17 @@ class AdminEquipment extends Component {
         let list=this.state.list;
         list[index].threshold=value;
         this.setState({
-             eHold:value,
              list:list
         })
       }
-    remove = (text,record) => {//阈值改变
-        this.setState({
-            record:record.code,
-            threshold:record.threshold,
-        },()=>{
-            this.requerthreshold();
-            // this.getlist();
-        })
-    }
-    requerthreshold=()=>{ 
+    remove = (record) => {//阈值改变
         const params={
-            threshold:this.state.eHold,
-            code:this.state.record,
+            threshold:record.threshold,
+            code:record.code,
         }
         post({url:"/api/camera/update_threshold",data:params}, (res)=>{
         })
+       
     }
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -226,9 +217,8 @@ class AdminEquipment extends Component {
                 return(
                     <div>
                         {<Slider 
-                            //  onBlur={()=>this.remove(text,record)}
                             style={{width:'76%',float:'left'}} 
-                            onAfterChange={()=>this.remove(text,record)}
+                            onAfterChange={()=>this.remove(record)}
                             onChange={(value)=>this.threshold(value,index)}
                             min={1} 
                             max={9} 
@@ -237,9 +227,8 @@ class AdminEquipment extends Component {
                          />
                         } 
                          <div className="rednum">
-                           {record.code===this.state.record?this.state.eHold:record.threshold}
+                           {record.threshold}
                          </div>
-                     
                     </div>
                 )
             }
@@ -333,7 +322,6 @@ class AdminEquipment extends Component {
                             <Table style={{marginTop:'24px'}}
                                 bordered={true}
                                 dataSource={this.state.list}
-                                // onRow={this.onRowSelect}
                                 columns={columns}
                                 pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage}}
                             />
