@@ -89,18 +89,10 @@ class OneAlarm extends React.Component{
         })
     }
     hanlePageSize = (page) => { //翻页
-        const data={};
-        if(this.state.propsid){
-            data.cid=this.state.propsid
-            data.status=0
-        }
-        // data.bdate=this.state.bdate?this.state.bdate.format('YYYY-MM-DD HH:00:00'):'';
-        // data.edate=this.state.edate?this.state.edate.format('YYYY-MM-DD HH:00:00'):'';
-        // data.cid=this.state.cid;
         this.setState({
             page:page
         },()=>{
-            this.handleAlerm(data)
+            this.handleAlerm()
         })
     };
     //报警信息列表
