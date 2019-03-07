@@ -6,6 +6,7 @@ import BreadcrumbCustom from "../BreadcrumbCustom";
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import 'moment/locale/zh-cn';
 import {post} from "../../axios/tools";
+var pageset={};
 const FormItem = Form.Item;
 class AdmindUser extends Component {
     constructor(props){
@@ -20,15 +21,6 @@ class AdmindUser extends Component {
         this.requestdata()
     }
     requestdata=(params) => { //取数据
-        this.props.form.validateFields((err, values) => {
-        const pageset={
-            pagesize:10,
-            pageindex:this.state.page,
-            bdate:this.state.bdate?this.state.bdate.format('YYYY-MM-DD'):'',
-            edate:this.state.edate?this.state.edate.format('YYYY-MM-DD'):'',
-            cname:values.name,
-            pname:values.cteam, 
-        }
         post({url:"/api/company/getlist_user",data:pageset}, (res)=>{
             if(res.success){
                 this.setState({
@@ -36,11 +28,9 @@ class AdmindUser extends Component {
                     total:res.totalcount,
                 })
             }
-        })
+    
     })
     }
-
-    
     //禁止的开始时间
     disabledStartDate = (startValue) => {
         const endValue = this.state.endValue;
@@ -79,15 +69,22 @@ onChangeDate = (field, value) => {
     selectopt = (e) => { //检索search
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
+            pageset={
+                pagesize:10,
+                pageindex:this.state.page,
+                bdate:values.range_picker1?values.range_picker1.format('YYYY-MM-DD'):'',
+                edate:values.range_picker2?values.range_picker2.format('YYYY-MM-DD'):'',
+                cname:values.name,
+                pname:values.cteam, 
+            }
             if(!err){
                 this.setState({
                     page:1,
                 },()=>{
-                    this.requestdata()
+                    this.requestdata(pageset)
                 })
-               
             }
-        })
+       })
     }
     changePage=(page,pageSize)=>{ //分页  页码改变的回调，参数是改变后的页码及每页条数
         this.setState({
@@ -95,15 +92,12 @@ onChangeDate = (field, value) => {
         },()=>{
             this.requestdata()  
         })
-
     }
-
 searchCancel = () =>{//删除取消
     this.setState({
         deleteshow: false,
     });
 };
-
     render() {
         const { getFieldDecorator } = this.props.form;
         
@@ -146,27 +140,21 @@ searchCancel = () =>{//删除取消
                 render: (text, record) => {
                  if(text===4){
                     return ('树莓派企业用户');
-
                  }if (text===5) {
                     return ('局域网企业用户');
                  } else {
                     return ('树莓派个人用户');
                  }
-               
                 },
             }];
         return (
             <div className="AdmindUser">
-              
                 <BreadcrumbCustom first="账号管理" second="用户管理" />
                 <div className="shange">
                 <Row style={{marginBottom:'20px'}}>
                     <Col span={18}>
                     <LocaleProvider locale={zh_CN}>
                         <Form layout="inline"onSubmit={this.selectopt}>
-                       
-                               
-
                             <FormItem label="单位名称">
                                 {getFieldDecorator('name', {
                                     rules: [{ required: false, message: '请输入单位名称!' }],
@@ -189,8 +177,8 @@ searchCancel = () =>{//删除取消
                                            showTime={{format:"HH"}}
                                            format="YYYY-MM-DD"
                                            placeholder="开始时间"
-                                           setFieldsValue={this.state.bdate}
-                                           onChange={this.onChange1}
+                                        //    setFieldsValue={this.state.bdate}
+                                        //    onChange={this.onChange1}
                                            disabledDate={this.disabledStartDate}
                                            onOpenChange={this.handleStartOpenChange}
                                        />
@@ -202,22 +190,14 @@ searchCancel = () =>{//删除取消
                                            showTime={{format:"HH"}}
                                            format="YYYY-MM-DD"
                                            placeholder="结束时间"
-                                           setFieldsValue={this.state.edate}
-                                           onChange={this.onChange2}
+                                        //    setFieldsValue={this.state.edate}
+                                        //    onChange={this.onChange2}
                                            disabledDate={this.disabledEndDate}
                                            onOpenChange={this.handleEndOpenChange}
                                            className="allInput"
                                        />
                                    )}
                                </FormItem>
-                          
-                            {/* <FormItem label="云服务到期日期">
-                                {getFieldDecorator('clouddata', {
-                                    rules: [{ required: false, message: '请选择日期!' }],
-                                })(
-                                    <RangePicker onChange={onChange_time} format={dateFormat} />
-                                )}
-                            </FormItem> */}
                             <FormItem>
                                 <Button type="primary" htmlType="submit">
                                     查询
@@ -227,14 +207,12 @@ searchCancel = () =>{//删除取消
                         </LocaleProvider>
                     </Col>
                 </Row>
-                
                 <Table 
                      columns={columns} dataSource={this.state.list} bordered={true}
                      pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage}}
                 />
                 </div>
             </div>
-
         )
     }
 
