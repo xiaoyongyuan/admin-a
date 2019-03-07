@@ -20,6 +20,7 @@ const formItemLayout = {
         sm: { span: 16 },
     },
 };
+var alarmmdata;
 class OneAlarm extends React.Component{
     constructor(props){
         super(props);
@@ -93,9 +94,9 @@ class OneAlarm extends React.Component{
             data.cid=this.state.propsid
             data.status=0
         }
-        data.bdate=this.state.bdate?this.state.bdate.format('YYYY-MM-DD HH:00:00'):'';
-        data.edate=this.state.edate?this.state.edate.format('YYYY-MM-DD HH:00:00'):'';
-        data.cid=this.state.cid;
+        // data.bdate=this.state.bdate?this.state.bdate.format('YYYY-MM-DD HH:00:00'):'';
+        // data.edate=this.state.edate?this.state.edate.format('YYYY-MM-DD HH:00:00'):'';
+        // data.cid=this.state.cid;
         this.setState({
             page:page
         },()=>{
@@ -104,7 +105,9 @@ class OneAlarm extends React.Component{
     };
     //报警信息列表
     handleAlerm = (data={})=>{
-        post({url:'/api/alarm/getlist_foradmin',data:Object.assign(data,{pageindex:this.state.page,pagesize:18,passivecode:this.state.activecompcode})},(res)=>{
+
+
+        post({url:'/api/alarm/getlist_foradmin',data:alarmmdata},(res)=>{
             if(res.success){
                 this.setState({
                     displaysearch:true,
@@ -145,26 +148,46 @@ class OneAlarm extends React.Component{
     * 开始时间、结束时间、设备cid
     * */
     handleSubmit =(e)=>{
+
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            alarmmdata={
+                bdate:values.range_picker1?values.range_picker1.format('YYYY-MM-DD'):'',
+                edate:values.range_picker2?values.range_picker2.format('YYYY-MM-DD'):'',
+            }
+            if(!err){
+                this.setState({
+                    page:1,
+                    loadding:true,
+                },()=>{
+                    this.handleAlerm(alarmmdata)
+                })
+            }
+       })
+
+
+
+
         this.setState({
             displaysearch:false,
         })
-        e.preventDefault();
+      
         if(this.state.propsid){
             this.setState({
                     propsid:'',
                 })
         }
-        this.setState({
-                    page:1,
-                    loadding:true,
-                },()=>{
-                    const data={
-                        bdate:this.state.bdate?this.state.bdate.format('YYYY-MM-DD HH:00:00'):'',
-                        edate:this.state.edate?this.state.edate.format('YYYY-MM-DD HH:00:00'):'',
-                        cid:this.state.cid
-                    };
-                    this.handleAlerm(data);
-                })
+        // this.setState({
+        //             page:1,
+        //             loadding:true,
+        //         },()=>{
+        //             const data={
+        //                 bdate:this.state.bdate?this.state.bdate.format('YYYY-MM-DD HH:00:00'):'',
+        //                 edate:this.state.edate?this.state.edate.format('YYYY-MM-DD HH:00:00'):'',
+        //                 cid:this.state.cid
+        //             };
+        //             this.handleAlerm(data);
+        //         })
         
     };
     onChangeDate = (field, value) => {
@@ -222,7 +245,7 @@ class OneAlarm extends React.Component{
                                     {...formItemLayout}
                                     label="日期"
                                 >
-                                    {getFieldDecorator('range-picker1')(
+                                    {getFieldDecorator('range_picker1')(
                                         <DatePicker
                                             className="allInput"
                                             showTime={{format:"HH"}}
@@ -238,7 +261,7 @@ class OneAlarm extends React.Component{
                             </Col>
                             <Col xl={3} xxl={3} lg={3}>
                                 <Form.Item>
-                                    {getFieldDecorator('range-picker2')(
+                                    {getFieldDecorator('range_picker2')(
                                         <DatePicker
                                             showTime={{format:"HH"}}
                                             format="YYYY-MM-DD HH:00:00"
