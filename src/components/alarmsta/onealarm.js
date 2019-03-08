@@ -89,16 +89,29 @@ class OneAlarm extends React.Component{
         })
     }
     hanlePageSize = (page) => { //翻页
+     
+        const data={};
+        if(this.state.propsid){
+            data.cid=this.state.propsid
+            data.status=0
+        }
+ 
         this.setState({
-            page:page
+            page:page,
+            pagesize:18,
+            pageindex:this.state.page,
         },()=>{
-            this.handleAlerm()
+            this.handleAlerm(data)
         })
     };
     //报警信息列表
     handleAlerm = (data={})=>{
-
-
+        var alarmmdata={
+            bdate:this.state.bdate,
+            edate:this.state.edate,
+            pagesize:18,
+            pageindex:this.state.page,
+        }
         post({url:'/api/alarm/getlist_foradmin',data:alarmmdata},(res)=>{
             if(res.success){
                 this.setState({
@@ -137,49 +150,31 @@ class OneAlarm extends React.Component{
 
     /*
     * 检索
-    * 开始时间、结束时间、设备cid
+    * 开始时间、结束时间
     * */
     handleSubmit =(e)=>{
-
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
-            alarmmdata={
+            console.log('******************111111',values.range_picker1.format('YYYY-MM-DD'));
+            console.log('******************111111',values.range_picker2.format('YYYY-MM-DD'));
+            this.setState({
                 bdate:values.range_picker1?values.range_picker1.format('YYYY-MM-DD'):'',
                 edate:values.range_picker2?values.range_picker2.format('YYYY-MM-DD'):'',
-            }
+                pagesize:18,
+                pageindex:this.state.page,
+            })
             if(!err){
                 this.setState({
                     page:1,
                     loadding:true,
                 },()=>{
-                    this.handleAlerm(alarmmdata)
+                    this.handleAlerm()
                 })
             }
        })
-
-
-
-
         this.setState({
             displaysearch:false,
         })
-      
-        if(this.state.propsid){
-            this.setState({
-                    propsid:'',
-                })
-        }
-        // this.setState({
-        //             page:1,
-        //             loadding:true,
-        //         },()=>{
-        //             const data={
-        //                 bdate:this.state.bdate?this.state.bdate.format('YYYY-MM-DD HH:00:00'):'',
-        //                 edate:this.state.edate?this.state.edate.format('YYYY-MM-DD HH:00:00'):'',
-        //                 cid:this.state.cid
-        //             };
-        //             this.handleAlerm(data);
-        //         })
         
     };
     onChangeDate = (field, value) => {
@@ -211,20 +206,7 @@ class OneAlarm extends React.Component{
         }
         return endValue.valueOf() <= startValue.valueOf();
     };
-    //开始时间
-    onChange1 =(dateString1)=> {
-        this.onChangeDate('startValue',dateString1);
-        this.setState({
-            bdate:dateString1
-        })
-    };
-    //结束时间
-    onChange2 =(dateString2)=> {
-        this.onChangeDate("endValue",dateString2);
-        this.setState({
-            edate:dateString2
-        })
-    };
+   
     render(){
         const { getFieldDecorator } = this.props.form;
         return(
