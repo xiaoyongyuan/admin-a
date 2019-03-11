@@ -58,8 +58,8 @@
     text-align: center;
 }
 .backImg img{
-    width: 10%;
-    height: 100%;
+    width: 8%;
+    height: 80%;
 }
 .colorgreen{
     color:#5DCB9A;
@@ -147,7 +147,7 @@
     }
 }
 .mt{
-    margin: 3px 0 0 0;
+    margin-top: 3px;
 }
 .word-row{
     font-family: MicrosoftYaHei;
