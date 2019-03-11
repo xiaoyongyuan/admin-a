@@ -453,9 +453,13 @@ margin: 20px 0;
     right: 0;
     
 }
-
 .spin {
     width: 100%;
     margin: 30px auto;
-    margin-top: 100px;
+}
+.ant-pagination-item-active{
+    background: #313653!important;
+}
+.ant-pagination-item-active a{
+    color: #ffffff!important;
 }

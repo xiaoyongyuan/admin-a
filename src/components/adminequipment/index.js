@@ -1,9 +1,11 @@
 import React, { Component} from 'react';
 import {post} from "../../axios/tools";
 import BreadcrumbCustom from "../BreadcrumbCustom";
-import {Table, Row, Col, Form, Input, Button ,Icon,Modal,message,Spin,Slider, } from 'antd';
+import {Table, Row, Col, Form, Input, Button ,Icon,Modal,message,Spin,Slider,LocaleProvider  } from 'antd';
 import '../../style/yal/home.css';
 import moment from "moment";
+import zh_CN from 'antd/lib/locale-provider/zh_CN';
+import 'moment/locale/zh-cn';
 import EquipDetail from './EquipDetail';
 const FormItem = Form.Item;
 class AdminEquipment extends Component {
@@ -18,7 +20,6 @@ class AdminEquipment extends Component {
             toson:{}, //传给详情页面的值
             loading: true,//加载状态
             disabled: false,
-  
         };
     }
     componentDidMount() {
@@ -49,6 +50,7 @@ class AdminEquipment extends Component {
         this.setState({
             page: page,
             ecode:'',
+            loading:true
         },()=>{
             this.componentDidMount()
         })
@@ -65,7 +67,6 @@ class AdminEquipment extends Component {
     onRowSelect = (record, index)=>{//table 行单击
         return {
             onClick:(e)=>{
-                
                 this.showModalEdit(record.code,index,record,record.ecode)
             }
         }
@@ -90,7 +91,7 @@ class AdminEquipment extends Component {
     e_getinfo = (e) => {//更新数据
         const params = {
             ecode:this.state.ecode
-        }
+        };
         return;
    
         post({url:"/api/equipment/e_getinfo",data:params}, (res)=>{
@@ -100,6 +101,9 @@ class AdminEquipment extends Component {
         })
     };
     selectopt = (e) => { //检索search
+        this.setState({
+            loading:true
+        });
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if(!err){
@@ -156,25 +160,22 @@ class AdminEquipment extends Component {
                                     taskresultA:res.data.taskresult,
                                     taskstatusA: res.data.taskstatus,
                                     tasktimeA:res.data.tasktime,
-        
-                                    })
+                                    });
                                     clearInterval(inter);
                                 }
                             }
                     })
                 },2000)
-
             }
         })
-       
-    }
+    };
     threshold = (value,index) => {//阈值改变
         let list=this.state.list;
         list[index].threshold=value;
         this.setState({
              list:list
         })
-      }
+      };
     remove = (record) => {//阈值改变
         const params={
             threshold:record.threshold,
@@ -186,7 +187,7 @@ class AdminEquipment extends Component {
             }
         })
        
-    }
+    };
     render() {
         const { getFieldDecorator } = this.props.form;
         const columns = [
@@ -282,17 +283,16 @@ class AdminEquipment extends Component {
             ];
 
 
-        return ( 
+        return (
+            <LocaleProvider locale={zh_CN}>
             <div className="AdminEquipment">
-            
-                <BreadcrumbCustom first="设备信息"/>
-               
+                <BreadcrumbCustom first="设备信息" />
                 <div className="shange">
                     <Row>
                         <Col span={14}>
                             <Form layout="inline" onSubmit={this.selectopt}>
                                 <FormItem label="设备编号">
-                                    {getFieldDecorator('ecode', {
+                                    {getFieldDecorator("ecode", {
                                         rules: [{
                                             required: false,
                                             message: '请输入设备编号!',
@@ -302,7 +302,7 @@ class AdminEquipment extends Component {
                                     )}
                                 </FormItem>
                                 <FormItem label="公司名称">
-                                    {getFieldDecorator('cname', {
+                                    {getFieldDecorator("cname", {
                                         rules: [{
                                             required: false,
                                             message: '请输入公司名称!',
@@ -319,21 +319,19 @@ class AdminEquipment extends Component {
                             </Form>
                         </Col>
                     </Row>
-                    
-                    <Row>
-                        <Spin spinning={this.state.loading} size="large" className="spin" tip="Loading...">  
-                            <Table style={{marginTop:'24px'}}
+                    <Row style={{marginTop:"20px"}}>
+                        <Spin spinning={this.state.loading} size="large" className="spin" tip="加载中...">
+                            <Table
                                 bordered={true}
                                 dataSource={this.state.list}
                                 columns={columns}
                                 pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage}}
                             />
                         </Spin>
-
                     </Row>
                     
                     <Modal visible={this.state.visible} width={660}
-                           title='设备详细信息'
+                           title="设备详细信息"
                            onCancel={this.handleCancel}
                            footer={[
                                <Button key="back" onClick={this.e_getinfo}>数据更新</Button>,
@@ -342,7 +340,7 @@ class AdminEquipment extends Component {
                                </Button>,
                            ]}
                     >
-                        <EquipDetail style={{width:'660px',background:"green"}}
+                        <EquipDetail style={{width:"660px",background:"green"}}
                             visible={this.state.visible}
                                      code={this.state.type}
                             ecode={this.state.ecode}
@@ -350,11 +348,11 @@ class AdminEquipment extends Component {
                         />
                     </Modal>
                     <Modal visible={this.state.block} width={660}
-                           title='设备'
+                           title="设备"
                            onCancel={this.handleCancel}
                            footer={[ <Button key="back" onClick={this.handleCancel} >确认</Button>]}
                     >
-                            <div style={{marginLeft:'60px',}}>
+                            <div style={{marginLeft:"60px"}}>
                                 <div>cid：<span> {this.state.cidA} </span></div>
                                 <div>code：<span> {this.state.codeA}</span></div>
                                 <div>companycode：<span> {this.state.companycodeA}</span></div>
@@ -369,8 +367,8 @@ class AdminEquipment extends Component {
                             </div>
                     </Modal>
                 </div>
-              
             </div>
+            </LocaleProvider>
           
         )
     }
