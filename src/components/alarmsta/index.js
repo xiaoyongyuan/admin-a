@@ -27,13 +27,12 @@ class Alarmsta extends Component {
         };
         post({url:"/api/alarm/getlist_report",data:params}, (res)=>{
             if(res.success){
-                if(res.data.length){
-                    this.setState({
-                        list: res.data,
-                        total:res.totalcount,
-                        loading:false
-                    })
-                }
+                this.setState({
+                    list: res.data,
+                    total:res.totalcount,
+                    loading:false
+                })
+
             }
         })
     }

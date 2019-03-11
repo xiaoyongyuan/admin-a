@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import '../../style/sjg/home.css';
 import {Form,Table, DatePicker,Input, Row, Col, Button,LocaleProvider,Spin} from 'antd';
@@ -40,28 +39,6 @@ class AdmindUser extends Component {
             }
     })
     }
-    //禁止的开始时间
-    disabledStartDate = (startValue) => {
-        const endValue = this.state.endValue;
-        if (!startValue || !endValue) {
-            return false;
-        }
-        return startValue.valueOf() > endValue.valueOf();
-    };
-    //禁止的结束时间
-    disabledEndDate = (endValue) => {
-        const startValue = this.state.startValue;
-        if (!endValue || !startValue) {
-            return false;
-        }
-        return endValue.valueOf() <= startValue.valueOf();
-    };
-
-onChangeDate = (field, value) => {
-    this.setState({
-        [field]: value,
-    });
-};
     selectopt = (e) => { //检索search
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -186,10 +163,10 @@ searchCancel = () =>{//删除取消
                     </Col>
                 </Row>
                 <Spin spinning={this.state.loading} size="large"tip="加载中..." >
-                <Table 
-                     columns={columns} dataSource={this.state.list} bordered={true}
-                     pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage}}
-                />
+                    <Table
+                         columns={columns} dataSource={this.state.list} bordered={true}
+                         pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage,hideOnSinglePage:true}}
+                    />
                 </Spin>
                 </div>
                 
