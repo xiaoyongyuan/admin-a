@@ -1,11 +1,12 @@
 
 import React, { Component } from 'react';
 import '../../style/sjg/home.css';
-import {Form,Table, DatePicker,Input, Row, Col, Button,LocaleProvider} from 'antd';
+import {Form,Table, DatePicker,Input, Row, Col, Button,LocaleProvider,Spin} from 'antd';
 import BreadcrumbCustom from "../BreadcrumbCustom";
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import 'moment/locale/zh-cn';
 import {post} from "../../axios/tools";
+const RangePicker = DatePicker.RangePicker;
 var pageset={};
 const FormItem = Form.Item;
 class AdmindUser extends Component {
@@ -15,20 +16,28 @@ class AdmindUser extends Component {
             list:[],
             value: 1,
             page:1, //当前页
+            loading:true,
         };
     }
     componentDidMount() {
-        this.requestdata()
+        this.requestdata();
+
+        this.state={
+            loading:true,
+        };
     }
     requestdata=(params) => { //取数据
+        this.setState({
+            loading:true,
+        })
         post({url:"/api/company/getlist_user",data:pageset}, (res)=>{
             if(res.success){
                 this.setState({
+                    loading:false,
                     list: res.data,
                     total:res.totalcount,
                 })
             }
-    
     })
     }
     //禁止的开始时间
@@ -47,20 +56,7 @@ class AdmindUser extends Component {
         }
         return endValue.valueOf() <= startValue.valueOf();
     };
-  //开始时间
-  onChange1 =(dateString1)=> {
-    this.onChangeDate('startValue',dateString1);
-    this.setState({
-        bdate:dateString1
-    })
-};
-//结束时间
-onChange2 =(dateString2)=> {
-    this.onChangeDate("endValue",dateString2);
-    this.setState({
-        edate:dateString2
-    })
-};
+
 onChangeDate = (field, value) => {
     this.setState({
         [field]: value,
@@ -69,21 +65,22 @@ onChangeDate = (field, value) => {
     selectopt = (e) => { //检索search
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
-            pageset={
-                pagesize:10,
-                pageindex:this.state.page,
-                bdate:values.range_picker1?values.range_picker1.format('YYYY-MM-DD'):'',
-                edate:values.range_picker2?values.range_picker2.format('YYYY-MM-DD'):'',
-                cname:values.name,
-                pname:values.cteam, 
-            }
-            if(!err){
-                this.setState({
-                    page:1,
-                },()=>{
-                    this.requestdata(pageset)
-                })
-            }
+                pageset={
+                    pagesize:10,
+                    pageindex:this.state.page,
+                    bdate:values.range_picker1?values.range_picker1[0].format("YYYY-MM-DD"):"",
+                    edate:values.range_picker1?values.range_picker1[1].format("YYYY-MM-DD"):"",
+                    cname:values.name,
+                    pname:values.cteam, 
+                }
+                if(!err){
+                    this.setState({
+                        page:1,
+                    },()=>{
+                        this.requestdata(pageset)
+                    })
+                }
+           
        })
     }
     changePage=(page,pageSize)=>{ //分页  页码改变的回调，参数是改变后的页码及每页条数
@@ -99,6 +96,7 @@ searchCancel = () =>{//删除取消
     });
 };
     render() {
+        
         const { getFieldDecorator } = this.props.form;
         
         const columns = [
@@ -148,6 +146,7 @@ searchCancel = () =>{//删除取消
                 },
             }];
         return (
+            <LocaleProvider locale={zh_CN}>
             <div className="AdmindUser">
                 <BreadcrumbCustom first="账号管理" second="用户管理" />
                 <div className="shange">
@@ -170,34 +169,13 @@ searchCancel = () =>{//删除取消
                                 )}
                             </FormItem>
                             
-                            <FormItem label="云服务到期日期">
-                                   {getFieldDecorator('range_picker1')(
-                                       <DatePicker
-                                           className="allInput"
-                                           showTime={{format:"HH"}}
-                                           format="YYYY-MM-DD"
-                                           placeholder="开始时间"
-                                        //    setFieldsValue={this.state.bdate}
-                                        //    onChange={this.onChange1}
-                                           disabledDate={this.disabledStartDate}
-                                           onOpenChange={this.handleStartOpenChange}
-                                       />
-                                   )}
-                               </FormItem>
-                               <FormItem>
-                                   {getFieldDecorator('range_picker2')(
-                                       <DatePicker
-                                           showTime={{format:"HH"}}
-                                           format="YYYY-MM-DD"
-                                           placeholder="结束时间"
-                                        //    setFieldsValue={this.state.edate}
-                                        //    onChange={this.onChange2}
-                                           disabledDate={this.disabledEndDate}
-                                           onOpenChange={this.handleEndOpenChange}
-                                           className="allInput"
-                                       />
-                                   )}
-                               </FormItem>
+                            <Form.Item
+                                label="日期"
+                            >
+                                {getFieldDecorator('range_picker1')(
+                                    <RangePicker placeholder={['开始时间', '结束时间']} />
+                                )}
+                            </Form.Item>
                             <FormItem>
                                 <Button type="primary" htmlType="submit">
                                     查询
@@ -207,12 +185,16 @@ searchCancel = () =>{//删除取消
                         </LocaleProvider>
                     </Col>
                 </Row>
+                <Spin spinning={this.state.loading} size="large"tip="加载中..." >
                 <Table 
                      columns={columns} dataSource={this.state.list} bordered={true}
                      pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage}}
                 />
+                </Spin>
                 </div>
+                
             </div>
+            </LocaleProvider>
         )
     }
 
