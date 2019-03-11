@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom';
-import {Form, Input, Row, Col, Button, Table, Modal, message, Select, Icon} from 'antd';
+import {Form, Input, Row, Col, Button, Table, Modal, message, Select, Spin, LocaleProvider} from 'antd';
 import '../../style/sjg/home.css';
 import {post} from "../../axios/tools";
 import ModaBianhao from './ModaBianhao';
 import moment from "moment";
+import zh_CN from "antd/lib/locale-provider/zh_CN";
 const FormItem = Form.Item;
 const Option = Select.Option;
 class Admindeveices extends Component {
@@ -45,6 +46,7 @@ class Admindeveices extends Component {
         this.requestdata()
     }
     requestdata=() => {//取数据
+        this.setState({ loading: true });
         const params={
             pagesize:10,
             ecode:this.state.ecode,
@@ -57,7 +59,8 @@ class Admindeveices extends Component {
             if(res){
                 this.setState({
                     list:res.data,
-                    total:res.totalcount
+                    total:res.totalcount,
+                    loading: false 
                 }); 
             }   
         })
@@ -314,6 +317,7 @@ class Admindeveices extends Component {
         };
 
         return (
+            <LocaleProvider locale={zh_CN}>
             <div>
                 <BreadcrumbCustom first="功能扩展" second="管理员首页" />
 
@@ -380,15 +384,16 @@ class Admindeveices extends Component {
                             </Row>
                         </Col>
                     </Row>
-
                     <div>
+                    <Spin spinning={this.state.loading} size="large"tip="加载中..." >
                         <Table
                             bordered={true}
                             rowSelection={rowSelection}
                             columns={columns}
                             dataSource={this.state.list}
-                            pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage}}
+                            pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage ,hideOnSinglePage:true}}
                         />
+                    </Spin>
                     </div>
                 </div>
 
@@ -416,6 +421,7 @@ class Admindeveices extends Component {
                     <p>确认删除吗？</p>
                 </Modal>
             </div>
+            </LocaleProvider>
         )
     }
 

@@ -68,8 +68,8 @@ onChangeDate = (field, value) => {
                 pageset={
                     pagesize:10,
                     pageindex:this.state.page,
-                    bdate:values.range_picker1?values.range_picker1[0].format("YYYY-MM-DD"):"",
-                    edate:values.range_picker1?values.range_picker1[1].format("YYYY-MM-DD"):"",
+                    bdate:values.range_picker1&&values.range_picker1.length?values.range_picker1[0].format("YYYY-MM-DD"):"",
+                    edate:values.range_picker1&&values.range_picker1.length?values.range_picker1[1].format("YYYY-MM-DD"):"",
                     cname:values.name,
                     pname:values.cteam, 
                 }
