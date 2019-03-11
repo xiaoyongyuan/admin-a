@@ -325,7 +325,7 @@ class AdminEquipment extends Component {
                                 bordered={true}
                                 dataSource={this.state.list}
                                 columns={columns}
-                                pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage}}
+                                pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage,hideOnSinglePage:true}}
                             />
                         </Spin>
                     </Row>
