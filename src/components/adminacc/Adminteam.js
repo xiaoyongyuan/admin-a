@@ -260,7 +260,7 @@ class Adminteam extends Component {
                          
                         }
                     </Row>
-                    <Pagination defaultPageSize={10} current={this.state.page} total={this.state.totalcount} onChange={this.hanlePageSize} className="pageSize" />
+                    <Pagination hideOnSinglePage={true} defaultPageSize={10} current={this.state.page} total={this.state.totalcount} onChange={this.hanlePageSize} className="pageSize" />
                 </div>
                 <Modal title={this.state.type?'编辑维护团队':'新增维护团队'} visible={this.state.visible} onOk={this.handleCreate}
                     onCancel={this.handleCancel} okText={"确认"} cancelText={"取消"} 
