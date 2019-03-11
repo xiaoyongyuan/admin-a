@@ -63,8 +63,6 @@ class OneAlarm extends React.Component{
     hanlePageSize = (page) => { //翻页
         this.setState({
             page:page,
-            pagesize:18,
-            pageindex:this.state.page,
         },()=>{
             this.handleAlerm()
         })
@@ -123,7 +121,6 @@ class OneAlarm extends React.Component{
             this.setState({
                 bdate:values.date.length?values.date[0].format('YYYY-MM-DD'):'',
                 edate:values.date.length?values.date[1].format('YYYY-MM-DD'):'',
-                pagesize:18,
                 pageindex:this.state.page,
             })
             if(!err){

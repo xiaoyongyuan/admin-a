@@ -60,8 +60,8 @@ selectopt = (e) => { //检索search
         this.props.form.validateFields((err, values) => {
             if(!err){
                 this.setState({
-                    bdate:values.date?values.date[0].format('YYYY-MM-DD'):"",
-                    edate:values.date?values.date[1].format('YYYY-MM-DD'):"",
+                    bdate:values.date && values.date.length?values.date[0].format('YYYY-MM-DD'):"",
+                    edate:values.date && values.date.length?values.date[1].format('YYYY-MM-DD'):"",
                     ecode: values.ecode,
                     cname:values.cname,
                     page:1,
