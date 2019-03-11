@@ -6,6 +6,7 @@ import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import 'moment/locale/zh-cn';
 import '../../style/yal/home.css';
 const FormItem = Form.Item;
+const { RangePicker } = DatePicker ;
 class AsynHistory extends Component {
 constructor(props){
     super(props);
@@ -19,15 +20,14 @@ constructor(props){
 componentDidMount() {
     this.requestdata();
 }
-requestdata=(params) => { //取数据
-    this.props.form.validateFields((err, values) => {
+requestdata=() => { //取数据
         const params={
             pagesize:10,
             pageindex:this.state.page,
-            bdate:this.state.bdate?this.state.bdate.format('YYYY-MM-DD 00:00:00'):'',
-            edate:this.state.edate?this.state.edate.format('YYYY-MM-DD 59:59:59'):'',
-            eid:values.eid, 
-        }
+            bdate:this.state.bdate,
+            edate:this.state.edate,
+            eid:this.state.eid,
+        };
         post({url:"/api/smptask/getlist",data:params}, (res)=>{
             if(res.success){
                 this.setState({
@@ -35,68 +35,44 @@ requestdata=(params) => { //取数据
                     total:res.totalcount,
                     loading: false,//加载状态
                 })
+            }else{
+                this.setState({
+                    loading: false,//加载状态
+                })
             }
         })
-   })
-}
-changePage=(page,pageSize)=>{ //分页  页码改变的回调，参数是改变后的页码及每页条数
+};
+changePage=(page)=>{ //分页  页码改变的回调，参数是改变后的页码及每页条数
     this.setState({
         page: page,
         ecode:'',
+        loading:true
     },()=>{
         this.componentDidMount()
     })
 }
-//禁止的开始时间
-disabledStartDate = (startValue) => {
-    const endValue = this.state.endValue;
-    if (!startValue || !endValue) {
-        return false;
-    }
-    return startValue.valueOf() > endValue.valueOf();
-};
-//禁止的结束时间
-disabledEndDate = (endValue) => {
-    const startValue = this.state.startValue;
-    if (!endValue || !startValue) {
-        return false;
-    }
-    return endValue.valueOf() <= startValue.valueOf();
-};
-//开始时间
-onChange1 =(dateString1)=> {
-    this.onChangeDate('startValue',dateString1);
-    this.setState({
-        bdate:dateString1
-    })
-};
-//结束时间
-onChange2 =(dateString2)=> {
-    this.onChangeDate("endValue",dateString2);
-    this.setState({
-        edate:dateString2
-    })
-};
-onChangeDate = (field, value) => {
-    this.setState({
-        [field]: value,
-    });
-};
+
 selectopt = (e) => { //检索search
+    this.setState({
+        loading:true
+    });
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if(!err){
                 this.setState({
+                    bdate:values.date?values.date[0].format('YYYY-MM-DD'):"",
+                    edate:values.date?values.date[1].format('YYYY-MM-DD'):"",
                     ecode: values.ecode,
                     cname:values.cname,
-                    page:1
+                    page:1,
+                    eid:values.eid,
                 },()=>{
                     this.componentDidMount()
                 })
 
             }
         })
-    }
+    };
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -122,16 +98,14 @@ selectopt = (e) => { //检索search
             }];
 
 
-        return ( 
+        return (
+            <LocaleProvider locale={zh_CN}>
             <div className="AsynHistory">
-            
-                    
                 <BreadcrumbCustom first="异步历史"/>
-              
                 <div className="shange">
                 <Row>
                         <Col span={14}>
-                            <LocaleProvider locale={zh_CN}>
+
                                 <Form layout="inline" onSubmit={this.selectopt}>
                                     <FormItem label="设备编号">
                                         {getFieldDecorator('eid', {
@@ -143,46 +117,25 @@ selectopt = (e) => { //检索search
                                             <Input />
                                         )}
                                     </FormItem>
-                                    
-                                    <FormItem label="时间">
-                                    {getFieldDecorator('range_picker1')(
-                                        <DatePicker
-                                            className="allInput"
-                                            showTime={{format:"HH"}}
-                                            format="YYYY-MM-DD"
-                                            placeholder="开始时间"
-                                            setFieldsValue={this.state.bdate}
-                                            onChange={this.onChange1}
-                                            disabledDate={this.disabledStartDate}
-                                            onOpenChange={this.handleStartOpenChange}
-                                        />
-                                    )}
-                                </FormItem>
-                                <FormItem>
-                                    {getFieldDecorator('range_picker2')(
-                                        <DatePicker
-                                            showTime={{format:"HH"}}
-                                            format="YYYY-MM-DD"
-                                            placeholder="结束时间"
-                                            setFieldsValue={this.state.edate}
-                                            onChange={this.onChange2}
-                                            disabledDate={this.disabledEndDate}
-                                            onOpenChange={this.handleEndOpenChange}
-                                            className="allInput"
-                                        />
-                                    )}
-                                </FormItem>
+
+                                    <FormItem label="日期" >
+                                        {getFieldDecorator('date')(
+                                            <RangePicker
+                                                placeholder={['开始时间', '结束时间']}
+                                            />
+                                        )}
+                                    </FormItem>
                                     <FormItem>
                                         <Button type="primary" htmlType="submit">
                                             查询
                                         </Button>
                                     </FormItem>
                                 </Form>
-                            </LocaleProvider>
+
                         </Col>
                     </Row>
                     <Row>
-                        <Spin spinning={this.state.loading} size="large" className="spin" tip="Loading...">  
+                        <Spin spinning={this.state.loading} size="large" className="spin" tip="加载中...">
                             <Table style={{marginTop:'24px'}}
                                 bordered={true}
                                 dataSource={this.state.list}
@@ -193,6 +146,7 @@ selectopt = (e) => { //检索search
                     </Row>
                 </div>
             </div>
+            </LocaleProvider>
         )
     }
 }
