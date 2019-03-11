@@ -1,10 +1,9 @@
 import React, { Component} from 'react';
 import {post} from "../../axios/tools";
 import BreadcrumbCustom from "../BreadcrumbCustom";
-import {Table, Row, Col, Form, Input, Button ,Icon,Modal,message} from 'antd';
+import {Table, Row, Col, Form, Input, Button ,LocaleProvider ,message,Spin} from 'antd';
 import '../../style/yal/home.css';
-import moment from "moment";
-
+import zh_CN from 'antd/lib/locale-provider/zh_CN';
 const FormItem = Form.Item;
 
 class Alarmsta extends Component {
@@ -16,6 +15,7 @@ class Alarmsta extends Component {
             createinfo:[],
             page:1,
             cname:'',
+            loading:true
         };
     }
     componentDidMount() {
@@ -24,27 +24,27 @@ class Alarmsta extends Component {
             cname:this.state.cname,
             pageindex:this.state.page,
 
-        }
-
+        };
         post({url:"/api/alarm/getlist_report",data:params}, (res)=>{
             if(res.success){
-                this.setState({
-                    list: res.data,
-                    total:res.totalcount
-                })
+                if(res.data.length){
+                    this.setState({
+                        list: res.data,
+                        total:res.totalcount,
+                        loading:false
+                    })
+                }
             }
         })
     }
-
-    changePage=(page,pageSize)=>{ //分页  页码改变的回调，参数是改变后的页码及每页条数
+    changePage=(page)=>{ //分页  页码改变的回调，参数是改变后的页码及每页条数
         this.setState({
             page: page,
+            loading:true
         },()=>{
             this.componentDidMount()
         })
-
-    }
-
+    };
     showModalEdit=(code,index,record,ecode)=>{ //打开弹层
         this.setState({
             visible: true,
@@ -53,7 +53,7 @@ class Alarmsta extends Component {
             index:index,
         });
 
-    }
+    };
 
 
     onRowSelect = (record, index)=>{//table 行单击
@@ -93,12 +93,15 @@ class Alarmsta extends Component {
 
     };
     selectopt = (e) => { //检索search
+        this.setState({
+            loading:true
+        });
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if(!err){
                 this.setState({
                     cname:values.cname,
-                    page:1
+                    page:1,
                 },()=>{
                     this.componentDidMount()
                 })
@@ -108,7 +111,6 @@ class Alarmsta extends Component {
     }
     render() {
         const { getFieldDecorator } = this.props.form;
-        const data = new Date().getTime();
         const columns = [
             {
                 title: '序号',
@@ -139,10 +141,7 @@ class Alarmsta extends Component {
                 let bili = (record.confirmcount/record.alarmcount)*100;
                     return(
                         <div>
-                            {
-
-                                bili.toFixed(0)
-                            }
+                            {bili.toFixed(0)}
                         </div>
                     )
                 }
@@ -151,42 +150,47 @@ class Alarmsta extends Component {
 
 
         return (
-            <div className="Alarmsta">
-                <BreadcrumbCustom first="报警统计"/>
-                <div className="shange">
-                    <Row>
-                        <Col span={14}>
-                            <Form layout="inline" onSubmit={this.selectopt}>
-                                <FormItem label="公司名称">
-                                    {getFieldDecorator('cname', {
-                                        rules: [{
-                                            required: false,
-                                            message: '请输入公司名称!',
-                                        }],
-                                    })(
-                                        <Input />
-                                    )}
-                                </FormItem>
-                                <FormItem>
-                                    <Button type="primary" htmlType="submit">
-                                        查询
-                                    </Button>
-                                </FormItem>
-                            </Form>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Table
-                            bordered={true}
-                            dataSource={this.state.list}
-                            onRow={this.onRowSelect}
-                            columns={columns}
-                            pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage}}
-                        />
-                    </Row>
-                    
-                </div>
-            </div>
+            <LocaleProvider locale={zh_CN}>
+                <div className="Alarmsta">
+                        <BreadcrumbCustom first="报警统计"/>
+                        <div className="shange">
+                            <Row>
+                                <Col span={14}>
+                                    <Form layout="inline" onSubmit={this.selectopt}>
+                                        <FormItem label="公司名称">
+                                            {getFieldDecorator('cname', {
+                                                rules: [{
+                                                    required: false,
+                                                    message: '请输入公司名称!',
+                                                }],
+                                            })(
+                                                <Input />
+                                            )}
+                                        </FormItem>
+                                        <FormItem>
+                                            <Button type="primary" htmlType="submit">
+                                                查询
+                                            </Button>
+                                        </FormItem>
+                                    </Form>
+                                </Col>
+                            </Row>
+
+                            <Row style={{marginTop:"20px"}}>
+                                <Spin size="large" spinning={this.state.loading} tip="加载中......">
+                                    <Table
+                                    bordered={true}
+                                    dataSource={this.state.list}
+                                    onRow={this.onRowSelect}
+                                    columns={columns}
+                                    pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage}}
+                                />
+                                </Spin>
+                            </Row>
+
+                        </div>
+                    </div>
+            </LocaleProvider>
         )
     }
 }

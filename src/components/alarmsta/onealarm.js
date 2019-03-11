@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import { DatePicker, Row, Col, Button, Modal, Pagination, Form,LocaleProvider,Spin } from "antd";
 import "../../style/ztt/css/police.css";
@@ -9,18 +7,7 @@ import 'moment/locale/zh-cn';
 import {post} from "../../axios/tools";
 import Alarmdetails from "./Alarmdetails";
 import nodata from "../../style/imgs/nodata.png";
-const formItemLayout = {
-    labelCol: {
-        xs: { span: 24 },
-        sm: { span: 5 },
-        xxl:{ span: 6}
-    },
-    wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
-    },
-};
-var alarmmdata;
+const { RangePicker } = DatePicker ;
 class OneAlarm extends React.Component{
     constructor(props){
         super(props);
@@ -50,24 +37,8 @@ class OneAlarm extends React.Component{
             nodatapic:true,
         };
     }
-    componentWillMount() {
-        const activecompcode=localStorage.getItem('activecompcode');
-        this.setState({
-            activecompcode:activecompcode && activecompcode !='undefined'?activecompcode:''
-        })
-        if(this.props.query.id){
-            this.setState({
-                propsid:this.props.query.id,
-            })
-        }   
-    }
     componentDidMount() {
-        const data={};
-        if(this.state.propsid){
-            data.cid=this.state.propsid;
-            data.status=0
-        }
-        this.handleAlerm(data);//报警信息列表
+        this.handleAlerm();//报警信息列表
     }
     handleCancelAlarmImg =()=>{
         this.setState({
@@ -77,35 +48,29 @@ class OneAlarm extends React.Component{
 
     //查看报警详情
     alarmImg =(code)=>{
-        const toson={
-            code:code,
-            bdate:this.state.bdate.locale?this.state.bdate.format('YYYY-MM-DD HH:00:00'):'',
-            edate:this.state.edate.locale?this.state.edate.format('YYYY-MM-DD HH:00:00'):'',
-            cid:this.state.cid,
-        };
+        if(this.state.bdate!==null && this.state.edate!=null){
+            var toson={
+                code:code,
+                bdate:this.state.bdate,
+                edate:this.state.edate
+            };
+        }
         this.setState({
             alarmImgType:true,
             toson:toson
         })
     }
     hanlePageSize = (page) => { //翻页
-     
-        const data={};
-        if(this.state.propsid){
-            data.cid=this.state.propsid
-            data.status=0
-        }
- 
         this.setState({
             page:page,
             pagesize:18,
             pageindex:this.state.page,
         },()=>{
-            this.handleAlerm(data)
+            this.handleAlerm()
         })
     };
     //报警信息列表
-    handleAlerm = (data={})=>{
+    handleAlerm = ()=>{
         var alarmmdata={
             bdate:this.state.bdate,
             edate:this.state.edate,
@@ -155,11 +120,9 @@ class OneAlarm extends React.Component{
     handleSubmit =(e)=>{
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
-            console.log('******************111111',values.range_picker1.format('YYYY-MM-DD'));
-            console.log('******************111111',values.range_picker2.format('YYYY-MM-DD'));
             this.setState({
-                bdate:values.range_picker1?values.range_picker1.format('YYYY-MM-DD'):'',
-                edate:values.range_picker2?values.range_picker2.format('YYYY-MM-DD'):'',
+                bdate:values.date.length?values.date[0].format('YYYY-MM-DD'):'',
+                edate:values.date.length?values.date[1].format('YYYY-MM-DD'):'',
                 pagesize:18,
                 pageindex:this.state.page,
             })
@@ -177,11 +140,6 @@ class OneAlarm extends React.Component{
         })
         
     };
-    onChangeDate = (field, value) => {
-        this.setState({
-            [field]: value,
-        });
-    };
     handleStartOpenChange = (open) => {
         if (!open) {
             this.setState({ endOpen: true });
@@ -190,61 +148,20 @@ class OneAlarm extends React.Component{
     handleEndOpenChange = (open) => {
         this.setState({ endOpen: open });
     };
-    //禁止的开始时间
-    disabledStartDate = (startValue) => {
-        const endValue = this.state.endValue;
-        if (!startValue || !endValue) {
-            return false;
-        }
-        return startValue.valueOf() > endValue.valueOf();
-    };
-    //禁止的结束时间
-    disabledEndDate = (endValue) => {
-        const startValue = this.state.startValue;
-        if (!endValue || !startValue) {
-            return false;
-        }
-        return endValue.valueOf() <= startValue.valueOf();
-    };
-   
     render(){
         const { getFieldDecorator } = this.props.form;
         return(
             <div className="OneAlarm Alarmlist">
                 <LocaleProvider locale={zh_CN}>
-                    <Row style={{marginTop:"20px"}}>
-                        <Form onSubmit={this.handleSubmit}>
-                            <Col xl={4} xxl={4} lg={6}>
-                                <Form.Item
-                                    {...formItemLayout}
-                                    label="日期"
-                                >
-                                    {getFieldDecorator('range_picker1')(
-                                        <DatePicker
-                                            className="allInput"
-                                            showTime={{format:"HH"}}
+                    <Row style={{marginTop:"20px",marginLeft:"20px"}}>
+                        <Form onSubmit={this.handleSubmit} layout="inline">
+                            <Col xl={10} xxl={6}>
+                                <Form.Item label="日期" >
+                                    {getFieldDecorator('date')(
+                                        <RangePicker
+                                            showTime={{ format: 'HH:00:00' }}
                                             format="YYYY-MM-DD HH:00:00"
-                                            placeholder="开始时间"
-                                            setFieldsValue={this.state.bdate}
-                                            onChange={this.onChange1}
-                                            disabledDate={this.disabledStartDate}
-                                            onOpenChange={this.handleStartOpenChange}
-                                        />
-                                    )}
-                                </Form.Item>
-                            </Col>
-                            <Col xl={3} xxl={3} lg={3}>
-                                <Form.Item>
-                                    {getFieldDecorator('range_picker2')(
-                                        <DatePicker
-                                            showTime={{format:"HH"}}
-                                            format="YYYY-MM-DD HH:00:00"
-                                            placeholder="结束时间"
-                                            setFieldsValue={this.state.edate}
-                                            onChange={this.onChange2}
-                                            disabledDate={this.disabledEndDate}
-                                            onOpenChange={this.handleEndOpenChange}
-                                            className="allInput"
+                                            placeholder={['开始时间', '结束时间']}
                                         />
                                     )}
                                 </Form.Item>
@@ -255,13 +172,13 @@ class OneAlarm extends React.Component{
                         </Form>
                     </Row>
                 </LocaleProvider>
-                <Spin size="large" spinning={this.state.loadding} tip="Loading..." className="loadding" />
+                <Spin size="large" spinning={this.state.loadding} tip="加载中..." className="loadding" />
                 {this.state.nodatapic?"":
                 <Row style={{marginTop:"70px",}}>
                      <Col style={{width:"100%",textAlign:"center"}}><div className="backImg"><img src={nodata} alt="" /></div></Col>
                 </Row>}
                
-                <Row style={{marginLeft:"10px",display:this.state.type===0?"none":"block",}}>
+                <Row style={{marginLeft:"10px",marginTop:"20px",display:this.state.type===0?"none":"block",}}>
                     {
                         this.state.policeList.map((v,i)=>(
                             <Col xm={11} sm={11} md={11} lg={11} xl={11} xxl={7} key={v.code} style={{margin:"0px 10px",display:this.state.displaysearch=== true?" block":"none"}}>
