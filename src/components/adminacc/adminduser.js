@@ -186,10 +186,10 @@ searchCancel = () =>{//删除取消
                     </Col>
                 </Row>
                 <Spin spinning={this.state.loading} size="large"tip="加载中..." >
-                <Table 
-                     columns={columns} dataSource={this.state.list} bordered={true}
-                     pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage,hideOnSinglePage:true}}
-                />
+                    <Table
+                         columns={columns} dataSource={this.state.list} bordered={true}
+                         pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage,hideOnSinglePage:true}}
+                    />
                 </Spin>
                 </div>
                 

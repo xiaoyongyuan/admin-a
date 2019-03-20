@@ -14,8 +14,7 @@ export default {
             key: '/app/adminequipment', title: '设备管理', icon: 'camera',
             subs: [
                 { key: '/app/adminequipment/index', title: '设备信息', component: 'AdminEquipment'},
-                { key: '/app/adminequipment/AsynHistory', title: '异步历史', component: 'AsynHistory'},
-                { key: '/app/adminacc/adminduser', title: '单位管理', component: 'AdmindUser'},        
+                { key: '/app/adminequipment/AsynHistory', title: '异步历史', component: 'AsynHistory'},       
             ],
         },
         { key: '/app/alarmsta', title: '报警管理', icon: 'alert',
