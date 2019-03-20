@@ -7,6 +7,7 @@ import moment from "moment";
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import 'moment/locale/zh-cn';
 import EquipDetail from './EquipDetail';
+import Alarmnum from './Alarmnum';
 const FormItem = Form.Item;
 class AdminEquipment extends Component {
     constructor(props){
@@ -20,6 +21,7 @@ class AdminEquipment extends Component {
             toson:{}, //传给详情页面的值
             loading: true,//加载状态
             disabled: false,
+            alarmImgType:false,
         };
     }
     componentDidMount() {
@@ -41,7 +43,7 @@ class AdminEquipment extends Component {
                     list: res.data,
                     total:res.totalcount,
                     loading: false,//加载状态
-                   
+                
                 })
             }
         })
@@ -188,6 +190,23 @@ class AdminEquipment extends Component {
         })
        
     };
+    //查看报警详情
+    alarmImg =(text,record,index)=>{
+            var toson={
+                ccode:record.ccode,
+                cid:record.cid,
+                eid:record.ecode,
+            };
+        this.setState({
+            alarmImgType:true,
+            toson:toson
+        })
+    }
+    handleCancelAlarmImg =()=>{
+        this.setState({
+            alarmImgType:false
+        })
+    };
     render() {
         const { getFieldDecorator } = this.props.form;
         const columns = [
@@ -249,21 +268,42 @@ class AdminEquipment extends Component {
                     </div>
                 )
                 }
-        },
+            },
             {
-            title: '最后一次报警时间',
-            dataIndex: 'lastonce',
-            key: 'lastonce',
-        },
+                title: '最后一次报警时间',
+                dataIndex: 'lastonce',
+                key: 'lastonce',
+            },
             {
-            title:'最后二次报警时间',
+                title:'最后二次报警时间',
                 dataIndex:'lasttwice',
-            key:'lasttwice',
-            },{
-            title:'所属公司',
+                key:'lasttwice',
+            },
+            {
+                title:'所属公司',
                 dataIndex:'cname',
                 key:'cname'
-            },{
+            },
+            {
+            title:'误报数量',
+                dataIndex:'misinfocount',
+                key:'misinfocount',
+                render: (text,record,index) => {
+                    return(
+                        <div onClick={()=>this.alarmImg(text,record,index)} className="wbsum">
+                            {
+                            <span >
+                               {text}
+                            </span>
+                            }
+                        </div>
+                    )
+                }
+
+
+                
+            },
+            {
                 title:'操作',
                     dataIndex:'data',
                     key:'data',
@@ -366,8 +406,18 @@ class AdminEquipment extends Component {
                                 <div>tasktime：<span> {this.state.tasktimeA}</span></div>
                             </div>
                     </Modal>
+                    <Modal
+                        width={1200}
+                        title="误报详情"
+                        visible={this.state.alarmImgType}
+                        onCancel={this.handleCancelAlarmImg}
+                        footer={null}
+                    >
+                        <Alarmnum visible={this.state.alarmImgType} toson={this.state.toson} />
+                    </Modal>
                 </div>
             </div>
+            
             </LocaleProvider>
           
         )

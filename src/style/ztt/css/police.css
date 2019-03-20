@@ -354,3 +354,20 @@
     text-align:center;
     margin-top: 6px;
 }
+
+
+
+.wbsum{
+    margin-left:10%;
+    display:block;
+    width:100%;
+    height:40px;
+    line-height:40px;
+    text-align:center;
+    
+}
+.mispic{
+    width: 90%;
+    height:500px;
+    background: #eee;
+}
