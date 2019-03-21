@@ -68,38 +68,21 @@ class Alarmdetails extends React.Component{
     	this.draw()
     });	
   }
-  looknew=(text)=>{ //查看上下一条
-    let faths=this.state.faths;
-    faths.code=this.state[text];
-  	this.setState({
-  		field:true,
-  		obj:true,
-      faths:faths,
-  		code:this.state[text]
-    },()=>{
-    	this.componentDidMount()
-    });
-  }
+
   draw = ()=>{ //画围界
      let ele = document.getElementById("canvasobj");
      let area = ele.getContext("2d");
-      // area.clearRect(0,0,604,476);//清除之前的绘图
- 
-
-    console.log('2222',this.state.data.length);
     const objs=this.state.data;
   	if( objs.length>0){
       //计算缩放比例
-      console.log('11111');
-      const x=604/this.state.data.pic_width, y=476/this.state.data.pic_height;
       objs.map((el,i)=>{
+        this.setState({ x:604/el.pic_width,y:476/el.pic_height});	
+        const x=604/el.pic_width, y=476/el.pic_height;
         let fangquarr = []
         let finalareastring=el.finalarea;
         let zhuanhou= JSON.parse(finalareastring)
         fangquarr.push(zhuanhou); //属性
-        console.log('fangquarr',fangquarr);
           fangquarr.map((item,j)=>{   
-            console.log('/item*',item);
             area.strokeStyle='#ff0';
             area.beginPath();
             area.rect(parseInt(item.x*x),parseInt(item.y*y),parseInt(item.w*x),parseInt(item.h*y));
@@ -107,23 +90,8 @@ class Alarmdetails extends React.Component{
             area.closePath();
             return ''; 
         })
-       
       })
-  		
   	}
-  }
-  drawSelectObj=(el)=>{ //画出当前选中的围界
-    console.log('dddd')
-    const x=604/this.state.data.pic_width, y=476/this.state.data.pic_height;
-    let ele = document.getElementById("canvasobj");
-    let area = ele.getContext("2d");
-    area.clearRect(0,0,604,476);//清除之前的绘图
-    area.lineWidth=1;
-    area.strokeStyle='#ff0';
-    area.beginPath();
-    area.rect(parseInt(el.x*x),parseInt(el.y*y),parseInt(el.w*x),parseInt(el.h*y));
-    area.stroke();
-    area.closePath();
   }
   getcoord = (coords) => { //获取坐标
         let ele = document.getElementById("canvasobj");
@@ -135,88 +103,43 @@ class Alarmdetails extends React.Component{
     }
   clickgetcorrd =(e)=>{ //点击
     e.preventDefault();
-    const finalresult=this.state.data.finalresult;
-        if(finalresult.length){
-          let getcord=this.getcoord(e); //获取点击的坐标
-          const xi=604/this.state.data.pic_width, yi=476/this.state.data.pic_height;
-          let x=parseInt(getcord[0]/xi),y=parseInt(getcord[1]/yi);
-          const crut=this.selectObj(x,y);
-          if(crut){
-            console.log(crut);
-            this.setState({crut})
-            this.drawSelectObj(crut);
-            this.openNotification();
-          } 
-          
+     const objss=this.state.data;
+        if(objss.length>0){
+            let getcord=this.getcoord(e); //获取点击的坐标
+            let x=parseInt(getcord[0]/this.state.x),y=parseInt(getcord[1]/this.state.y);
+            let crut=this.selectObj(x,y);
+            console.log("crut2222",crut,x,y);
+             if(crut){
+               console.log("crut",crut);
+               this.setState({crut})
+               this.openNotification();
+             } 
+             console.log("objss",objss);
         }
-        
   }
   selectObj=(x,y)=>{
+    const objssa=this.state.data;
     var crut='';
-    const finalresult=this.state.data.finalresult;
-    finalresult.some((el,i)=>{
-      if(el.x<=x && x<=(el.x+el.w) && el.y<=y && y<=(el.y+el.h) ){
-        return crut=el;
-      }
+    objssa.map((el,i)=>{
+      let finalresult = []
+      let finalareastring=el.finalarea;
+      let zhuanhou= JSON.parse(finalareastring)
+      finalresult.push(zhuanhou); 
+       finalresult.some(
+          (el,i)=>{
+            if(el.x<=x && x<=(el.x+el.w) && el.y<=y && y<=(el.y+el.h) ){
+              return crut=el;
+            }
+        }
+      )
     })
+    
     return crut;
   }
 
   openNotification = () => { //确认误报弹层
-    const _this=this;
-     const btn = (
-        <div>
-          <Button type="primary" size="small"  onClick={() => _this.selectobjOk('newalarm')}>确认</Button>
-          <Button type="primary" size="small" onClick={() => _this.selectobjCancel('newalarm')}>取消</Button>
-        </div>      
-    );
-      notification.open({
-          key:'newalarm',
-          message: '信息',
-          description: (
-            <div>
-                确认将此条报警对象置为误报？
-            </div>
-        ),
-        onClose:function(){
-          _this.selectobjCancel()
-        },
-        btn,
-        duration: 0,
-        placement:'topLeft',
-        left:100,
-        top:300,
-      });
+
   };
-  selectobjOk =(key)=>{ //误报提交
-    const _this=this;
-    const data={
-      finalinfo:'',
-      aid:_this.state.code,
-      cid:_this.state.data.cid,
-      finalarea:JSON.stringify(_this.state.crut),
-      picpath:_this.state.data.src,
-      pic_width:_this.state.data.pic_width,
-      pic_height:_this.state.data.pic_height
-    }
-     post({url:"/api/Misinformation/add",data:data},(res)=>{
-      if(res.success){
-        notification.close(key);
-        message.success('操作成功');
-        _this.draw();
-      }
-     })
-    
-  }
-  selectobjCancel =(key)=>{ //误报确认取消
-    this.setState({
-      crut:{}
-    },()=>{
-      this.draw();
-      notification.close(key);
-    })
-    
-  }
     render(){      
         return(
             <div className="alarmDetails">
