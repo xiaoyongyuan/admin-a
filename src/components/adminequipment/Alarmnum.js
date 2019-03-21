@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Switch, Icon, notification, message } from 'antd';
+import {Button, Icon, message } from 'antd';
 import {post} from "../../axios/tools";
 import "../../style/ztt/css/police.css";
 let vis=false;
@@ -7,6 +7,7 @@ class Alarmdetails extends React.Component{
 	constructor(props){
       super(props);
       this.state={
+        ifblock:false,
       	data:{ //请求的数据
       		src:'',
       		name:'',
@@ -15,6 +16,7 @@ class Alarmdetails extends React.Component{
             atime:'',
       		field:[],
           finalresult:[],
+         
       	},
       	field:true, //是否显示围界信息
       	obj:true, //是否显示报警对象
@@ -73,6 +75,7 @@ class Alarmdetails extends React.Component{
       createby:"",
       createon:"",
       memo:"",
+      ifblock:false,
     })
      let ele = document.getElementById("canvasobj");
      let area = ele.getContext("2d");
@@ -133,6 +136,8 @@ class Alarmdetails extends React.Component{
                 createby:crut.createby,
                 createon:crut.createon,
                 memo:crut.memo,
+                ifblock:true,
+                code:crut.code,
               })
              } 
         }
@@ -150,6 +155,21 @@ class Alarmdetails extends React.Component{
     }
     return crut;
   }
+
+
+  del=()=>{
+    const data={
+      code:this.state.code
+    }
+    post({url:"/api/misinformation/del",data:data},(res)=>{   
+        if(res.success){
+          message.success('删除成功');
+        }
+
+    })
+  }
+
+
     render(){      
         return(
             <div className="alarmDetails">
@@ -160,9 +180,17 @@ class Alarmdetails extends React.Component{
             	 <div className="flexright">
                     <p><label>设备名称：<span>{}</span></label></p>
                     <p><label>误报数量：<span>{this.state.data.length}</span></label></p>
-            				<p><label>创建人：<span>{this.state.createby}</span></label></p>
-                    <p><label>报警对象：<span>{this.state.createon}</span></label></p>
-                    <p><label>备注：<span>{this.state.memo}</span></label></p>
+                    <div style={this.state.ifblock?{display:'block'}:{display:'none'}}>
+                      <p><label>当前误报信息</label></p>
+                      <p><label>创建人：<span>{this.state.createby}</span></label></p>
+                      <p><label>报警对象：<span>{this.state.createon}</span></label></p>
+                      <p><label>备注：<span>{this.state.memo}</span></label></p>
+                       <Button type="primary" onClick={()=>this.del()}>
+      							    	删除<Icon type="delete" />
+      							   </Button>
+                    </div>
+                   
+
             		</div> 
             	</div>
             </div>
