@@ -18,7 +18,6 @@ class Alarmdetails extends React.Component{
       	},
       	field:true, //是否显示围界信息
       	obj:true, //是否显示报警对象
-
       	code:'', //当前数据的code
       };
   }
@@ -70,8 +69,14 @@ class Alarmdetails extends React.Component{
   }
 
   draw = ()=>{ //画围界
+    this.setState({
+      createby:"",
+      createon:"",
+      memo:"",
+    })
      let ele = document.getElementById("canvasobj");
      let area = ele.getContext("2d");
+     area.clearRect(0,0,604,476);//清除之前的绘图
     const objs=this.state.data;
   	if( objs.length>0){
       //计算缩放比例
@@ -93,6 +98,19 @@ class Alarmdetails extends React.Component{
       })
   	}
   }
+  drawSelectObj=(el)=>{ //画出当前选中的围界
+    let pel= JSON.parse(el.finalarea);
+    const x=this.state.x, y=this.state.y;
+    let ele = document.getElementById("canvasobj");
+    let area = ele.getContext("2d");
+    area.clearRect(0,0,604,476);//清除之前的绘图
+    area.lineWidth=1;
+    area.strokeStyle='#ff0';
+    area.beginPath();
+    area.rect(parseInt(pel.x*x),parseInt(pel.y*y),parseInt(pel.w*x),parseInt(pel.h*y));
+    area.stroke();
+    area.closePath();
+  }
   getcoord = (coords) => { //获取坐标
         let ele = document.getElementById("canvasobj");
         let canvsclent = ele.getBoundingClientRect();
@@ -108,51 +126,43 @@ class Alarmdetails extends React.Component{
             let getcord=this.getcoord(e); //获取点击的坐标
             let x=parseInt(getcord[0]/this.state.x),y=parseInt(getcord[1]/this.state.y);
             let crut=this.selectObj(x,y);
-            console.log("crut2222",crut,x,y);
              if(crut){
-               console.log("crut",crut);
-               this.setState({crut})
-               this.openNotification();
+              this.drawSelectObj(crut);
+              this.setState({crut})
+              this.setState({
+                createby:crut.createby,
+                createon:crut.createon,
+                memo:crut.memo,
+              })
              } 
-             console.log("objss",objss);
         }
   }
   selectObj=(x,y)=>{
     const objssa=this.state.data;
     var crut='';
-    objssa.map((el,i)=>{
-      let finalresult = []
-      let finalareastring=el.finalarea;
-      let zhuanhou= JSON.parse(finalareastring)
-      finalresult.push(zhuanhou); 
-       finalresult.some(
-          (el,i)=>{
-            if(el.x<=x && x<=(el.x+el.w) && el.y<=y && y<=(el.y+el.h) ){
-              return crut=el;
-            }
-        }
-      )
-    })
-    
+    for( var j=0; j<= objssa.length; j++){
+     //点击是否在 objssa[j].finalarea
+     let finalareastring=objssa[j]!==undefined?objssa[j].finalarea:'';
+     let zhuanhou= JSON.parse(finalareastring);
+      if(zhuanhou.x<=x && x<=(zhuanhou.x+zhuanhou.w) && zhuanhou.y<=y && y<=(zhuanhou.y+zhuanhou.h) ){
+       return objssa[j]
+      }
+    }
     return crut;
   }
-
-  openNotification = () => { //确认误报弹层
-
-  };
     render(){      
         return(
             <div className="alarmDetails">
             	<div className="alarmflex">
             		<div className="flexleft" id="flexleft"style={{background:'#ccc'}}>
             			 <canvas id="canvasobj" width="604px" height="476px" onClick={this.clickgetcorrd} style={{backgroundImage:'url('+this.state.src+')',backgroundSize:"100% 100%",}} /> 
-                  {/* <div className="mispic">
-                       <img src={this.state.src} alt="误报图片" />
-                  </div> */}
             		</div>	
             	 <div className="flexright">
-            				<h4><b>{this.state.data.name}</b></h4>
-            				<p><label>报警对象：<span>{this.state.data.tags}</span></label></p>
+                    <p><label>设备名称：<span>{}</span></label></p>
+                    <p><label>误报数量：<span>{this.state.data.length}</span></label></p>
+            				<p><label>创建人：<span>{this.state.createby}</span></label></p>
+                    <p><label>报警对象：<span>{this.state.createon}</span></label></p>
+                    <p><label>备注：<span>{this.state.memo}</span></label></p>
             		</div> 
             	</div>
             </div>
