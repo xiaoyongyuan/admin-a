@@ -9,7 +9,7 @@ import { message } from 'antd';
  * @param msg       接口异常提示
  * @param headers   接口所需header配置
  */
-const Httpurl='http://api.aokecloud.cn';
+const Httpurl=window.g.url;
 
 
 /**
