@@ -363,6 +363,7 @@ class AdminEquipment extends Component {
                     <Row style={{marginTop:"20px"}}>
                         <Spin spinning={this.state.loading} size="large" className="spin" tip="加载中...">
                             <Table
+                                rowKey={record => record.code}
                                 bordered={true}
                                 dataSource={this.state.list}
                                 columns={columns}
@@ -408,7 +409,7 @@ class AdminEquipment extends Component {
                             </div>
                     </Modal>
                     <Modal
-                        width={1200}
+                        width={900}
                         title="误报详情"
                         visible={this.state.alarmImgType}
                         onCancel={this.handleCancelAlarmImg}

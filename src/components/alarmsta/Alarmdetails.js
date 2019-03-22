@@ -23,7 +23,8 @@ class Alarmdetails extends React.Component{
       	obj:true, //是否显示报警对象
       	prev:'', //上一条数据code
       	next:'', //下一条数据code
-      	code:'', //当前数据的code
+        code:'', //当前数据的code
+        ifall:false,
       };
   }
   componentWillMount() {
@@ -31,6 +32,7 @@ class Alarmdetails extends React.Component{
     this.setState({
       faths:this.props.toson,
       code:this.props.toson.code,
+      ifall:false,
     });
   }
   componentDidMount() {
@@ -43,7 +45,8 @@ class Alarmdetails extends React.Component{
               vis=nextProps.visible;
               this.setState({
                   code:nextProps.toson.code,
-                  faths:nextProps.toson
+                  faths:nextProps.toson,
+                  ifall:false,
               }, () => {
                   this.componentDidMount()});
           }
@@ -52,6 +55,7 @@ class Alarmdetails extends React.Component{
   request=()=>{
     post({url:"/api/alarm/getone_foradmin",data:this.state.faths},(res)=>{        
       let data={
+         
           cid:res.data.cid,
           src:res.data.picpath,
           field:res.data.field,
@@ -67,6 +71,7 @@ class Alarmdetails extends React.Component{
         }
         this.setState({
           data:data,
+          eid:res.data.eid,
           prev:res.data.last,
           next:res.data.next, 
       },()=>{
@@ -237,31 +242,120 @@ class Alarmdetails extends React.Component{
     })
     
   }
+  
+  
+  baojing=()=>{
+    this.setState({
+      ifall:false,
+    });
+    this.componentDidMount()
+  }
+  misinf=()=>{
+    this.setState({
+      ifall:true,
+    });
+    const data={
+      ccode: this.state.faths.ccode,
+      cid: this.state.faths.cid,
+      eid: this.state.faths.eid,
+    }
+    post({url:"/api/misinformation/gets_misinfo",data:data},(res)=>{  
+      if(res){
+        console.log('res.picpath',res.picpath);
+        
+          this.setState({
+            data:res.data,
+            srct:res.path,
+          },()=>{
+            if(res.data.length){
+              this.drawtwo();
+            }
+         });
+      }  
+    })
+  }
+  
+
+  drawtwo = ()=>{ //画围界
+    this.setState({
+      createby:"",
+      createon:"",
+      memo:"",
+      ifblock:false,
+      eid:this.props.toson.eid,
+    })
+     let ele = document.getElementById("canvasobjt");
+     let area = ele.getContext("2d");
+     area.clearRect(0,0,604,476);//清除之前的绘图
+    const objs=this.state.data;
+  	if( objs.length>0){
+      //计算缩放比例
+      objs.map((el,i)=>{
+        this.setState({ x:604/el.pic_width,y:476/el.pic_height});	
+        const x=604/el.pic_width, y=476/el.pic_height;
+        let fangquarr = []
+        let finalareastring=el.finalarea;
+        let zhuanhou= JSON.parse(finalareastring)
+        fangquarr.push(zhuanhou); //属性
+          fangquarr.map((item,j)=>{   
+            area.strokeStyle='#ff0';
+            area.beginPath();
+            area.rect(parseInt(item.x*x),parseInt(item.y*y),parseInt(item.w*x),parseInt(item.h*y));
+            area.stroke();
+            area.closePath();
+            return ''; 
+        })
+      })
+  	}
+  }
+
+
+
     render(){      
         return(
             <div className="alarmDetails">
-            	<div className="alarmflex">
-            		<div className="flexleft" id="flexleft">
-            			<canvas id="canvasobj" width="604px" height="476px" onClick={this.clickgetcorrd} style={{backgroundImage:'url('+this.state.data.src+')',backgroundSize:"100% 100%"}} />
-            			<div style={{textAlign:'center'}}>
-            				<ButtonGroup>
-      							  <Button type="primary" onClick={()=>this.looknew('prev')} disabled={this.state.prev?false:true}>
-      								<Icon type="left" />上一条
-      							  </Button>&nbsp;&nbsp;&nbsp;
-      							  <Button type="primary" onClick={()=>this.looknew('next')} disabled={this.state.next?false:true}>
-      								下一条<Icon type="right" />
-      							  </Button>
-      							</ButtonGroup> 
-            			</div>
-            		</div>	
-            		<div className="flexright">
-            				<h4><b>{this.state.data.name}</b></h4>
-            				<p><label>报警对象：<span>{this.state.data.tags}</span></label></p>
-            				<p><label>围界信息: <Switch size="small" checked={this.state.field} onChange={(checked)=>this.onChange(checked,'field')} /></label></p>
-            				<p><label>报警信息: <Switch size="small" checked={this.state.obj} onChange={(checked)=>this.onChange(checked,'obj')} /></label></p>
-            				<p><label>报警时间：<span>{this.state.data.atime}</span></label></p>
-            		</div>
-            	</div>
+              <div style={this.state.ifall?{display:'none'}:{display:'block'}}>
+                  <div className="alarmflex">
+                    <div className="flexleft" id="flexleft">
+                      <canvas id="canvasobj" width="604px" height="476px" onClick={this.clickgetcorrd} style={{backgroundImage:'url('+this.state.data.src+')',backgroundSize:"100% 100%"}} />
+                      <div style={{textAlign:'center'}}>
+                        <ButtonGroup>
+                          <Button type="primary" onClick={()=>this.looknew('prev')} disabled={this.state.prev?false:true}>
+                          <Icon type="left" />上一条
+                          </Button>&nbsp;&nbsp;&nbsp;
+                          <Button type="primary" onClick={()=>this.looknew('next')} disabled={this.state.next?false:true}>
+                          下一条<Icon type="right" />
+                          </Button>
+                        </ButtonGroup> 
+                      </div>
+                    </div>	
+                    <div className="flexright">
+                        <h4><b>{this.state.data.name}</b></h4>
+                        <p><label>设备编号：<span>{this.state.eid}</span></label></p>
+                        <p><label>报警对象：<span>{this.state.data.tags}</span></label></p>
+                        <p><label>围界信息: <Switch size="small" checked={this.state.field} onChange={(checked)=>this.onChange(checked,'field')} /></label></p>
+                        <p><label>报警信息: <Switch size="small" checked={this.state.obj} onChange={(checked)=>this.onChange(checked,'obj')} /></label></p>
+                        <p><label>报警时间：<span>{this.state.data.atime}</span></label></p>
+                        <Button type="primary" onClick={()=>this.misinf()} >
+                          查看该设备误报信息
+                        </Button>
+                    </div>
+                  </div>
+              </div>
+              <div style={this.state.ifall?{display:'block'}:{display:'none'}}>
+                  <div className="alarmflex">
+                    <div className="flexleft" id="flexleft">
+                      <canvas id="canvasobjt" width="604px" height="476px" style={{backgroundImage:'url('+this.state.srct+')',backgroundSize:"100% 100%",}} /> 
+                    </div>	
+                  <div className="flexright">
+                        <p><label>设备名称：<span>{this.state.eid}</span></label></p>
+                        <p><label>误报数量：<span>{this.state.data.length?this.state.data.length:'0'}</span></label></p>
+                        <Button type="primary" onClick={()=>this.baojing()} >
+                          返回报警信息
+                        </Button>
+                    </div> 
+                  </div>
+              </div>
             </div>
         )
     }

@@ -47,13 +47,19 @@ class OneAlarm extends React.Component{
     };
 
     //查看报警详情
-    alarmImg =(code)=>{
+    alarmImg =(code,v)=>{
+        console.log('code,v',code,v);
+        
         if(this.state.bdate!==null && this.state.edate!=null){
             var toson={
                 code:code,
                 bdate:this.state.bdate,
-                edate:this.state.edate
+                edate:this.state.edate,   
+                ccode:v.companycode,
+                cid:v.cid,
+                eid:v.eid,
             };
+
         }
         this.setState({
             alarmImgType:true,
@@ -62,6 +68,7 @@ class OneAlarm extends React.Component{
     }
     hanlePageSize = (page) => { //翻页
         this.setState({
+            loadding:true,
             page:page,
         },()=>{
             this.handleAlerm()
@@ -152,7 +159,6 @@ class OneAlarm extends React.Component{
                 <LocaleProvider locale={zh_CN}>
                     <Row style={{marginTop:"20px",marginLeft:"20px"}}>
                         <Form onSubmit={this.handleSubmit} layout="inline">
-                            <Col xl={10} xxl={6}>
                                 <Form.Item label="日期" >
                                     {getFieldDecorator('date')(
                                         <RangePicker
@@ -162,14 +168,11 @@ class OneAlarm extends React.Component{
                                         />
                                     )}
                                 </Form.Item>
-                            </Col>
-                            <Col xl={2} xxl={2} lg={4} className="mt">
                                 <Button type="primary" htmlType="submit" className="queryBtn">查询</Button>
-                            </Col>
                         </Form>
                     </Row>
                 </LocaleProvider>
-                <Spin size="large" spinning={this.state.loadding} tip="加载中..." className="loadding" />
+                <Spin size="large" spinning={this.state.loadding} tip="加载中..." className="loadding" >
                 {this.state.nodatapic?"":
                 <Row style={{marginTop:"70px",}}>
                      <Col style={{width:"100%",textAlign:"center"}}><div className="backImg"><img src={nodata} alt="" /></div></Col>
@@ -183,7 +186,7 @@ class OneAlarm extends React.Component{
                                     <div >
                                         <Row>
                                             <Col span={8}>
-                                                <div className="pliceImgyal" onClick={()=>this.alarmImg(v.code)}>
+                                                <div className="pliceImgyal" onClick={()=>this.alarmImg(v.code,v)}>
                                                     <img src={v.pic_min} alt="" />
                                                 </div>
                                             </Col>
@@ -220,10 +223,12 @@ class OneAlarm extends React.Component{
                         ))
                     }
                 </Row>
+                </Spin>
+              
                 <Pagination defaultCurrent={this.state.page} current={this.state.page} total={this.state.totalcount} pageSize={this.state.pageSize} onChange={this.hanlePageSize} className="pageSize" style={{display:this.state.type===1?"block":"none"}} />
                 <div>
                     <Modal
-                        width={1200}
+                        width={900}
                         title="报警详情"
                         visible={this.state.alarmImgType}
                         onCancel={this.handleCancelAlarmImg}
