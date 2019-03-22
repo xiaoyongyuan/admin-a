@@ -206,6 +206,7 @@ class AdminEquipment extends Component {
         this.setState({
             alarmImgType:false
         })
+       this.getlist();
     };
     render() {
         const { getFieldDecorator } = this.props.form;
