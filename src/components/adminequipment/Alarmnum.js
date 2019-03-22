@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Icon, message } from 'antd';
+import {Button, Icon, message,notification } from 'antd';
 import {post} from "../../axios/tools";
 import "../../style/ztt/css/police.css";
 let vis=false;
@@ -16,7 +16,6 @@ class Alarmdetails extends React.Component{
             atime:'',
       		field:[],
           finalresult:[],
-         
       	},
       	field:true, //是否显示围界信息
       	obj:true, //是否显示报警对象
@@ -28,11 +27,11 @@ class Alarmdetails extends React.Component{
     this.setState({
       faths:this.props.toson,
       code:this.props.toson.code,
+      eid:this.props.toson.eid,
     });
   }
   componentDidMount() {
        this.request();
-      
     } ;
   componentWillReceiveProps(nextProps){ //此处修改父页面参数
       if( nextProps.visible !== vis){
@@ -61,7 +60,6 @@ class Alarmdetails extends React.Component{
       });
     })
   }
-
   onChange=(checked,text)=>{ //控制显示围界与对象
   	this.setState({
         [text]: checked,
@@ -69,13 +67,13 @@ class Alarmdetails extends React.Component{
     	this.draw()
     });	
   }
-
   draw = ()=>{ //画围界
     this.setState({
       createby:"",
       createon:"",
       memo:"",
       ifblock:false,
+      eid:this.props.toson.eid,
     })
      let ele = document.getElementById("canvasobj");
      let area = ele.getContext("2d");
@@ -130,6 +128,7 @@ class Alarmdetails extends React.Component{
             let x=parseInt(getcord[0]/this.state.x),y=parseInt(getcord[1]/this.state.y);
             let crut=this.selectObj(x,y);
              if(crut){
+              this.openNotification();
               this.drawSelectObj(crut);
               this.setState({crut})
               this.setState({
@@ -155,21 +154,54 @@ class Alarmdetails extends React.Component{
     }
     return crut;
   }
-
-
-  del=()=>{
+  openNotification = () => { //确认误报弹层
+    const _this=this;
+     const btn = (
+        <div>
+          <Button type="primary" size="small"  onClick={() => _this.selectobjOk('newalarm')}>确认</Button>
+          <Button type="primary" size="small" onClick={() => _this.selectobjCancel('newalarm')}>取消</Button>
+        </div>      
+    );
+      notification.open({
+          key:'newalarm',
+          message: '信息',
+          description: (
+            <div>
+                确认将此条误报对象删除？
+            </div>
+        ),
+        onClose:function(){
+          _this.selectobjCancel()
+        },
+        btn,
+        duration: 0,
+        placement:'topLeft',
+        left:100,
+        top:300,
+      });
+  };
+  selectobjOk =(key)=>{ //误报删除
+    const _this=this;
     const data={
       code:this.state.code
     }
-    post({url:"/api/misinformation/del",data:data},(res)=>{   
-        if(res.success){
-          message.success('删除成功');
-        }
-
+     post({url:"/api/misinformation/del",data:data},(res)=>{
+      if(res.success){
+        notification.close(key);
+        message.success('删除成功');
+        _this.draw();
+        this.request();
+      }
+     })
+  }
+  selectobjCancel =(key)=>{ //误报删除取消
+    this.setState({
+      crut:{}
+    },()=>{
+      this.draw();
+      notification.close(key);
     })
   }
-
-
     render(){      
         return(
             <div className="alarmDetails">
@@ -178,19 +210,14 @@ class Alarmdetails extends React.Component{
             			 <canvas id="canvasobj" width="604px" height="476px" onClick={this.clickgetcorrd} style={{backgroundImage:'url('+this.state.src+')',backgroundSize:"100% 100%",}} /> 
             		</div>	
             	 <div className="flexright">
-                    <p><label>设备名称：<span>{}</span></label></p>
+                    <p><label>设备名称：<span>{this.state.eid}</span></label></p>
                     <p><label>误报数量：<span>{this.state.data.length}</span></label></p>
                     <div style={this.state.ifblock?{display:'block'}:{display:'none'}}>
                       <p><label>当前误报信息</label></p>
                       <p><label>创建人：<span>{this.state.createby}</span></label></p>
                       <p><label>报警对象：<span>{this.state.createon}</span></label></p>
                       <p><label>备注：<span>{this.state.memo}</span></label></p>
-                       <Button type="primary" onClick={()=>this.del()}>
-      							    	删除<Icon type="delete" />
-      							   </Button>
                     </div>
-                   
-
             		</div> 
             	</div>
             </div>

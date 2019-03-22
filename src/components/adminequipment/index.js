@@ -288,6 +288,7 @@ class AdminEquipment extends Component {
             title:'误报数量',
                 dataIndex:'misinfocount',
                 key:'misinfocount',
+                width: 120,
                 render: (text,record,index) => {
                     return(
                         <div onClick={()=>this.alarmImg(text,record,index)} className="wbsum">
