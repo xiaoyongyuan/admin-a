@@ -335,7 +335,7 @@ class AdminEquipment extends Component {
                                     <span style={{marginLeft:'10%'}}>
                                         <Button type="primary" onClick={()=>this.viewdetails(text,record)}>查看详情</Button>
                                         <Button type="primary" style={{marginLeft:'1%'}} onClick={()=>this.canequip(text,record)}>获取当前设备信息</Button>
-                                        <Button type="primary" onClick={()=>this.ifleavefactory(text,record)} style={{marginLeft:'9%',marginTop:'10px'}}>回复出厂设置</Button>
+                                        <Button type="primary" onClick={()=>this.ifleavefactory(text,record)} style={{marginLeft:'9%',marginTop:'10px'}}>恢复出厂设置</Button>
                                     </span>
                                 }
                             </div>
