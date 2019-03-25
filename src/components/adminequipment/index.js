@@ -15,6 +15,7 @@ class AdminEquipment extends Component {
         this.state={
             visible:false,
             block:false,
+            leave:false,
             list:[],
             createinfo:[],
             page:1,
@@ -88,8 +89,10 @@ class AdminEquipment extends Component {
         this.setState({
             visible: false,
             block: false,
+            leave: false,
         });
     };
+
     e_getinfo = (e) => {//更新数据
         const params = {
             ecode:this.state.ecode
@@ -208,6 +211,23 @@ class AdminEquipment extends Component {
         })
        this.getlist();
     };
+
+    ifleavefactory = (text,record) => {//出厂设置弹出层
+        this.setState({
+            eid:record.ecode,
+            leave: true,
+        });
+    };
+    leaveCancel = (e) => {//恢复出厂设置确认
+        post({url:"/api/equipment/restore_e",data:{eid:this.state.eid}}, (res)=>{
+            if(res.success){
+                message.success('修改成功');
+            }
+        })
+        this.setState({
+            leave: false,
+        });
+    };
     render() {
         const { getFieldDecorator } = this.props.form;
         const columns = [
@@ -235,7 +255,7 @@ class AdminEquipment extends Component {
             title: '阈值',
             dataIndex: 'threshold',
             key: 'threshold',
-            width: 260,
+            width: 220,
             render:(text,record,index)=>{
                 const { disabled } = this.state;
                 return(
@@ -283,13 +303,14 @@ class AdminEquipment extends Component {
             {
                 title:'所属公司',
                 dataIndex:'cname',
-                key:'cname'
+                key:'cname',
+                width: 120,
             },
             {
             title:'误报数量',
                 dataIndex:'misinfocount',
                 key:'misinfocount',
-                width: 120,
+                width: 100,
                 render: (text,record,index) => {
                     return(
                         <div onClick={()=>this.alarmImg(text,record,index)} className="wbsum">
@@ -309,13 +330,15 @@ class AdminEquipment extends Component {
                 title:'操作',
                     dataIndex:'data',
                     key:'data',
+                    width:300,
                     render: (text, record) => {
                         return(
                             <div>
                                 {
                                     <span style={{marginLeft:'10%'}}>
-                                        <Button onClick={()=>this.viewdetails(text,record)}>查看详情</Button>
-                                        <Button style={{marginLeft:'10%'}} onClick={()=>this.canequip(text,record)}>获取当前设备信息</Button>
+                                        <Button type="primary" onClick={()=>this.viewdetails(text,record)}>查看详情</Button>
+                                        <Button type="primary" style={{marginLeft:'1%'}} onClick={()=>this.canequip(text,record)}>获取当前设备信息</Button>
+                                        <Button type="primary" onClick={()=>this.ifleavefactory(text,record)} style={{marginLeft:'9%',marginTop:'10px'}}>回复出厂设置</Button>
                                     </span>
                                 }
                             </div>
@@ -408,6 +431,14 @@ class AdminEquipment extends Component {
                                 <div>taskstatus：<span> {this.state.taskstatusA}</span></div>
                                 <div>tasktime：<span> {this.state.tasktimeA}</span></div>
                             </div>
+                    </Modal>
+
+                    <Modal visible={this.state.leave} 
+                           title="恢复出厂设置"
+                           onCancel={this.handleCancel}
+                           footer={[ <Button key="back" onClick={this.leaveCancel} >确认</Button>]}
+                    >
+                           <div>是否恢复出厂设置?</div>
                     </Modal>
                     <Modal
                         width={900}
