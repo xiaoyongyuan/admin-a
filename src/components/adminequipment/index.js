@@ -322,9 +322,6 @@ class AdminEquipment extends Component {
                         </div>
                     )
                 }
-
-
-                
             },
             {
                 title:'操作',
@@ -346,8 +343,6 @@ class AdminEquipment extends Component {
                     }
                 }
             ];
-
-
         return (
             <LocaleProvider locale={zh_CN}>
             <div className="AdminEquipment">
@@ -450,8 +445,7 @@ class AdminEquipment extends Component {
                         <Alarmnum visible={this.state.alarmImgType} toson={this.state.toson} />
                     </Modal>
                 </div>
-            </div>
-            
+            </div>           
             </LocaleProvider>
           
         )
