@@ -138,7 +138,6 @@ class Alarmdetails extends React.Component{
   	}
   }
   drawSelectObj=(el)=>{ //画出当前选中的围界
-    console.log('dddd')
     const x=604/this.state.data.pic_width, y=476/this.state.data.pic_height;
     let ele = document.getElementById("canvasobj");
     let area = ele.getContext("2d");
@@ -167,14 +166,11 @@ class Alarmdetails extends React.Component{
           let x=parseInt(getcord[0]/xi),y=parseInt(getcord[1]/yi);
           const crut=this.selectObj(x,y);
           if(crut){
-            console.log(crut);
             this.setState({crut})
             this.drawSelectObj(crut);
             this.openNotification();
           } 
-          
         }
-        
   }
   selectObj=(x,y)=>{
     var crut='';
@@ -186,7 +182,6 @@ class Alarmdetails extends React.Component{
     })
     return crut;
   }
-
   openNotification = () => { //确认误报弹层
     const _this=this;
      const btn = (
@@ -201,7 +196,12 @@ class Alarmdetails extends React.Component{
           description: (
             <div>
                 确认将此条报警对象置为误报？
+                <div style={{marginTop:'14px'}}>
+                 <span style={{float:'left'}}> 备注：</span>
+                 <textarea style={{float:'left'}} id="memo"onBlur={() => _this.memo()} style={{width:'160px',height:'6opx'}}placeholder="请输入备注" > </textarea>
+                </div>
             </div>
+           
         ),
         onClose:function(){
           _this.selectobjCancel()
@@ -222,7 +222,8 @@ class Alarmdetails extends React.Component{
       finalarea:JSON.stringify(_this.state.crut),
       picpath:_this.state.data.src,
       pic_width:_this.state.data.pic_width,
-      pic_height:_this.state.data.pic_height
+      pic_height:_this.state.data.pic_height,
+      memo:_this.state.memo,
     }
      post({url:"/api/Misinformation/add",data:data},(res)=>{
       if(res.success){
@@ -232,6 +233,13 @@ class Alarmdetails extends React.Component{
       }
      })
     
+  }
+
+  memo =(e)=>{ 
+    var memoval=document.getElementById("memo").value;  
+    this.setState({
+      memo:memoval
+    })
   }
   selectobjCancel =(key)=>{ //误报确认取消
     this.setState({
@@ -261,8 +269,6 @@ class Alarmdetails extends React.Component{
     }
     post({url:"/api/misinformation/gets_misinfo",data:data},(res)=>{  
       if(res){
-        console.log('res.picpath',res.picpath);
-        
           this.setState({
             data:res.data,
             srct:res.path,

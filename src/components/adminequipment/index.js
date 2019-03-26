@@ -15,6 +15,7 @@ class AdminEquipment extends Component {
         this.state={
             visible:false,
             block:false,
+            threshold:false,
             leave:false,
             list:[],
             createinfo:[],
@@ -23,6 +24,7 @@ class AdminEquipment extends Component {
             loading: true,//加载状态
             disabled: false,
             alarmImgType:false,
+            ifreq:false,//是否确认鞥该阈值
         };
     }
     componentDidMount() {
@@ -92,6 +94,7 @@ class AdminEquipment extends Component {
             leave: false,
         });
     };
+
 
     e_getinfo = (e) => {//更新数据
         const params = {
@@ -174,24 +177,44 @@ class AdminEquipment extends Component {
             }
         })
     };
-    threshold = (value,index) => {//阈值改变
-        let list=this.state.list;
-        list[index].threshold=value;
+    thresholdCancel= (e) => {//关闭阈值弹出层
         this.setState({
-             list:list
-        })
-      };
-    remove = (record) => {//阈值改变
+            threshold:false,
+            ifreq:false,
+        });
+    };
+    thresholdok = (e) => {//确认阈值
+        this.setState({
+            threshold:false,
+            ifreq:true,
+        });
         const params={
-            threshold:record.threshold,
-            code:record.code,
+            threshold:this.state.threshold,
+            code:this.state.code,
         }
         post({url:"/api/camera/update_threshold",data:params}, (res)=>{
             if(res.success){
                 message.success('修改成功');
             }
         })
-       
+    };
+    threshold = (value,index) => {//阈值改变
+        console.log('*value',value);
+        
+        let list=this.state.list;
+        list[index].threshold=value;
+        this.setState({
+             list:list,
+             threshold:true,
+             inputValue: value,
+        })
+      };
+    remove = (record) => {//阈值改变
+        this.setState({
+            threshold:record.threshold,
+            code:record.code,
+            
+       })                 
     };
     //查看报警详情
     alarmImg =(text,record,index)=>{
@@ -264,6 +287,7 @@ class AdminEquipment extends Component {
                             style={{width:'76%',float:'left'}} 
                             onAfterChange={()=>this.remove(record)}
                             onChange={(value)=>this.threshold(value,index)}
+                            value={ this.state.inputValue}
                             min={1} 
                             max={9} 
                             defaultValue={record.threshold} 
@@ -425,6 +449,16 @@ class AdminEquipment extends Component {
                                 <div>taskresult：<span> {this.state.taskresultA}</span></div>
                                 <div>taskstatus：<span> {this.state.taskstatusA}</span></div>
                                 <div>tasktime：<span> {this.state.tasktimeA}</span></div>
+                            </div>
+                    </Modal>
+                    <Modal visible={this.state.threshold} width={400}
+                          okText="确认"
+                          cancelText="取消"
+                           onCancel={this.thresholdCancel}
+                           onOk={this.thresholdok}
+                    >
+                            <div style={{marginLeft:"60px"}}>
+                                是否确定改变阈值？
                             </div>
                     </Modal>
 
