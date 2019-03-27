@@ -24,7 +24,8 @@ class AdminEquipment extends Component {
             loading: true,//加载状态
             disabled: false,
             alarmImgType:false,
-            ifreq:false,//是否确认鞥该阈值
+            ifreq:false,//是否确认鞥该阈值、
+            ifinput:false,//是否确认取消弹框该阈值
         };
     }
     componentDidMount() {
@@ -150,7 +151,6 @@ class AdminEquipment extends Component {
                             });
                             message.warn('请求超时，请稍后再试');
                             clearInterval(inter);
-                            
                         }
                         if(res.success){
                             if(res.data.taskstatus){
@@ -181,12 +181,15 @@ class AdminEquipment extends Component {
         this.setState({
             threshold:false,
             ifreq:false,
+            ifinput:true,//阈值弹框点击取消是
+            inputValue: this.state.onBeforevalue,
         });
     };
     thresholdok = (e) => {//确认阈值
         this.setState({
             threshold:false,
             ifreq:true,
+            ifinput:false,//阈值弹框点击确认是
         });
         const params={
             threshold:this.state.threshold,
@@ -198,23 +201,31 @@ class AdminEquipment extends Component {
             }
         })
     };
-    threshold = (value,index) => {//阈值改变
-        console.log('*value',value);
+    threshold = (value,index,record,) => {//阈值改变
+        console.log('111',record.code,);
         
         let list=this.state.list;
         list[index].threshold=value;
         this.setState({
+             ingcode:record.code,
              list:list,
              threshold:true,
-             inputValue: value,
+             ifinput:false,//阈值弹框点击确认是
         })
       };
     remove = (record) => {//阈值改变
+        console.log('this.state.ifinput',this.state.ifinput);
         this.setState({
             threshold:record.threshold,
             code:record.code,
-            
-       })                 
+       })   
+        
+    };
+    onBefore= (e,text,record,index) => {//阈值改变前
+        this.setState({
+            onBeforevalue:e,
+            onBeforecode:record.code, 
+       })            
     };
     //查看报警详情
     alarmImg =(text,record,index)=>{
@@ -285,17 +296,19 @@ class AdminEquipment extends Component {
                     <div>
                         {<Slider 
                             style={{width:'76%',float:'left'}} 
+                            onBeforeChange={(e)=>this.onBefore(e,text,record,index)}
                             onAfterChange={()=>this.remove(record)}
-                            onChange={(value)=>this.threshold(value,index)}
-                            value={ this.state.inputValue}
+                            onChange={(value)=>this.threshold(value,index,record)}
                             min={1} 
                             max={9} 
                             defaultValue={record.threshold} 
                             disabled={disabled} 
+                            value={record.code==this.state.ingcode&&this.state.ifinput?this.state.onBeforevalue:record.threshold}
                          />
                         } 
                          <div className="rednum">
-                           {record.threshold}
+                           {record.code==this.state.ingcode&&this.state.ifinput?this.state.onBeforevalue:record.threshold}--
+                          {record.threshold} 
                          </div>
                     </div>
                 )
@@ -452,8 +465,9 @@ class AdminEquipment extends Component {
                             </div>
                     </Modal>
                     <Modal visible={this.state.threshold} width={400}
-                          okText="确认"
-                          cancelText="取消"
+                           title="改变阈值"
+                           okText="确认"
+                           cancelText="取消"
                            onCancel={this.thresholdCancel}
                            onOk={this.thresholdok}
                     >
@@ -464,8 +478,11 @@ class AdminEquipment extends Component {
 
                     <Modal visible={this.state.leave} 
                            title="恢复出厂设置"
+                           okText="确认"
+                           cancelText="取消"
                            onCancel={this.handleCancel}
-                           footer={[ <Button key="back" onClick={this.leaveCancel} >确认</Button>]}
+                           onOk={this.leaveCancel}
+                          
                     >
                            <div>是否恢复出厂设置?</div>
                     </Modal>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Icon, message,notification } from 'antd';
+import {Button, Icon, message,notification,Modal } from 'antd';
 import {post} from "../../axios/tools";
 import "../../style/ztt/css/police.css";
 let vis=false;
@@ -19,7 +19,8 @@ class Alarmdetails extends React.Component{
       	},
       	field:true, //是否显示围界信息
       	obj:true, //是否显示报警对象
-      	code:'', //当前数据的code
+        code:'', //当前数据的code
+        ifmis:false,
       };
   }
   componentWillMount() {
@@ -155,36 +156,42 @@ class Alarmdetails extends React.Component{
     return crut;
   }
   openNotification = () => { //确认误报弹层
-    const _this=this;
-     const btn = (
-        <div>
-          <Button type="primary" size="small"  onClick={() => _this.selectobjOk('newalarm')}>确认</Button>
-          <Button type="primary" size="small" onClick={() => _this.selectobjCancel('newalarm')}>取消</Button>
-        </div>      
-    );
-      notification.open({
-          key:'newalarm',
-          message: '信息',
-          description: (
-            <div>
-                确认将此条误报对象删除？
-            </div>
-        ),
-        onClose:function(){
-          _this.selectobjCancel()
-        },
-        btn,
-        duration: 0,
-        placement:'topLeft',
-        left:100,
-        top:300,
-      });
+        this.setState({
+          ifmis:true,
+        })
+    // const _this=this;
+    //  const btn = (
+    //     <div>
+    //       <Button type="primary" size="small"  onClick={() => _this.selectobjOk('newalarm')}>确认</Button>
+    //       <Button type="primary" size="small" onClick={() => _this.selectobjCancel('newalarm')}>取消</Button>
+    //     </div>      
+    // );
+    //   notification.open({
+    //       key:'newalarm',
+    //       message: '信息',
+    //       description: (
+    //         <div>
+    //             确认将此条误报对象删除？
+    //         </div>
+    //     ),
+    //     onClose:function(){
+    //       _this.selectobjCancel()
+    //     },
+    //     btn,
+    //     duration: 0,
+    //     placement:'topLeft',
+    //     left:100,
+    //     top:300,
+    //   });
   };
   selectobjOk =(key)=>{ //误报删除
     const _this=this;
     const data={
       code:this.state.code
     }
+    this.setState({
+      ifmis:false,
+    })
      post({url:"/api/misinformation/del",data:data},(res)=>{
       if(res.success){
         notification.close(key);
@@ -196,6 +203,7 @@ class Alarmdetails extends React.Component{
   }
   selectobjCancel =(key)=>{ //误报删除取消
     this.setState({
+      ifmis:false,
       crut:{}
     },()=>{
       this.draw();
@@ -218,8 +226,20 @@ class Alarmdetails extends React.Component{
                       <p><label>报警对象：<span>{this.state.createon}</span></label></p>
                       <p><label>备注：<span>{this.state.memo}</span></label></p>
                     </div>
+                    <Modal visible={this.state.ifmis} 
+                          title="信息"
+                          okText="确认"
+                           cancelText="取消"
+                           onCancel={() => this.selectobjCancel('newalarm')}
+                           onOk={() => this.selectobjOk('newalarm')}
+                    >
+                            <div style={{marginLeft:"60px"}}>
+                            确认将此条误报对象删除?
+                            </div>
+                    </Modal>
             		</div> 
             	</div>
+                  
             </div>
         )
     }
