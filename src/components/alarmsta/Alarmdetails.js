@@ -350,6 +350,9 @@ class Alarmdetails extends React.Component{
               >
                       <div style={{marginLeft:"60px"}}>
                       确认将此条报警对象置为误报?
+                      <div style={{marginTop:"10px"}}>
+                        <span style={{float:'left'}}>备注：</span><textarea onChange={() => this.memo()} style={{width:'200px',height:'30px',float:'left'}} placeholder="请输入备注" id="memo"></textarea>
+                      </div>
                       </div>
               </Modal>
             </div>
