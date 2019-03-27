@@ -130,7 +130,9 @@ class ServerInfo extends Component {
                     title="服务器状态"
                     >
                         <div className="tabborder">
-                            <Table columns={columns} dataSource={this.state.tablelist} size="middle" />
+                            <Table columns={columns} dataSource={this.state.tablelist} size="middle" 
+                             pagination={{hideOnSinglePage:true}}
+                            />
                         </div>
                     </Card>
 
