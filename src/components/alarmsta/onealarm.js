@@ -1,5 +1,5 @@
 import React from 'react';
-import { DatePicker, Row, Col, Button, Modal, Pagination, Form,LocaleProvider,Spin } from "antd";
+import { DatePicker, Row, Col, Button, Modal, Pagination, Form,LocaleProvider,Spin,Input } from "antd";
 import "../../style/ztt/css/police.css";
 import "../../style/publicStyle/publicStyle.css";
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
@@ -81,6 +81,7 @@ class OneAlarm extends React.Component{
             edate:this.state.edate,
             pagesize:18,
             pageindex:this.state.page,
+            eid:this.state.eid,
         }
         post({url:'/api/alarm/getlist_foradmin',data:alarmmdata},(res)=>{
             if(res.success){
@@ -125,10 +126,13 @@ class OneAlarm extends React.Component{
     handleSubmit =(e)=>{
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
+            console.log('values.date',values.eid);
+            
             this.setState({
-                bdate:values.date.length?values.date[0].format('YYYY-MM-DD'):'',
-                edate:values.date.length?values.date[1].format('YYYY-MM-DD'):'',
+                bdate:values.date&&values.date.length?values.date[0].format('YYYY-MM-DD HH:mm:ss'):'',
+                edate:values.date&&values.date.length?values.date[1].format('YYYY-MM-DD HH:mm:ss'):'',
                 pageindex:this.state.page,
+                eid:values.eid,
             })
             if(!err){
                 this.setState({
@@ -168,6 +172,17 @@ class OneAlarm extends React.Component{
                                         />
                                     )}
                                 </Form.Item>
+                                <Form.Item label="设备编号">
+                                    {getFieldDecorator("eid", {
+                                        rules: [{
+                                            required: false,
+                                            message: '请输入设备编号!',
+                                        }],
+                                    })(
+                                        <Input />
+                                    )}
+                                </Form.Item>
+                               
                                 <Button type="primary" htmlType="submit" className="queryBtn">查询</Button>
                         </Form>
                     </Row>

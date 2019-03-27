@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Switch, Icon, notification, message } from 'antd';
+import {Button, Switch, Icon, notification, message,Modal } from 'antd';
 import {post} from "../../axios/tools";
 import "../../style/ztt/css/police.css";
 const ButtonGroup = Button.Group;
@@ -25,6 +25,7 @@ class Alarmdetails extends React.Component{
       	next:'', //下一条数据code
         code:'', //当前数据的code
         ifall:false,
+        ifmis:false,//误报确认弹框
       };
   }
   componentWillMount() {
@@ -183,37 +184,14 @@ class Alarmdetails extends React.Component{
     return crut;
   }
   openNotification = () => { //确认误报弹层
-    const _this=this;
-     const btn = (
-        <div>
-          <Button type="primary" size="small"  onClick={() => _this.selectobjOk('newalarm')}>确认</Button>
-          <Button type="primary" size="small" onClick={() => _this.selectobjCancel('newalarm')}>取消</Button>
-        </div>      
-    );
-      notification.open({
-          key:'newalarm',
-          message: '信息',
-          description: (
-            <div>
-                确认将此条报警对象置为误报？
-                <div style={{marginTop:'14px'}}>
-                 <span style={{float:'left'}}> 备注：</span>
-                 <textarea style={{float:'left'}} id="memo"onBlur={() => _this.memo()} style={{width:'160px',height:'6opx'}}placeholder="请输入备注" > </textarea>
-                </div>
-            </div>
-           
-        ),
-        onClose:function(){
-          _this.selectobjCancel()
-        },
-        btn,
-        duration: 0,
-        placement:'topLeft',
-        left:100,
-        top:300,
-      });
+    this.setState({
+      ifmis:true,
+    })
   };
   selectobjOk =(key)=>{ //误报提交
+    this.setState({
+      ifmis:false,
+    })
     const _this=this;
     const data={
       finalinfo:'',
@@ -243,7 +221,8 @@ class Alarmdetails extends React.Component{
   }
   selectobjCancel =(key)=>{ //误报确认取消
     this.setState({
-      crut:{}
+      crut:{},
+      ifmis:false,
     },()=>{
       this.draw();
       notification.close(key);
@@ -362,6 +341,17 @@ class Alarmdetails extends React.Component{
                     </div> 
                   </div>
               </div>
+              <Modal visible={this.state.ifmis} 
+                    title="信息"
+                    okText="确认"
+                      cancelText="取消"
+                      onCancel={() => this.selectobjCancel('newalarm')}
+                      onOk={() => this.selectobjOk('newalarm')}
+              >
+                      <div style={{marginLeft:"60px"}}>
+                      确认将此条报警对象置为误报?
+                      </div>
+              </Modal>
             </div>
         )
     }
