@@ -92,9 +92,22 @@ selectopt = (e) => { //检索search
             key: 'eid',
                
             }, {
-                title: '时间',
+                title: '触发时间',
                 dataIndex: 'createon',
                 key: 'createon',
+            }, {
+                title: '执行结果',
+                dataIndex: 'taskstatus',
+                key: 'taskstatus',
+                render:(text,record)=>{
+                    if(record.taskstatus==0){
+                        return(  '未执行')
+                    }else if(record.taskstatus==1){
+                        return(<span> '执行成功'+{record.tasktime}</span>)
+                    }else{
+                        return('执行失败')
+                    }
+                }
             }];
 
 
@@ -104,7 +117,7 @@ selectopt = (e) => { //检索search
                 <BreadcrumbCustom first="异步历史"/>
                 <div className="shange">
                 <Row>
-                        <Col span={14}>
+                        <Col span={24}>
 
                                 <Form layout="inline" onSubmit={this.selectopt}>
                                     <FormItem label="设备编号">

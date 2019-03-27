@@ -338,7 +338,7 @@ class AdminEquipment extends Component {
                 key:'lasttwice',
             },
             {
-                title:'所属公司',
+                title:'所属单位',
                 dataIndex:'cname',
                 key:'cname',
                 width: 120,
@@ -428,7 +428,7 @@ class AdminEquipment extends Component {
                         </Spin>
                     </Row>
                     
-                    <Modal visible={this.state.visible} width={660}
+                    <Modal visible={this.state.visible} width={550}
                            title="设备详细信息"
                            onCancel={this.handleCancel}
                            footer={[
@@ -445,7 +445,7 @@ class AdminEquipment extends Component {
 
                         />
                     </Modal>
-                    <Modal visible={this.state.block} width={660}
+                    <Modal visible={this.state.block} width={550}
                            title="设备"
                            onCancel={this.handleCancel}
                            footer={[ <Button key="back" onClick={this.handleCancel} >确认</Button>]}
