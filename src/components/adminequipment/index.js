@@ -307,8 +307,7 @@ class AdminEquipment extends Component {
                          />
                         } 
                          <div className="rednum">
-                           {record.code==this.state.ingcode&&this.state.ifinput?this.state.onBeforevalue:record.threshold}--
-                          {record.threshold} 
+                           {record.code==this.state.ingcode&&this.state.ifinput?this.state.onBeforevalue:record.threshold}
                          </div>
                     </div>
                 )
