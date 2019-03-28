@@ -189,6 +189,7 @@ searchCancel = () =>{//删除取消
                     <Table
                          columns={columns} dataSource={this.state.list} bordered={true}
                          pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage,hideOnSinglePage:true}}
+                         rowKey={record => record.code}
                     />
                 </Spin>
                 </div>

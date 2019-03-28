@@ -392,6 +392,7 @@ class Admindeveices extends Component {
                             columns={columns}
                             dataSource={this.state.list}
                             pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage ,hideOnSinglePage:true}}
+                            rowKey={record => record.code}
                         />
                     </Spin>
                     </div>

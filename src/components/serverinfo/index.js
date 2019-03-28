@@ -132,6 +132,7 @@ class ServerInfo extends Component {
                         <div className="tabborder">
                             <Table columns={columns} dataSource={this.state.tablelist} size="middle" 
                              pagination={{hideOnSinglePage:true}}
+                             rowKey={record => record.name}
                             />
                         </div>
                     </Card>

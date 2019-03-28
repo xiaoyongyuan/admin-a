@@ -178,12 +178,13 @@ class Alarmsta extends Component {
                             <Row style={{marginTop:"20px"}}>
                                 <Spin size="large" spinning={this.state.loading} tip="加载中......">
                                     <Table
-                                    bordered={true}
-                                    dataSource={this.state.list}
-                                    onRow={this.onRowSelect}
-                                    columns={columns}
-                                    pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage}}
-                                />
+                                        bordered={true}
+                                        dataSource={this.state.list}
+                                        onRow={this.onRowSelect}
+                                        columns={columns}
+                                        pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage}}
+                                        rowKey={record =>record.companycode}
+                                    />
                                 </Spin>
                             </Row>
 
