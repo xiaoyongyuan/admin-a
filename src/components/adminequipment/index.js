@@ -202,8 +202,6 @@ class AdminEquipment extends Component {
         })
     };
     threshold = (value,index,record,) => {//阈值改变
-        console.log('111',record.code,);
-        
         let list=this.state.list;
         list[index].threshold=value;
         this.setState({
@@ -214,7 +212,6 @@ class AdminEquipment extends Component {
         })
       };
     remove = (record) => {//阈值改变
-        console.log('this.state.ifinput',this.state.ifinput);
         this.setState({
             threshold:record.threshold,
             code:record.code,
