@@ -186,7 +186,7 @@ class Dashboard extends React.Component {
                                         <Col xl={1} xxl={1}><div className="sandian"><img src={quyumidu} alt="" /></div></Col>
                                         <Col xl={10} xxl={12}><span className="titleFont">维护团队区域密度图</span></Col>
                                     </Row>
-                                    <EchartsProjects datasMap={this.state.mapJson}/>
+                                    <EchartsProjects datasMap={this.state.mapJson} />
                                 </Card>
                             </div>
                         </Col>
@@ -201,7 +201,7 @@ class Dashboard extends React.Component {
                                             <Col xl={3} xxl={2}><div className="sandian"><img src={baojingIcon} alt="" /></div></Col>
                                             <Col xl={10} xxl={12}><span className="titleFont">报警统计</span></Col>
                                         </Row>
-                                        <Calpolice falseNumber={this.state.falseNumber} alarmNumber={this.state.alarmNumber}/>
+                                        <Calpolice falseNumber={this.state.falseNumber} alarmNumber={this.state.alarmNumber} />
                                         <div style={{width:"100%",textAlign:"center"}}><span>虚报数:{this.state.falseNumber}</span>&nbsp;&nbsp;&nbsp;
                                         <span>报警总数:{this.state.alarmNumber}</span></div>
                                     </Card>
@@ -214,7 +214,7 @@ class Dashboard extends React.Component {
                                             <Col xl={3} xxl={2}><div className="sandian"><img src={zaixianshebei} alt="" /></div></Col>
                                             <Col xl={10} xxl={12}><span className="titleFont">在线设备</span></Col>
                                         </Row>
-                                        <Onlineeq equipmentEtotal={this.state.equipmentEtotal} equipmentcount={this.state.equipmentcount}/>
+                                        <Onlineeq equipmentEtotal={this.state.equipmentEtotal} equipmentcount={this.state.equipmentcount} />
                                         <div style={{width:"100%",textAlign:"center"}}><span>在线设备数:{this.state.equipmentEtotal}</span>&nbsp;&nbsp;&nbsp;
                                         <span>入网设备数:{this.state.equipmentcount}</span></div>
                                     </Card>
@@ -229,7 +229,7 @@ class Dashboard extends React.Component {
                                             <Col xl={3} xxl={2}><div className="sandian"><img src={fwnleiruwang} alt="" /></div></Col>
                                             <Col xl={10} xxl={12}><span className="titleFont">分类入网数</span></Col>
                                         </Row>
-                                        <Classifiedaccess raspberry={this.state.raspberryTotal} classifiedLAN={this.state.LAN}/>
+                                        <Classifiedaccess raspberry={this.state.raspberryTotal} classifiedLAN={this.state.LAN} />
                                     </Card>
                                 </div>
                             </Col>
@@ -263,7 +263,7 @@ class Dashboard extends React.Component {
                                             <Col xl={2} xxl={1}><div className="sandian"><img src={yueruwangshu} alt="" /></div></Col>
                                             <Col xl={10} xxl={12}><span className="titleFont">月入网数</span></Col>
                                         </Row>
-                                        <EchartsViews line={this.state.lineY}  times={this.state.timeX}/>
+                                        <EchartsViews line={this.state.lineY} times={this.state.timeX} />
                                     </Card>
                                 </div>
                             </Col>

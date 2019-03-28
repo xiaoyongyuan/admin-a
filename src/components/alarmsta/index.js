@@ -117,23 +117,28 @@ class Alarmsta extends Component {
                 key: 'index',
                 render: (text, record,index) => (index+1)
             },
-            {   title:'所属公司',
+            {   
+                title:'所属公司',
                 dataIndex:'cname',
                 key:'cname'
             },
-            {   title:'报警日期',
+            {   
+                title:'报警日期',
                 dataIndex:'adate',
                 key:'adate'
             },
-            {   title:'报警总数',
+            {   
+                title:'报警总数',
                 dataIndex:'alarmcount',
                 key:'alarmcount'
             },
-            {   title:'二次确认报警数',
+            {   
+                title:'二次确认报警数',
                 dataIndex:'confirmcount',
                 key:'confirmcount'
             },
-            {   title:'报警确认百分比（%）',
+            {   
+                title:'报警确认百分比（%）',
                 dataIndex:'',
                 key:'sure',
                 render: (text, record,index) => {
@@ -151,7 +156,7 @@ class Alarmsta extends Component {
         return (
             <LocaleProvider locale={zh_CN}>
                 <div className="Alarmsta">
-                        <BreadcrumbCustom first="报警统计"/>
+                        <BreadcrumbCustom first="报警统计" />
                         <div className="shange">
                             <Row>
                                 <Col span={14}>

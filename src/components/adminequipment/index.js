@@ -1,7 +1,7 @@
 import React, { Component} from 'react';
 import {post} from "../../axios/tools";
 import BreadcrumbCustom from "../BreadcrumbCustom";
-import {Table, Row, Col, Form, Input, Button ,Icon,Modal,message,Spin,Slider,LocaleProvider  } from 'antd';
+import {Table, Row, Col, Form, Input, Button ,Icon,Modal,message,Spin,Slider,LocaleProvider } from 'antd';
 import '../../style/yal/home.css';
 import moment from "moment";
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
@@ -276,7 +276,7 @@ class AdminEquipment extends Component {
                     return(
                         <div>
                             {moment().subtract('minutes',5).format('YYYY-MM-DD HH:mm:ss') > record.lastheart
-                                ? <div>{record.ecode} <Icon type="clock-circle" title='已离线' /></div>
+                                ? <div>{record.ecode} <Icon type="clock-circle" title="已离线" /></div>
                                 :record.ecode
                             }
                         </div>
@@ -300,11 +300,11 @@ class AdminEquipment extends Component {
                             max={9} 
                             defaultValue={record.threshold} 
                             disabled={disabled} 
-                            value={record.code==this.state.ingcode&&this.state.ifinput?this.state.onBeforevalue:record.threshold}
+                            value={record.code===this.state.ingcode&&this.state.ifinput?this.state.onBeforevalue:record.threshold}
                          />
                         } 
                          <div className="rednum">
-                           {record.code==this.state.ingcode&&this.state.ifinput?this.state.onBeforevalue:record.threshold}
+                           {record.code===this.state.ingcode&&this.state.ifinput?this.state.onBeforevalue:record.threshold}
                          </div>
                     </div>
                 )
@@ -317,7 +317,7 @@ class AdminEquipment extends Component {
                 return(
                     <div>
                         {
-                            text == "null"?"":text
+                            text === "null"?"":text
                         }
                     </div>
                 )

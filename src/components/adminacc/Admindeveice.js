@@ -4,7 +4,6 @@ import {Form, Input, Row, Col, Button, Table, Modal, message, Select, Spin, Loca
 import '../../style/sjg/home.css';
 import {post} from "../../axios/tools";
 import ModaBianhao from './ModaBianhao';
-import moment from "moment";
 import zh_CN from "antd/lib/locale-provider/zh_CN";
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -107,6 +106,7 @@ class Admindeveices extends Component {
             console.log('item.code',item.code)
             console.log('item.ecode',item.ecode)
             codelist.push(item.code)
+            return ""
         })
         
         codelist.push(selectedRows.map((item,index)=>{
@@ -171,8 +171,9 @@ class Admindeveices extends Component {
                     this.state.selectedcode.map((item)=>{
                         codelist.push(item.code)
                         ecodelist.push(item.ecode)
+                        return ""
                     })
-                    const ecode = ecodelist.join(',');
+                   
                     const code = codelist.join(',')+',';
                     post({url:'/api/equipment/update',data:{companycode:values.companycode,code:code}},(res)=>{
                         if(res){
@@ -296,7 +297,7 @@ class Admindeveices extends Component {
                     return(
                         <div>
                             {record.estatus === 1
-                                ?  null
+                                ? null
                                 :<span><Button onClick={()=>this.showModaldelete(text,index)}>删除</Button></span>
                             }
                         </div>

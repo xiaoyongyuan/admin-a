@@ -17,6 +17,7 @@ class AdmindUser extends Component {
             value: 1,
             page:1, //当前页
             loading:true,
+            bordered:true,
         };
     }
     componentDidMount() {

@@ -100,9 +100,9 @@ selectopt = (e) => { //检索search
                 dataIndex: 'taskstatus',
                 key: 'taskstatus',
                 render:(text,record)=>{
-                    if(record.taskstatus==0){
-                        return(  '未执行')
-                    }else if(record.taskstatus==1){
+                    if(record.taskstatus===0){
+                        return( '未执行')
+                    }else if(record.taskstatus===1){
                         return(<span> '执行成功'+{record.tasktime}</span>)
                     }else{
                         return('执行失败')
@@ -114,7 +114,7 @@ selectopt = (e) => { //检索search
         return (
             <LocaleProvider locale={zh_CN}>
             <div className="AsynHistory">
-                <BreadcrumbCustom first="异步历史"/>
+                <BreadcrumbCustom first="异步历史" />
                 <div className="shange">
                 <Row>
                         <Col span={24}>
