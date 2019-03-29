@@ -15,7 +15,7 @@ class AdminEquipment extends Component {
         this.state={
             visible:false,
             block:false,
-            threshold:false,
+            threshold:false,//是否确认阈值弹框、
             leave:false,
             list:[],
             createinfo:[],
@@ -24,8 +24,6 @@ class AdminEquipment extends Component {
             loading: true,//加载状态
             disabled: false,
             alarmImgType:false,
-            ifreq:false,//是否确认鞥该阈值、
-            ifinput:false,//是否确认取消弹框该阈值
         };
     }
     componentDidMount() {
@@ -215,35 +213,39 @@ class AdminEquipment extends Component {
     };
 
 
-//阈值弹框点击
+    //阈值弹出层
     thresholdCancel= (e) => {//关闭阈值弹出层
+        let list=this.state.list;
+        list[this.state.index].threshold=this.state.onBeforevalue;
         this.setState({
-            threshold:false,
-            ifreq:false,
-            ifinput:true,//阈值弹框点击取消是
-            inputValue: this.state.onBeforevalue,
+            list:list,
+            threshold:false,//是否确认阈值弹框、
         });
     };
-    threshold = (value,index,record,) => {//阈值改变 onChange={(value)=>this.threshold(value,index,record)}
+    onBefore= (e,record) => {//阈值改变前onBeforeChange
         this.setState({
-             ingcode:record.code,
+            onBeforevalue:e,//阈值改变前值
+       })            
+    };
+    threshold = (value,index) => {//阈值改变 onChange
+        let list=this.state.list;
+        list[index].threshold=value;
+        this.setState({
+             list:list,
              index:index,
-             threshold:true,
-             ifinput:false,//阈值弹框点击确认是
-             successvalue:value,
+             threshold:true,//是否确认阈值弹框、
+             successvalue:value,//阈值改变值
         })
       };
-    remove = (record) => {//阈值改变 onAfterChange={()=>this.remove(record)}
+    remove = (record) => {//阈值改变 onAfterChange
         this.setState({
-            threshold:record.threshold,
+            threshold:record.threshold,//阈值改变后值
             code:record.code,
-       })   
+        })   
     };
-    thresholdok = (e) => {//确认阈值
+    thresholdok = (e) => {//确认阈值按钮
         this.setState({
-            threshold:false,
-            ifreq:true,
-            ifinput:false,//阈值弹框点击确认是
+            threshold:false,//是否确认阈值弹框、
         });
         const params={
             threshold:this.state.threshold,
@@ -253,10 +255,10 @@ class AdminEquipment extends Component {
             if(res.success){
                 let list=this.state.list;
                 list[this.state.index].threshold=this.state.successvalue;
-                message.success('修改成功');
                 this.setState({
                     list:list,
                })
+               message.success('修改成功');
             }
         })
     };
@@ -294,6 +296,7 @@ class AdminEquipment extends Component {
                     <div>
                         {<Slider 
                             style={{width:'76%',float:'left'}} 
+                            onBeforeChange={(e)=>this.onBefore(e,text,record,index)}
                             onAfterChange={()=>this.remove(record)}
                             onChange={(value)=>this.threshold(value,index,record)}
                             min={1} 
@@ -304,7 +307,7 @@ class AdminEquipment extends Component {
                          />
                         } 
                          <div className="rednum">
-                           {record.threshold}
+                             {record.threshold}
                          </div>
                     </div>
                 )
