@@ -152,7 +152,7 @@ searchCancel = () =>{//删除取消
                 <BreadcrumbCustom first="账号管理" second="用户管理" />
                 <div className="shange">
                 <Row style={{marginBottom:'20px'}}>
-                    <Col span={18}>
+                    <Col>
                     <LocaleProvider locale={zh_CN}>
                         <Form layout="inline"onSubmit={this.selectopt}>
                             <FormItem label="单位名称">
