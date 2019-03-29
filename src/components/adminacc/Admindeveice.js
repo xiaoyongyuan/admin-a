@@ -324,7 +324,7 @@ class Admindeveices extends Component {
 
                 <div className="shange">
                     <Row className="home_top">
-                        <Col span={14}>
+                        <Col span={16}>
                             <Form layout="inline" onSubmit={this.selectopt} >
                                 <FormItem label="设备编号">
                                     {getFieldDecorator('ecode', {
@@ -369,7 +369,7 @@ class Admindeveices extends Component {
                             </Form>
                         </Col>
 
-                        <Col span={8} offset={2}>
+                        <Col span={6} offset={2}>
                             <Row>
                                 <Col span={6}>
                                     <Button type="primary" onClick={this.distribute}>派发</Button>
