@@ -296,7 +296,7 @@ class AdminEquipment extends Component {
                     <div>
                         {<Slider 
                             style={{width:'76%',float:'left'}} 
-                            onBeforeChange={(e)=>this.onBefore(e,text,record,index)}
+                            onBeforeChange={(e)=>this.onBefore(e,record)}
                             onAfterChange={()=>this.remove(record)}
                             onChange={(value)=>this.threshold(value,index,record)}
                             min={1} 
