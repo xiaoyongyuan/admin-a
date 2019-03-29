@@ -177,53 +177,7 @@ class AdminEquipment extends Component {
             }
         })
     };
-    thresholdCancel= (e) => {//关闭阈值弹出层
-        this.setState({
-            threshold:false,
-            ifreq:false,
-            ifinput:true,//阈值弹框点击取消是
-            inputValue: this.state.onBeforevalue,
-        });
-    };
-    thresholdok = (e) => {//确认阈值
-        this.setState({
-            threshold:false,
-            ifreq:true,
-            ifinput:false,//阈值弹框点击确认是
-        });
-        const params={
-            threshold:this.state.threshold,
-            code:this.state.code,
-        }
-        post({url:"/api/camera/update_threshold",data:params}, (res)=>{
-            if(res.success){
-                message.success('修改成功');
-            }
-        })
-    };
-    threshold = (value,index,record,) => {//阈值改变
-        let list=this.state.list;
-        list[index].threshold=value;
-        this.setState({
-             ingcode:record.code,
-             list:list,
-             threshold:true,
-             ifinput:false,//阈值弹框点击确认是
-        })
-      };
-    remove = (record) => {//阈值改变
-        this.setState({
-            threshold:record.threshold,
-            code:record.code,
-       })   
-        
-    };
-    onBefore= (e,text,record,index) => {//阈值改变前
-        this.setState({
-            onBeforevalue:e,
-            onBeforecode:record.code, 
-       })            
-    };
+
     //查看报警详情
     alarmImg =(text,record,index)=>{
             var toson={
@@ -259,6 +213,53 @@ class AdminEquipment extends Component {
             leave: false,
         });
     };
+
+
+//阈值弹框点击
+    thresholdCancel= (e) => {//关闭阈值弹出层
+        this.setState({
+            threshold:false,
+            ifreq:false,
+            ifinput:true,//阈值弹框点击取消是
+            inputValue: this.state.onBeforevalue,
+        });
+    };
+    threshold = (value,index,record,) => {//阈值改变 onChange={(value)=>this.threshold(value,index,record)}
+        this.setState({
+             ingcode:record.code,
+             index:index,
+             threshold:true,
+             ifinput:false,//阈值弹框点击确认是
+             successvalue:value,
+        })
+      };
+    remove = (record) => {//阈值改变 onAfterChange={()=>this.remove(record)}
+        this.setState({
+            threshold:record.threshold,
+            code:record.code,
+       })   
+    };
+    thresholdok = (e) => {//确认阈值
+        this.setState({
+            threshold:false,
+            ifreq:true,
+            ifinput:false,//阈值弹框点击确认是
+        });
+        const params={
+            threshold:this.state.threshold,
+            code:this.state.code,
+        }
+        post({url:"/api/camera/update_threshold",data:params}, (res)=>{
+            if(res.success){
+                let list=this.state.list;
+                list[this.state.index].threshold=this.state.successvalue;
+                message.success('修改成功');
+                this.setState({
+                    list:list,
+               })
+            }
+        })
+    };
     render() {
         const { getFieldDecorator } = this.props.form;
         const columns = [
@@ -293,18 +294,17 @@ class AdminEquipment extends Component {
                     <div>
                         {<Slider 
                             style={{width:'76%',float:'left'}} 
-                            onBeforeChange={(e)=>this.onBefore(e,text,record,index)}
                             onAfterChange={()=>this.remove(record)}
                             onChange={(value)=>this.threshold(value,index,record)}
                             min={1} 
                             max={9} 
                             defaultValue={record.threshold} 
                             disabled={disabled} 
-                            value={record.code===this.state.ingcode&&this.state.ifinput?this.state.onBeforevalue:record.threshold}
+                            value={record.threshold}
                          />
                         } 
                          <div className="rednum">
-                           {record.code===this.state.ingcode&&this.state.ifinput?this.state.onBeforevalue:record.threshold}
+                           {record.threshold}
                          </div>
                     </div>
                 )
