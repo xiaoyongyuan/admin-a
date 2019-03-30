@@ -21,8 +21,9 @@ class AdmindUser extends Component {
         };
     }
     componentDidMount() {
+        pageset={
+        };
         this.requestdata();
-
         this.state={
             loading:true,
         };
