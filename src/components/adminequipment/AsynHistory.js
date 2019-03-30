@@ -153,9 +153,10 @@ selectopt = (e) => { //检索search
                                 bordered={true}
                                 dataSource={this.state.list}
                                 columns={columns}
-                                pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage}}
+                                pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage,hideOnSinglePage:true}}
                                 rowKey={record => record.code}
-                           />
+                                
+                            />
                         </Spin>
                     </Row>
                 </div>
