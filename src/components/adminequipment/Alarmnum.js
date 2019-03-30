@@ -223,7 +223,7 @@ class Alarmdetails extends React.Component{
                     <div style={this.state.ifblock?{display:'block'}:{display:'none'}}>
                       <p><label>当前误报信息</label></p>
                       <p><label>创建人：<span>{this.state.createby}</span></label></p>
-                      <p><label>报警对象：<span>{this.state.createon}</span></label></p>
+                      <p><label>报警时间：<span>{this.state.createon}</span></label></p>
                       <p><label>备注：<span>{this.state.memo}</span></label></p>
                     </div>
                     <Modal visible={this.state.ifmis} 
