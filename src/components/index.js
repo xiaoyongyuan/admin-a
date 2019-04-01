@@ -18,6 +18,8 @@ import AsynHistory from './adminequipment/AsynHistory';
 //报警统计
 import Alarmsta from './alarmsta/index';
 import OneAlarm from './alarmsta/onealarm';
+import selectDev from './alarmsta/selectDev';
+
 
 //服务器信息
 import ServerInfo from './serverinfo/index';
@@ -33,7 +35,7 @@ export default {
 
     , Adminteam, Admindeveice, AdmindUser
     , AdminEquipment, AsynHistory
-    ,Alarmsta, OneAlarm
+    ,Alarmsta, OneAlarm,selectDev
     ,ServerInfo
    
 
