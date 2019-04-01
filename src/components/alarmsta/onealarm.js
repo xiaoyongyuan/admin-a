@@ -38,6 +38,13 @@ class OneAlarm extends React.Component{
             ifmis:false,//误报确认弹框
         };
     }
+    componentWillMount=()=>{
+        this.setState({
+          ccodet: this.props.query.ccode,
+          cidt: this.props.query.cid,
+          eidt: this.props.query.eid,
+        });
+    }
     componentDidMount() {
         this.handleAlerm();//报警信息列表
     }
@@ -82,7 +89,7 @@ class OneAlarm extends React.Component{
             edate:this.state.edate,
             pagesize:18,
             pageindex:this.state.page,
-            
+            eid:this.state.eidt,
         }
         post({url:'/api/alarm/getlist_foradmin',data:alarmmdata},(res)=>{
             if(res.success){
@@ -160,16 +167,16 @@ class OneAlarm extends React.Component{
           ifmis:true,//误报确认弹框
         });
         const data={
-          ccode: 1000004,
-          cid: 1000039,
-          eid: 'EFGABC030',
+          ccode: this.state.ccodet,
+          cid: this.state.cidt,
+          eid: this.state.eidt,
         }
         post({url:"/api/misinformation/gets_misinfo",data:data},(res)=>{  
           if(res){
               this.setState({
                 data:res.data,
                 srct:res.path,
-                eid:'EFGABC030',
+                eid:res.eid,
               },()=>{
                 if(res.data.length){
                   this.drawtwo();

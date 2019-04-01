@@ -374,3 +374,77 @@
 .queryBtn{
     margin-top:4px;
 }
+
+.selectDev{
+    padding :20px;
+
+}
+.selectcontent{
+    width: 50%;
+    height: auto;
+}
+
+.devtittle{
+    width: 100%;
+    height: 30px;
+    line-height:30px;
+    background: #313653;
+    color: #fff;
+    padding:0 8px;
+    border-radius: 2px;
+}
+.selectframe{
+    margin-top: 20px;
+    height: auto;
+    width: 100%;
+}
+.selectcard{
+    width: 40%;
+    height: 300px;
+    border: 1px #888 solid;
+    float: left;
+}
+.selectcard_right{
+    float: right;
+}
+.arrow{
+    width: 20%;
+    height: 300px;
+    float: left;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+.arrowicon{
+    font-size: 40px;
+}
+.cardtit{
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 6px;
+    border-bottom: 1px #888 solid;
+}
+.cardbody{
+    height: 90%;
+    overflow: scroll;
+}
+.cardbodyitem{
+    height: 100%;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 6px;
+}
+.itemlink{
+    display: flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    width: 100%;
+    height: 100%;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 6px; 
+}
