@@ -20,7 +20,7 @@ export default {
         { key: '/app/alarmsta', title: '报警管理', icon: 'alert',
             subs: [
                 { key: '/app/alarmsta/index', title: '报警统计', component: 'Alarmsta'},
-                { key: '/app/alarmsta/onealarm', title: '一次报警', component: 'OneAlarm'},
+                { key: '/app/alarmsta/selectDev', title: '一次报警', component: 'selectDev'},
             ],
         },
         { key: '/app/serverinfo/index', title: '服务器信息', icon: 'desktop', component: 'ServerInfo' },
@@ -28,7 +28,8 @@ export default {
     ],
     // 非菜单相关路由
     others: [
-            {
+        { key: '/app/alarmsta/onealarm', title: '一次报警', component: 'OneAlarm'},
+        {
         key: '/subs4', title: '页面', icon: 'switcher',
         subs: [
             { key: '/login', title: '登录' },
