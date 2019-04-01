@@ -237,65 +237,7 @@ class Alarmdetails extends React.Component{
     });
     this.componentDidMount()
   }
-  misinf=()=>{
-    this.setState({
-      ifall:true,
-    });
-    const data={
-      ccode: this.state.faths.ccode,
-      cid: this.state.faths.cid,
-      eid: this.state.faths.eid,
-    }
-    post({url:"/api/misinformation/gets_misinfo",data:data},(res)=>{  
-      if(res){
-          this.setState({
-            data:res.data,
-            srct:res.path,
-          },()=>{
-            if(res.data.length){
-              this.drawtwo();
-            }
-         });
-      }  
-    })
-  }
-  
-
-  drawtwo = ()=>{ //画围界
-    this.setState({
-      createby:"",
-      createon:"",
-      memo:"",
-      ifblock:false,
-      eid:this.props.toson.eid,
-    })
-     let ele = document.getElementById("canvasobjt");
-     let area = ele.getContext("2d");
-     area.clearRect(0,0,604,476);//清除之前的绘图
-    const objs=this.state.data;
-  	if( objs.length>0){
-      //计算缩放比例
-      objs.map((el,i)=>{
-        this.setState({ x:604/el.pic_width,y:476/el.pic_height});	
-        const x=604/el.pic_width, y=476/el.pic_height;
-        let fangquarr = []
-        let finalareastring=el.finalarea;
-        let zhuanhou= JSON.parse(finalareastring)
-        fangquarr.push(zhuanhou); //属性
-          fangquarr.map((item,j)=>{   
-            area.strokeStyle='#ff0';
-            area.beginPath();
-            area.rect(parseInt(item.x*x),parseInt(item.y*y),parseInt(item.w*x),parseInt(item.h*y));
-            area.stroke();
-            area.closePath();
-            return ''; 
-        })
-      })
-  	}
-  }
-
-
-
+ 
     render(){      
         return(
             <div className="alarmDetails">
@@ -321,9 +263,7 @@ class Alarmdetails extends React.Component{
                         <p><label>围界信息: <Switch size="small" checked={this.state.field} onChange={(checked)=>this.onChange(checked,'field')} /></label></p>
                         <p><label>报警信息: <Switch size="small" checked={this.state.obj} onChange={(checked)=>this.onChange(checked,'obj')} /></label></p>
                         <p><label>报警时间：<span>{this.state.data.atime}</span></label></p>
-                        <Button type="primary" onClick={()=>this.misinf()} >
-                          查看该设备误报信息
-                        </Button>
+                   
                     </div>
                   </div>
               </div>

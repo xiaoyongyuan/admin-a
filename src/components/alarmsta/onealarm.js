@@ -35,6 +35,7 @@ class OneAlarm extends React.Component{
             displayblue:'block',
             backColor:'',//背景颜色
             nodatapic:true,
+            ifmis:false,//误报确认弹框
         };
     }
     componentDidMount() {
@@ -57,7 +58,7 @@ class OneAlarm extends React.Component{
                 edate:this.state.edate,   
                 ccode:v.companycode,
                 cid:v.cid,
-                eid:v.eid,
+                
             };
 
         }
@@ -81,7 +82,7 @@ class OneAlarm extends React.Component{
             edate:this.state.edate,
             pagesize:18,
             pageindex:this.state.page,
-            eid:this.state.eid,
+            
         }
         post({url:'/api/alarm/getlist_foradmin',data:alarmmdata},(res)=>{
             if(res.success){
@@ -126,13 +127,10 @@ class OneAlarm extends React.Component{
     handleSubmit =(e)=>{
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
-            console.log('values.date',values.eid);
-            
             this.setState({
                 bdate:values.date&&values.date.length?values.date[0].format('YYYY-MM-DD HH:mm:ss'):'',
                 edate:values.date&&values.date.length?values.date[1].format('YYYY-MM-DD HH:mm:ss'):'',
                 pageindex:this.state.page,
-                eid:values.eid,
             })
             if(!err){
                 this.setState({
@@ -156,6 +154,72 @@ class OneAlarm extends React.Component{
     handleEndOpenChange = (open) => {
         this.setState({ endOpen: open });
     };
+    misinf=()=>{
+        this.setState({
+          ifall:true,
+          ifmis:true,//误报确认弹框
+        });
+        const data={
+          ccode: 1000004,
+          cid: 1000039,
+          eid: 'EFGABC030',
+        }
+        post({url:"/api/misinformation/gets_misinfo",data:data},(res)=>{  
+          if(res){
+              this.setState({
+                data:res.data,
+                srct:res.path,
+                eid:'EFGABC030',
+              },()=>{
+                if(res.data.length){
+                  this.drawtwo();
+                }
+             });
+          }  
+        })
+      }
+      drawtwo = ()=>{ //画围界
+        this.setState({
+          createby:"",
+          createon:"",
+          memo:"",
+          ifblock:false,
+          eid:this.state.eid,
+        })
+         let ele = document.getElementById("canvasobjt");
+         let area = ele.getContext("2d");
+         area.clearRect(0,0,604,476);//清除之前的绘图
+        const objs=this.state.data;
+          if( objs.length>0){
+          //计算缩放比例
+          objs.map((el,i)=>{
+            this.setState({ x:604/el.pic_width,y:476/el.pic_height});	
+            const x=604/el.pic_width, y=476/el.pic_height;
+            let fangquarr = []
+            let finalareastring=el.finalarea;
+            let zhuanhou= JSON.parse(finalareastring)
+            fangquarr.push(zhuanhou); //属性
+              fangquarr.map((item,j)=>{   
+                area.strokeStyle='#ff0';
+                area.beginPath();
+                area.rect(parseInt(item.x*x),parseInt(item.y*y),parseInt(item.w*x),parseInt(item.h*y));
+                area.stroke();
+                area.closePath();
+                return ''; 
+            })
+          })
+          }
+      }
+      selectobjOk =(key)=>{ //误报信息弹框关闭
+        this.setState({
+          ifmis:false,
+        })
+      }
+      selectobjCancel=(key)=>{ //误报信息弹框关闭
+        this.setState({
+          ifmis:false,
+        })
+      }
     render(){
         const { getFieldDecorator } = this.props.form;
         return(
@@ -172,18 +236,10 @@ class OneAlarm extends React.Component{
                                         />
                                     )}
                                 </Form.Item>
-                                <Form.Item label="设备编号">
-                                    {getFieldDecorator("eid", {
-                                        rules: [{
-                                            required: false,
-                                            message: '请输入设备编号!',
-                                        }],
-                                    })(
-                                        <Input />
-                                    )}
-                                </Form.Item>
-                               
                                 <Button type="primary" htmlType="submit" className="queryBtn">查询</Button>
+                                <Button type="primary" onClick={()=>this.misinf()} >
+                                    查看误报信息
+                                </Button>
                         </Form>
                     </Row>
                 </LocaleProvider>
@@ -252,6 +308,27 @@ class OneAlarm extends React.Component{
                         <Alarmdetails visible={this.state.alarmImgType} toson={this.state.toson} />
                     </Modal>
                 </div>
+
+                <Modal visible={this.state.ifmis} 
+                      width={900}
+                      title="信息"
+                      okText="确认"
+                      cancelText="取消"
+                      onCancel={() => this.selectobjCancel()}
+                      onOk={() => this.selectobjOk()}
+                >
+                     <div>
+                        <div className="alarmflex">
+                            <div className="flexleft" id="flexleft">
+                            <canvas id="canvasobjt" width="604px" height="476px" style={{backgroundImage:'url('+this.state.srct+')',backgroundSize:"100% 100%",}} /> 
+                            </div>	
+                        <div className="flexright">
+                                <p><label>设备名称：<span>{this.state.eid}</span></label></p>
+                                <p><label>误报数量：<span>{this.state.data?this.state.data.length:'0'}</span></label></p>
+                            </div> 
+                        </div>
+                    </div>
+              </Modal>
             </div>
         )
     }
