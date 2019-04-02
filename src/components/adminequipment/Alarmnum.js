@@ -159,30 +159,6 @@ class Alarmdetails extends React.Component{
         this.setState({
           ifmis:true,
         })
-    // const _this=this;
-    //  const btn = (
-    //     <div>
-    //       <Button type="primary" size="small"  onClick={() => _this.selectobjOk('newalarm')}>确认</Button>
-    //       <Button type="primary" size="small" onClick={() => _this.selectobjCancel('newalarm')}>取消</Button>
-    //     </div>      
-    // );
-    //   notification.open({
-    //       key:'newalarm',
-    //       message: '信息',
-    //       description: (
-    //         <div>
-    //             确认将此条误报对象删除？
-    //         </div>
-    //     ),
-    //     onClose:function(){
-    //       _this.selectobjCancel()
-    //     },
-    //     btn,
-    //     duration: 0,
-    //     placement:'topLeft',
-    //     left:100,
-    //     top:300,
-    //   });
   };
   selectobjOk =(key)=>{ //误报删除
     const _this=this;
