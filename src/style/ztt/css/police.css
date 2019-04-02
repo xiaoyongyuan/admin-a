@@ -448,3 +448,57 @@
     line-height: 30px;
     padding: 0 6px; 
 }
+.updownmargin20{
+    margin: 20px 0;
+}
+.areaContent{
+    display: flex;
+    flex-direction: column;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    width: 320px;
+    border: 1px solid #888; 
+}
+
+.areaContentBottom{
+    width: 100%;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+    background: #2F0E84;
+    color: #fff;
+}
+.areatit{
+    width: 100%;
+    height: 36px;
+    line-height: 36px;
+    text-align: left;
+    color: #444;
+    padding: 0 8px;
+    font-size: 17px;
+}
+.areacon{
+    display: flex;
+    flex-direction: column;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    width: inherit;
+    height: auto;
+}
+.areaconLine{
+    display: flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    width: inherit;
+    height: 40px;
+    line-height:40px;
+    padding: 0 10px;
+}
+.areaconLine>div{
+    text-align: left;
+    width: 50%;
+}
+.areaitem{
+    margin: 10px 0;
+}
