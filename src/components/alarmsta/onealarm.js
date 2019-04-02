@@ -236,7 +236,6 @@ class OneAlarm extends React.Component{
             return pre;
         }
       clickgetcorrd =(e)=>{ //点击
-        console.log('crut');
         e.preventDefault();
          const objss=this.state.data;
             if(objss.length>0){
@@ -244,8 +243,6 @@ class OneAlarm extends React.Component{
                 let x=parseInt(getcord[0]/this.state.x),y=parseInt(getcord[1]/this.state.y);
                 let crut=this.selectObj(x,y);
                  if(crut){
-                     console.log('crut',crut);
-                     
                   this.openNotification();
                   this.drawSelectObj(crut);
                   this.setState({crut})
