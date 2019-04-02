@@ -6,8 +6,9 @@ export default {
             key: '/app/adminacc', title: '账号管理', icon: 'team',
             subs: [
                 { key: '/app/adminacc/adminteam', title: '维护团队管理', component: 'Adminteam'},
-                { key: '/app/adminacc/admindeveice', title: '设备管理', component: 'Admindeveice'},
-                { key: '/app/adminacc/adminduser', title: '单位管理', component: 'AdmindUser'},        
+                { key: '/app/adminacc/admindeveice', title: '树莓派设备', component: 'Admindeveice'},
+                { key: '/app/adminacc/adminduser', title: '单位管理', component: 'AdmindUser'},  
+                { key: '/app/adminacc/policeAcc', title: '警务账号', component: 'policeAcc'},        
             ],
         },
         {

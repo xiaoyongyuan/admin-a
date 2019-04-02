@@ -9,6 +9,8 @@ import Dashboard from './dashboard/Dashboard';
 import Adminteam from './adminacc/Adminteam';
 import Admindeveice from './adminacc/Admindeveice';
 import AdmindUser from './adminacc/adminduser';
+import policeAcc from './adminacc/policeAcc';
+
 
 //设备管理
 import AdminEquipment from './adminequipment/index';
@@ -33,7 +35,7 @@ export default {
     Dashboard, 
     WysiwygBundle
 
-    , Adminteam, Admindeveice, AdmindUser
+    , Adminteam, Admindeveice, AdmindUser, policeAcc
     , AdminEquipment, AsynHistory
     ,Alarmsta, OneAlarm,selectDev
     ,ServerInfo
