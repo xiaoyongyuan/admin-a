@@ -1,5 +1,5 @@
 import React, { Component} from 'react';
-import {Form, Row, Col, Button,Icon,Modal,Input} from 'antd';
+import {Form, Row, Col, Button,Icon,Modal,Input,message} from 'antd';
 import {post} from "../../axios/tools";
 import "../../style/sjg/icon/iconfont.css";
 import CascaderModule from '../common/CascaderModule';
@@ -15,6 +15,7 @@ class policeAccs extends Component {
           options:[],//产品类型option
           addblock:false,//新增弹框
           modeltype:false,
+          delblock:false,//删除弹框
           list:[],
         };
     }
@@ -26,17 +27,36 @@ class policeAccs extends Component {
 
 
     addblock=()=>{
+        this.props.form.resetFields() //清空
       this.setState({
         addblock:true,//新增弹框
         modeltype:true,
       });
     }
-    editblock=()=>{
+    delblock=(e)=>{ //删除
         this.setState({
-          addblock:true,//新增弹框
-          modeltype:false,
+            delblock:true,
+            delcode:e,
+          });
+    }
+
+    delCancel= (e) => {//关闭删除弹框
+        this.setState({
+            delblock:false,
         });
-      }
+    }
+    delOk= (e) => {//关闭删除弹框
+        
+        this.setState({
+            delblock:false,
+        });
+        post({url:"/api/usercop/del",data:{zonecode: this.state.delcode}},(res)=>{
+            if(res.success){
+                this.requestdata();
+            }
+        })
+        message.success('删除成功');
+    }
     selectobjCancel = (e) => {//关闭弹框
         this.setState({
           addblock:false,
@@ -62,10 +82,7 @@ class policeAccs extends Component {
                             this.setState({list})
                         }
                     })
-                }else{
-                    console.log('编辑接口');
-                   
-                } 
+                }
                 this.setState({
                     addblock:false,//新增弹框
                 },()=>{
@@ -107,20 +124,20 @@ class policeAccs extends Component {
         return (
             <div className="policeAcc">
              <Row className="updownmargin20">
-                <Col span={5}>
-                <div style={{float:"left",height:"34px",lineHeight:"34px"}}> 选择区域：</div> 
-                <span style={{float:"left"}}> <CascaderModule style={{width:'100%'}} onRef={this.onRef} /></span>
-                </Col> 
-                <Col span={2}>
+                <div className="polsurch">
+                    <div style={{float:"left",height:"34px",lineHeight:"34px"}}> 选择区域：</div> 
+                    <span style={{float:"left"}}> <CascaderModule style={{width:'100%'}} onRef={this.onRef} /></span>
+                    </div> 
+                <div className="polsurch polsurchtwo">
                     <Button type="primary" onClick={()=>this.sure()}>
                         确定
                     </Button>
-                </Col> 
-                <Col span={6}>
+                </div> 
+                <div className="polsurch polsurchthree">
                     <Button type="primary" onClick={()=>this.addblock()}>
                         新增
                     </Button>
-                </Col>
+                </div>
               
              </Row>
               {
@@ -153,8 +170,8 @@ class policeAccs extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="areaContentBottom" onClick={()=>this.editblock()}>
-                        <span><Icon type="form" /> 编辑</span>   
+                        <div className="areaContentBottom" onClick={()=>this.delblock(item.companycode)}>
+                        <span><Icon type="delete" /> 删除</span>   
                         </div>
                     </div>
                   ))
@@ -168,7 +185,7 @@ class policeAccs extends Component {
                       onOk={() => this.selectobjOk()}
               >
                 <Form layout="vertical" >
-                    <FormItem label="区域">
+                    <FormItem label={true?<span><span style={{color:"red"}}>* </span> 区域</span>:"" }>
                         {getFieldDecorator('area', {
                             rules: [{ required: false, message: '请输入区域!' }],
                         })(
@@ -199,6 +216,15 @@ class policeAccs extends Component {
                     </FormItem>
                    
                 </Form>
+              </Modal>
+              <Modal visible={this.state.delblock} 
+                      title="删除"
+                      okText="确认"
+                      cancelText="取消"
+                      onCancel={() => this.delCancel()}
+                      onOk={() => this.delOk()}
+              >
+               <div>是否确认删除？</div>
               </Modal>
           </div>
         )
