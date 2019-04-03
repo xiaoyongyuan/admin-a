@@ -125,7 +125,7 @@ class policeAccs extends Component {
              </Row>
               {
                 this.state.list.map((item)=>(
-                    <div className="areaContent">
+                    <div key={item.code} className="areaContent">
                         <div className="areaContentTop">
                             <div className="areatit">
                             陕西 西安 高新
