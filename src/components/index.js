@@ -26,6 +26,9 @@ import selectDev from './alarmsta/selectDev';
 //服务器信息
 import ServerInfo from './serverinfo/index';
 
+//公共组件
+import CascaderModule from './common/CascaderModule';
+
 const WysiwygBundle = Loadable({ // 按需加载富文本配置
     loader: () => import('./ui/Wysiwyg'),
     loading: Loading,
@@ -39,7 +42,6 @@ export default {
     , AdminEquipment, AsynHistory
     ,Alarmsta, OneAlarm,selectDev
     ,ServerInfo
-   
-
+    ,CascaderModule
 
 }
