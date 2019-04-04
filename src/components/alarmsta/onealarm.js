@@ -275,7 +275,9 @@ class OneAlarm extends React.Component{
                 ifmis:true,
             })
       };
-  
+      queren=(key)=>{ //误报删除
+        this.setState({ ifkai:false,})
+      }
       selectobjOk =(key)=>{ //误报删除
         const _this=this;
         const data={
@@ -398,7 +400,7 @@ class OneAlarm extends React.Component{
                       okText="确认"
                       cancelText="取消"
                       onCancel={() => this.selectobjCancel()}
-                      onOk={() => this.selectobjOk()}
+                      onOk={() => this.queren()}
                 >
                      <div>
                         <div className="alarmflex">
