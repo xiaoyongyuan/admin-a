@@ -406,7 +406,7 @@ class OneAlarm extends React.Component{
                             <canvas id="canvasobjt"onClick={this.clickgetcorrd} width="604px" height="476px" style={{backgroundImage:'url('+this.state.srct+')',backgroundSize:"100% 100%",}} /> 
                             </div>	
                         <div className="flexright">
-                                <p><label>设备名称：<span>{this.state.eid}</span></label></p>
+                                <p><label>设备名称：<span>{this.state.eidt}</span></label></p>
                                 <p><label>误报数量：<span>{this.state.data?this.state.data.length:'0'}</span></label></p>
                             </div> 
                         </div>
