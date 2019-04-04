@@ -185,7 +185,7 @@ class policeAccs extends Component {
                       onOk={() => this.selectobjOk()}
               >
                 <Form layout="vertical" >
-                    <FormItem label={true?<span><span style={{color:"red"}}>* </span> 区域</span>:"" }>
+                    <FormItem label={true?<span><span style={{color:"red",fontSize:"17px"}}>* </span> 区域</span>:"" }>
                         {getFieldDecorator('area', {
                             rules: [{ required: false, message: '请输入区域!' }],
                         })(
