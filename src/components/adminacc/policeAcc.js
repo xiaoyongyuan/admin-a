@@ -20,14 +20,40 @@ class policeAccs extends Component {
         };
     }
     componentDidMount() {
-        
         this.requestdata();
-        
+    }
+    editblock=(account,ccode)=>{
+        // console.log('****************33**',account,ccode);
+        this.setState({
+          addblock:true,//编辑弹框
+          modeltype:false,
+          ccode:ccode,
+          account:account,
+        },()=>{
+            this.requestedit();
+        });
+      }
+      requestedit=() => {//取数据
+        console.log('getone1',this.state.ccode,this.state.account,);
+        if(this.state.ccode){
+            const data={
+                account:this.state.account,
+                zonecode:this.state.ccode,
+            }
+            post({url:"/api/usercop/getone",data:data }, (res)=>{
+                console.log('getone',res);
+                    this.props.form.setFieldsValue({
+                        account: res.data.account,//账号
+                        realname: res.data.realname,//姓名
+                        number: res.data.number,//姓名
+                        linktell: res.data.linktell,//姓名
+                    });
+            })
+        }
     }
 
-
     addblock=()=>{
-        this.props.form.resetFields() //清空
+      this.props.form.resetFields() //清空
       this.setState({
         addblock:true,//新增弹框
         modeltype:true,
@@ -82,6 +108,23 @@ class policeAccs extends Component {
                             this.setState({list})
                         }
                     })
+                }else{
+                    console.log('编辑接口');
+                      //编辑接口');
+                            var data={
+                                usertype: va.usertype,
+                                realname:values.realname,
+                            };
+                            post({url:"/api/usercop/update",data:data}, (res)=>{
+                                if(res.success){
+                                    let list=this.state.list;
+                                    list[this.state.index]=res.data[0];                        
+                                    this.setState({
+                                        list:list,
+                                    })
+                                }   
+                            })        
+                    
                 }
                 this.setState({
                     addblock:false,//新增弹框
@@ -147,15 +190,18 @@ class policeAccs extends Component {
                             <div className="areatit">
                             陕西 西安 高新
                             </div>
+                            <div style={{paddingLeft:'8px',marginTop:"8px"}}>
+                               区域码：<span>{item.companycode}</span>
+                            </div>
                             <div className="areacon">
                                 <div className="areaitem">
                                     <Row className="areaconLine">
-                                        <div><span className="iconfont icon-ren" />  张警官</div>
-                                        <div><span className="iconfont icon-dianhua" /> 131123456789</div>
+                                        <div> <span title="姓名"> <span className="iconfont icon-ren" /> {item.realname?item.realname:" 空"}</span></div>
+                                        <div> <span title="编码"><Icon type="align-left" /> {item.number?item.number:" 空"} </span> </div>
                                     </Row>
                                     <Row className="areaconLine">
-                                        <div><span className="iconfont icon-renyuanguanli" /> {item.account} </div>
-                                        <div><span className="iconfont icon-ai-connection" /> 4545</div>
+                                        <div><span title="账号"><span className="iconfont icon-renyuanguanli" /> {item.account}</span> </div>
+                                        <div><span title="账号数量"><span className="iconfont icon-ai-connection" /> 4545</span></div>
                                     </Row>
                                 </div>
                                 <div className="areaitem">
@@ -170,9 +216,15 @@ class policeAccs extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="areaContentBottom" onClick={()=>this.delblock(item.companycode)}>
-                        <span><Icon type="delete" /> 删除</span>   
+                        <div>
+                            <div className="areaContentBottom" onClick={()=>this.editblock(item.account,item.companycode)}>
+                               <span><Icon type="form" /> 编辑</span>   
+                            </div>
+                            <div className="areaContentBottom" onClick={()=>this.delblock(item.companycode)}>
+                               <span><Icon type="delete" /> 删除</span>   
+                            </div>
                         </div>
+                        
                     </div>
                   ))
                 }
@@ -202,7 +254,14 @@ class policeAccs extends Component {
                     </FormItem>
                     <FormItem label="联系人">
                         {getFieldDecorator('realname', {
-                            rules: [{ required: false, message: '请输入联系人!' }],
+                            rules: [{ required: true, message: '请输入联系人!' }],
+                        })(
+                            <Input />
+                        )}
+                    </FormItem>
+                    <FormItem label="编号">
+                        {getFieldDecorator('number', {
+                            rules: [{ required: true, message: '请输入编号!' }],
                         })(
                             <Input />
                         )}
