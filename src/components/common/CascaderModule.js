@@ -2,23 +2,12 @@ import React, { Component } from 'react';
 import {Cascader} from "antd";
 import {post} from "../../axios/tools";
 
-const options = [{
-  value: 'zhejiang',
-  label: 'Zhejiang',
-  isLeaf: false,
-
-}, {
-  value: 'jiangsu',
-  label: 'Jiangsu',
-  isLeaf: false,
-
-}];
 
 class CascaderModule extends Component {
     constructor(props){
         super(props);
         this.state={
-           options
+           options:[]
         };
     }
     componentDidMount() {
@@ -113,6 +102,7 @@ class CascaderModule extends Component {
               <Cascader options={this.state.options}
               loadData={this.loadData}
               onChange={this.onChange}
+              placeholder="请选择区域"
               changeOnSelect />
             </div>
         )
