@@ -428,7 +428,7 @@
     border-bottom: 1px #888 solid;
 }
 .cardbody{
-    height: 90%;
+    height: 71%;
     overflow: scroll;
 }
 .cardbodyitem{
@@ -436,6 +436,11 @@
     height: 30px;
     line-height: 30px;
     padding: 0 6px;
+   
+}
+.cardbodyitem:active{
+   background: #313653;
+   color: #fff;
 }
 .itemlink{
     display: flex;
@@ -526,4 +531,10 @@
 }
 .polsurchthree{
     margin-left:20%
+}
+.searcht{
+    width: 96%;
+    height: 30px;
+    line-height: 30px;
+    margin: 11px auto;
 }
