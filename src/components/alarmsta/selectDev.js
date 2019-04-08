@@ -117,11 +117,13 @@ class selectDev extends React.Component{
     unitcode=(code,cnamee) =>{ //点击获取设备code
         this.setState({
             unitcode: code,
-            cnamee:cnamee
+            cnamee:cnamee,
+            bgcolors:"bgcolors",
         },()=>{
             this.requestequmpent();
         });
     }
+    
     myonSearch=(e) =>{ //点击获取设备code
         let searchvalue=e.target.value
         this.setState({ loading:true })
@@ -164,12 +166,13 @@ class selectDev extends React.Component{
                                 <div className="cardbody"id="scorll">
                                     <Spin spinning={this.state.loading} size="large" className="spin" tip="加载中..." >
                                     <div>
-                                    
                                         {
                                         this.state.list.map((item)=>(
-                                            <div key={item.code} className="cardbodyitem" onClick={ ()=>this.unitcode(item.code,item.cname) } >
-                                                <span>{item.cname}</span>
-                                                <span>{item.pname}</span> 
+                                            <div key={item.code} className={this.state.unitcode===item.code?this.state.bgcolors:""} onClick={ ()=>this.unitcode(item.code,item.cname) } >
+                                                <div className="cardbodyitem">
+                                                    <span>{item.cname}</span>
+                                                    <span>{item.pname}</span> 
+                                                </div>
                                             </div>
                                         ))
                                         }

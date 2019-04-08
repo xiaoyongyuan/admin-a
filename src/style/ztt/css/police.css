@@ -449,11 +449,6 @@
    cursor:pointer;
 }
 
-/* .cardbodyitem:focus{
-    background: #313653;
-    color: #fff;
-    cursor:pointer;
- } */
 .cardbodyitem a:active{
     background: #313653;
     color: #fff;
