@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Switch, Icon, notification, message,Modal } from 'antd';
+import {Button, Switch, Icon, notification, message,Modal,Spin } from 'antd';
 import {post} from "../../axios/tools";
 import "../../style/ztt/css/police.css";
 const ButtonGroup = Button.Group;
@@ -26,6 +26,7 @@ class Alarmdetails extends React.Component{
         code:'', //当前数据的code
         ifall:false,
         ifmis:false,//误报确认弹框
+        loadding:true,//加载状态
       };
   }
   componentWillMount() {
@@ -34,10 +35,14 @@ class Alarmdetails extends React.Component{
       faths:this.props.toson,
       code:this.props.toson.code,
       ifall:false,
+      loadding:true,
     });
   }
   componentDidMount() {
        this.request();
+       this.setState({
+        loadding:true,
+      });
     } ;
   componentWillReceiveProps(nextProps){ //此处修改父页面参数
       if( nextProps.visible !== vis){
@@ -75,6 +80,7 @@ class Alarmdetails extends React.Component{
           eid:res.data.eid,
           prev:res.data.last,
           next:res.data.next, 
+          loadding:false,
       },()=>{
         this.draw();
       });
@@ -241,6 +247,7 @@ class Alarmdetails extends React.Component{
     render(){      
         return(
             <div className="alarmDetails">
+             <Spin size="large" spinning={this.state.loadding} tip="加载中..." className="loadding">
               <div style={this.state.ifall?{display:'none'}:{display:'block'}}>
                   <div className="alarmflex">
                     <div className="flexleft" id="flexleft">
@@ -295,6 +302,7 @@ class Alarmdetails extends React.Component{
                       </div>
                       </div>
               </Modal>
+              </Spin>
             </div>
         )
     }
