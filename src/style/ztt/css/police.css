@@ -530,7 +530,14 @@
     width: 50%;
 }
 .areaitem{
-    margin: 10px 0;
+    margin:0 0 10px 0;
+}
+.areaitem:not(:last-child){
+    border-bottom: #888 dashed 1px;
+}
+.qym{
+    border-bottom: #888 dashed 1px;
+    padding: 0 0 10px 0;
 }
 .polsurch{
     float: left;

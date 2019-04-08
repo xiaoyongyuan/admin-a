@@ -198,7 +198,7 @@ class policeAccs extends Component {
                             <div className="areatit">
                             陕西 西安 高新
                             </div>
-                            <div style={{paddingLeft:'8px',marginTop:"8px"}}>
+                            <div style={{paddingLeft:'8px'}}className="qym">
                                区域码：<span>{item.companycode}</span>
                             </div>
                             <div className="areacon">
@@ -219,7 +219,7 @@ class policeAccs extends Component {
                                     </Row>
                                     <Row className="areaconLine">
                                         <div><span>报警数    ：</span> <span>56</span></div>
-                                        <div><span>未处理报警数：</span> <span style={{color:'red'}}>180</span></div>
+                                        <div><span>未处理报警数：</span> <span style={{color:'red'}}>40</span></div>
                                     </Row>
                                 </div>
                             </div>
