@@ -31,8 +31,6 @@ class selectDev extends React.Component{
             var clientHeight = document.getElementById("scorll").clientHeight;//div内里框框的高度
             var scrollbottom=scrollHeight-clientHeight;
             var scrollTopP=Math.floor(scrollTop);
-            console.log('scrollbottom-scrollTopP',scrollbottom-scrollTopP);
-            
             if(scrollbottom-scrollTopP===0){//滚动到底部了
                 if(_this.state.isrequest){ 
                         _this.setState({
@@ -117,7 +115,6 @@ class selectDev extends React.Component{
         })
     }
     unitcode=(code,cnamee) =>{ //点击获取设备code
-        console.log('admincode',code,cnamee);
         this.setState({
             unitcode: code,
             cnamee:cnamee
@@ -126,13 +123,11 @@ class selectDev extends React.Component{
         });
     }
     myonSearch=(e) =>{ //点击获取设备code
-        console.log('myonSearch',e.target.value);
         let searchvalue=e.target.value
         this.setState({ loading:true })
         const Searchdata={cname:searchvalue,}
         post({url:"/api/company/getlist_user",data:Searchdata}, (res)=>{
             if(res.success){
-                console.log('*(res.data.length',res.data.length);
                 this.setState({
                     list: res.data,
                     total:res.totalcount,

@@ -278,6 +278,11 @@ class OneAlarm extends React.Component{
       queren=(key)=>{ //误报删除
         this.setState({ ifkai:false,})
       }
+      delCancel =(key)=>{ //误报删除取消
+        this.setState({
+          ifmis:false,
+        })
+      }
       selectobjOk =(key)=>{ //误报删除
         const _this=this;
         const data={
@@ -305,6 +310,7 @@ class OneAlarm extends React.Component{
           notification.close(key);
         })
       }
+    
     render(){
         const { getFieldDecorator } = this.props.form;
         return(
@@ -418,7 +424,7 @@ class OneAlarm extends React.Component{
                     title="信息"
                     okText="确认"
                     cancelText="取消"
-                    onCancel={() => this.selectobjCancel('newalarm')}
+                    onCancel={() => this.delCancel('newalarm')}
                     onOk={() => this.selectobjOk('newalarm')}
               >
                     <div style={{marginLeft:"60px"}}>
