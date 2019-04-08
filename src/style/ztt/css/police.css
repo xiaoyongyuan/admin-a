@@ -403,6 +403,7 @@
     height: 300px;
     border: 1px #888 solid;
     float: left;
+    background: #fff;
 }
 .selectcard_right{
     float: right;
@@ -441,7 +442,11 @@
 .cardbodyitem:active{
    background: #313653;
    color: #fff;
+   cursor:pointer;
 }
+.cardbodyitem:hover{
+    cursor:pointer;
+ }
 .itemlink{
     display: flex;
     flex-direction: row;
@@ -538,4 +543,7 @@
     height: 30px;
     line-height: 30px;
     margin: 11px auto;
+}
+.areaContentTop{
+    background: #fff;
 }

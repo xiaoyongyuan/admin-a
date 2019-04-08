@@ -17,6 +17,7 @@ class policeAccs extends Component {
           modeltype:false,
           delblock:false,//删除弹框
           list:[],
+          disab:true,//input框禁用
         };
     }
     componentDidMount() {
@@ -29,6 +30,7 @@ class policeAccs extends Component {
           modeltype:false,
           ccode:ccode,
           account:account,
+          disable:true,//禁止input输入
         },()=>{
             this.requestedit();
         });
@@ -40,13 +42,14 @@ class policeAccs extends Component {
                 account:this.state.account,
                 zonecode:this.state.ccode,
             }
+           
             post({url:"/api/usercop/getone",data:data }, (res)=>{
                 console.log('getone',res);
                     this.props.form.setFieldsValue({
                         account: res.data.account,//账号
                         realname: res.data.realname,//姓名
-                        number: res.data.number,//姓名
-                        linktell: res.data.linktell,//姓名
+                        copID: res.data.copID,//姓名
+                        linktel: res.data.linktel,//姓名
                     });
             })
         }
@@ -56,7 +59,8 @@ class policeAccs extends Component {
       this.props.form.resetFields() //清空
       this.setState({
         addblock:true,//新增弹框
-        modeltype:true,
+        modeltype:true,//判断新增还是编辑
+        disable:false,//禁止input输入关闭
       });
     }
     delblock=(e)=>{ //删除
@@ -91,6 +95,7 @@ class policeAccs extends Component {
     }
     selectobjOk= (e) => {//modal提交
         this.props.form.validateFields((err, values) => {
+            console.log('values.copID',values.copID,values.linktel);
             const va= this.child.formref()
            if(!err){
                 if(this.state.modeltype){
@@ -100,6 +105,8 @@ class policeAccs extends Component {
                         usertype: va.usertype,
                         account:values.account,
                         realname:values.realname,
+                        copID:values.copID,
+                        linktel:values.linktel,
                     };
                     post({url:"/api/usercop/add",data:data},(res)=>{
                         if(res.success){
@@ -124,7 +131,8 @@ class policeAccs extends Component {
                                     })
                                 }   
                             })        
-                    
+                            province=this.child.formref()
+                            province.zonecode=""
                 }
                 this.setState({
                     addblock:false,//新增弹框
@@ -197,7 +205,7 @@ class policeAccs extends Component {
                                 <div className="areaitem">
                                     <Row className="areaconLine">
                                         <div> <span title="姓名"> <span className="iconfont icon-ren" /> {item.realname?item.realname:" 空"}</span></div>
-                                        <div> <span title="编码"><Icon type="align-left" /> {item.number?item.number:" 空"} </span> </div>
+                                        <div> <span title="编码"><Icon type="align-left" /> {item.copID?item.copID:" 空"} </span> </div>
                                     </Row>
                                     <Row className="areaconLine">
                                         <div><span title="账号"><span className="iconfont icon-renyuanguanli" /> {item.account}</span> </div>
@@ -241,7 +249,7 @@ class policeAccs extends Component {
                         {getFieldDecorator('area', {
                             rules: [{ required: false, message: '请输入区域!' }],
                         })(
-                            <CascaderModule onRef={this.onRef} />
+                            this.state.modeltype?<CascaderModule onRef={this.onRef} />:<Input disabled={this.state.disable} />
                         )}
                     </FormItem>
 
@@ -249,7 +257,7 @@ class policeAccs extends Component {
                         {getFieldDecorator('account', {
                             rules: [{ required: true, message: '请输入管理员账号!' }],
                         })(
-                            <Input />
+                            <Input disabled={this.state.disable} />
                         )}
                     </FormItem>
                     <FormItem label="联系人">
@@ -260,14 +268,14 @@ class policeAccs extends Component {
                         )}
                     </FormItem>
                     <FormItem label="编号">
-                        {getFieldDecorator('number', {
+                        {getFieldDecorator('copID', {
                             rules: [{ required: true, message: '请输入编号!' }],
                         })(
                             <Input />
                         )}
                     </FormItem>
                     <FormItem label="联系人电话">
-                        {getFieldDecorator('linktell', {
+                        {getFieldDecorator('linktel', {
                             rules: [{ required: false, message: '请输入联系人电话!' }],
                         })(
                             <Input />
