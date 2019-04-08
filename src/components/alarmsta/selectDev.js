@@ -169,7 +169,7 @@ class selectDev extends React.Component{
                                         this.state.list.map((item)=>(
                                             <div key={item.code} className="cardbodyitem" onClick={ ()=>this.unitcode(item.code,item.cname) } >
                                                 <span>{item.cname}</span>
-                                                <span></span> 
+                                                <span>{item.pname}</span> 
                                             </div>
                                         ))
                                         }
@@ -189,7 +189,7 @@ class selectDev extends React.Component{
                                             <div key={item.code} className="cardbodyitem">
                                                 <a className="itemlink" href={"#/app/alarmsta/onealarm?ccode="+item.ccode+"&cid="+item.cid+"&eid="+item.ecode}  > 
                                                     <span>{item.ecode}</span>
-                                                    <span></span>
+                                                    <span>{item.pname}</span>
                                                 </a>
                                             </div>
                                     
