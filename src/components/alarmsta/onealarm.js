@@ -266,7 +266,7 @@ class OneAlarm extends React.Component{
         for( var j=0; j<= objssa.length; j++){
          //点击是否在 objssa[j].finalarea
          let finalareastring=objssa[j]!==undefined?objssa[j].finalarea:'';
-         let zhuanhou= JSON.parse(finalareastring);
+         let zhuanhou=finalareastring!==""?JSON.parse(finalareastring):'';
           if(zhuanhou.x<=x && x<=(zhuanhou.x+zhuanhou.w) && zhuanhou.y<=y && y<=(zhuanhou.y+zhuanhou.h) ){
            return objssa[j]
           }
