@@ -224,7 +224,7 @@ class policeAccs extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div>
+                        <div className="areabtit">
                             <div className="areaContentBottom" onClick={()=>this.editblock(item.account,item.companycode)}>
                                <span><Icon type="form" /> 编辑</span>   
                             </div>
