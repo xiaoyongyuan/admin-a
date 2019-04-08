@@ -209,7 +209,6 @@ class OneAlarm extends React.Component{
                 area.rect(parseInt(item.x*x),parseInt(item.y*y),parseInt(item.w*x),parseInt(item.h*y));
                 area.stroke();
                 area.closePath();
-                return ''; 
             })
           })
           }
