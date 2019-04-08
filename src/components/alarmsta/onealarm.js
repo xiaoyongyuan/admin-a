@@ -190,17 +190,13 @@ class OneAlarm extends React.Component{
           ifblock:false,
           eid:this.state.eid,
         })
-        console.log('***1');
-        
          let ele = document.getElementById("canvasobjt");
          let area = ele.getContext("2d");
          area.clearRect(0,0,604,476);//清除之前的绘图
         const objs=this.state.data;
           if( objs.length>0){
           //计算缩放比例
-          console.log('***2');
-          objs.map((el,i)=>{
-            console.log('***3');
+          objs.map((el,i) => {
             this.setState({ x:604/el.pic_width,y:476/el.pic_height});	
             const x=604/el.pic_width, y=476/el.pic_height;
             let fangquarr = []
