@@ -161,7 +161,7 @@ class selectDev extends React.Component{
                         <div className="selectcard">
                             <div className="cardtit">选择单位（{this.state.total}）</div>
                                     <div className="searcht">  
-                                        <Input placeholder="请输入搜索内容" allowClear onChange={this.myonSearch} />
+                                        <Input placeholder="请输入搜索内容" onChange={this.myonSearch} />
                                     </div>
                                 <div className="cardbody"id="scorll">
                                     <Spin spinning={this.state.loading} size="large" className="spin" tip="加载中..." >
