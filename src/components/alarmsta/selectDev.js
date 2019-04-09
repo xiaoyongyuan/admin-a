@@ -83,7 +83,9 @@ class selectDev extends React.Component{
                     list: res.data,
                     total:res.totalcount,
                     unitcode:res.data[0].code,
+                    fistcode:res.data[0].code,
                     loading:false,
+                    fistcname:res.data[0].cname
                 },()=>{
                     this.requestequmpent();
                 })
@@ -156,7 +158,7 @@ class selectDev extends React.Component{
         return(
             <div className="selectDev">
                 <div className="selectcontent">
-                    <div className="devtittle"><span>已选择 : </span><span> {this.state.cnamee}</span></div>
+                    <div className="devtittle"><span>已选择 : </span><span> {this.state.cnamee?this.state.cnamee:this.state.fistcname}</span></div>
                     <div className="selectframe">
                         <div className="selectcard">
                             <div className="cardtit">选择单位（{this.state.total}）</div>
