@@ -34,7 +34,6 @@ class policeAccs extends Component {
         })
     };
     editblock=(account,ccode,code)=>{
-        // console.log('****************33**',account,ccode);
         this.setState({
           addblock:true,//编辑弹框
           modeltype:false,
@@ -47,7 +46,6 @@ class policeAccs extends Component {
         });
       }
       requestedit=() => {//取数据
-        console.log('getone1',this.state.ccode,this.state.account,);
         if(this.state.ccode){
             const data={
                 account:this.state.account,
@@ -55,7 +53,6 @@ class policeAccs extends Component {
             }
            
             post({url:"/api/usercop/getone",data:data }, (res)=>{
-                console.log('getone',res);
                     this.props.form.setFieldsValue({
                         account: res.data.account,//账号
                         realname: res.data.realname,//姓名
@@ -84,8 +81,6 @@ class policeAccs extends Component {
     }
     selectobjOk= (e) => {//modal提交
         this.props.form.validateFields((err, values) => {
-            console.log('values.copID',values.copID,values.linktel);
-            
            if(!err){
                 if(this.state.modeltype){
                     const va= this.child.formref()
@@ -116,7 +111,6 @@ class policeAccs extends Component {
                     }
                     
                 }else{
-                    console.log('编辑接口');
                       //编辑接口');
                             const datab={
                                 realname:values.realname,
