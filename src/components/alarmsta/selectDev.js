@@ -171,7 +171,6 @@ class selectDev extends React.Component{
                                             <div key={item.code} className={this.state.unitcode===item.code?this.state.bgcolors:""} onClick={ ()=>this.unitcode(item.code,item.cname) } >
                                                 <div className="cardbodyitem">
                                                     <span>{item.cname}</span>
-                                                    <span>{item.pname}</span> 
                                                 </div>
                                             </div>
                                         ))
@@ -192,7 +191,7 @@ class selectDev extends React.Component{
                                             <div key={item.code} className="cardbodyitem">
                                                 <a className="itemlink" href={"#/app/alarmsta/onealarm?ccode="+item.ccode+"&cid="+item.cid+"&eid="+item.ecode}  > 
                                                     <span>{item.ecode}</span>
-                                                    <span>{item.pname}</span>
+                                                    <span>{item.name}</span>
                                                 </a>
                                             </div>
                                     
