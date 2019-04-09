@@ -23,7 +23,7 @@ class policeAccs extends Component {
     componentDidMount() {
         this.requestdata();
     }
-    editblock=(account,ccode)=>{
+    editblock=(account,ccode,code)=>{
         // console.log('****************33**',account,ccode);
         this.setState({
           addblock:true,//编辑弹框
@@ -31,6 +31,7 @@ class policeAccs extends Component {
           ccode:ccode,
           account:account,
           disable:true,//禁止input输入
+          code:code
         },()=>{
             this.requestedit();
         });
@@ -48,8 +49,9 @@ class policeAccs extends Component {
                     this.props.form.setFieldsValue({
                         account: res.data.account,//账号
                         realname: res.data.realname,//姓名
-                        copID: res.data.copID,//姓名
-                        linktel: res.data.linktel,//姓名
+                        copID: res.data.copID,//
+                        linktel: res.data.linktel,//
+                        area: res.data.zonename,//
                     });
             })
         }
@@ -73,9 +75,10 @@ class policeAccs extends Component {
     selectobjOk= (e) => {//modal提交
         this.props.form.validateFields((err, values) => {
             console.log('values.copID',values.copID,values.linktel);
-            const va= this.child.formref()
+            
            if(!err){
                 if(this.state.modeltype){
+                    const va= this.child.formref()
                     //新增
                     var data={
                         zonecode: va.zonecode,
@@ -85,6 +88,7 @@ class policeAccs extends Component {
                         copID:values.copID,
                         linktel:values.linktel,
                         zonename: va.zonename,
+                        addtype:1,
                     };
                     if(data.zonecode){
                         post({url:"/api/usercop/add",data:data},(res)=>{
@@ -93,6 +97,7 @@ class policeAccs extends Component {
                                 list.unshift(data);
                                 this.setState({list})
                                 message.success('新增成功');
+                                this.requestdata();
                             }
                         })
                     }else{
@@ -103,26 +108,20 @@ class policeAccs extends Component {
                 }else{
                     console.log('编辑接口');
                       //编辑接口');
-                            var data={
-                                usertype: va.usertype,
+                            const datab={
                                 realname:values.realname,
+                                copID:values.copID,
+                                linktel:values.linktel,
+                                code:this.state.code
                             };
-                            post({url:"/api/usercop/update",data:data}, (res)=>{
-                                if(res.success){
-                                    let list=this.state.list;
-                                    list[this.state.index]=res.data[0];                        
-                                    this.setState({
-                                        list:list,
-                                    })
-                                }   
+                            post({url:"/api/usercop/update",data:datab}, (res)=>{
+                                message.success('修改成功');  
+                                this.requestdata();
                             })        
-                            province=this.child.formref()
-                            province.zonecode=""
+                            
                 }
                 this.setState({
                     addblock:false,//新增弹框
-                },()=>{
-                    this.requestdata();
                 });
          }
        })
@@ -143,16 +142,23 @@ class policeAccs extends Component {
             zonename=province.zonecode;
         }
         this.requestdata();
-
-        console.log('province=this.child.formref()*',province=this.child.formref());
-        
       }
+    searchsure=()=>{
+       this.requestdata();
+    }
+    sear=(e)=>{
+       this.setState({
+       searchvalue:e.target.value
+       })
+    }
     requestdata=(params) => { //取数据
         this.setState({
             loading:true,
         })
-        
-        post({url:"/api/usercop/getlist",data:{usertype:utype,zonecode:zcode}}, (res)=>{
+        const searchvalue={
+            zonename:this.state.searchvalue
+        }
+        post({url:"/api/usercop/getlist",data:searchvalue}, (res)=>{
             if(res.success){
                 this.setState({
                     list: res.data,
@@ -167,11 +173,14 @@ class policeAccs extends Component {
              <Row className="updownmargin20">
                 <div className="polsurch">
                     <div style={{float:"left",height:"34px",lineHeight:"34px"}}> 选择区域：</div> 
-                    <span style={{float:"left"}}> <CascaderModule style={{width:'100%'}} onRef={this.onRef} /></span>
+                    <span style={{float:"left"}}> 
+                    {/* <CascaderModule style={{width:'100%'}} onRef={this.onRef} /> */}
+                    <Input onBlur={(e)=>this.sear(e)} />
+                    </span>
                     </div> 
                 <div className="polsurch polsurchtwo">
-                    <Button type="primary" onClick={()=>this.sure()}>
-                        确定
+                    <Button type="primary" onClick={()=>this.searchsure()}>
+                        搜索
                     </Button>
                 </div> 
                 <div className="polsurch polsurchthree">
@@ -199,23 +208,13 @@ class policeAccs extends Component {
                                     </Row>
                                     <Row className="areaconLine">
                                         <div><span title="账号"><span className="iconfont icon-renyuanguanli" /> {item.account}</span> </div>
-                                        <div><span title="账号数量"><span className="iconfont icon-ai-connection" /> 4545</span></div>
+                                        <div><span title="账号数量"><span className="iconfont icon-ai-connection" /> {item.usercount}</span></div>
                                     </Row>
                                 </div>
-                                {/* <div className="areaitem">
-                                    <Row className="areaconLine">
-                                        <div><span>管辖设备：</span> <span>56</span></div>
-                                        <div><span>管辖用户：</span> <span>89</span></div>
-                                    </Row>
-                                    <Row className="areaconLine">
-                                        <div><span>报警数    ：</span> <span>56</span></div>
-                                        <div><span>未处理报警数：</span> <span style={{color:'red'}}>40</span></div>
-                                    </Row>
-                                </div> */}
                             </div>
                         </div>
                         <div className="areabtit">
-                            <div className="areaContentBottom" onClick={()=>this.editblock(item.account,item.companycode)}>
+                            <div className="areaContentBottom" onClick={()=>this.editblock(item.account,item.companycode,item.code)}>
                                <span><Icon type="form" /> 编辑</span>   
                             </div>
                         </div>
@@ -248,14 +247,14 @@ class policeAccs extends Component {
                     </FormItem>
                     <FormItem label="联系人">
                         {getFieldDecorator('realname', {
-                            rules: [{ required: true, message: '请输入联系人!' }],
+                            rules: [{ required: true, message: '请输入联系人!'}],
                         })(
                             <Input />
                         )}
                     </FormItem>
                     <FormItem label="编号">
                         {getFieldDecorator('copID', {
-                            rules: [{ required: true, message: '请输入编号!' }],
+                            rules: [{ required: true },{pattern: new RegExp("^[0-9]*$"), message: "请输入正确格式编号!"}],
                         })(
                             <Input />
                         )}
@@ -264,7 +263,7 @@ class policeAccs extends Component {
                         {getFieldDecorator('linktel', {
                             rules: [
                                 { required: false,message: "请输入用户名(手机号)!"},
-                                {pattern: new RegExp(/^1(3|4|5|6|7|8|9)\d{9}$/, "g"), message: "请输入联系人电话!"}
+                                {pattern: new RegExp("^[0-9]*$"), message: "请输入正确格式联系人电话!"}
                             ]
                         })(
                             <Input />
