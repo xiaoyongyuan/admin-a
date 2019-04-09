@@ -7,7 +7,7 @@ const FormItem = Form.Item;
 var province
 var utype
 var zcode
-
+var zonename
 class policeAccs extends Component {
     constructor(props){
         super(props);
@@ -107,14 +107,22 @@ class policeAccs extends Component {
                         realname:values.realname,
                         copID:values.copID,
                         linktel:values.linktel,
+                        zonename: va.zonename,
                     };
-                    post({url:"/api/usercop/add",data:data},(res)=>{
-                        if(res.success){
-                            const list=this.state.list;
-                            list.unshift(data);
-                            this.setState({list})
-                        }
-                    })
+                    if(data.zonecode){
+                        post({url:"/api/usercop/add",data:data},(res)=>{
+                            if(res.success){
+                                const list=this.state.list;
+                                list.unshift(data);
+                                this.setState({list})
+                                message.success('新增成功');
+                            }
+                        })
+                    }else{
+                        message.error('请选择区域');
+                        return
+                    }
+                    
                 }else{
                     console.log('编辑接口');
                       //编辑接口');
@@ -151,11 +159,16 @@ class policeAccs extends Component {
         if(province.usertype===-1){
             utype=""
             zcode=province.zonecode;
+            zonename=province.zonecode;
         }else{
             utype=province.usertype;
             zcode=province.zonecode;
+            zonename=province.zonecode;
         }
         this.requestdata();
+
+        console.log('province=this.child.formref()*',province=this.child.formref());
+        
       }
     requestdata=(params) => { //取数据
         this.setState({
@@ -196,7 +209,7 @@ class policeAccs extends Component {
                     <div key={item.code} className="areaContent">
                         <div className="areaContentTop">
                             <div className="areatit">
-                            陕西 西安 高新
+                            {item.zonename}
                             </div>
                             <div style={{paddingLeft:'8px'}}className="qym">
                                区域码：<span>{item.companycode}</span>
@@ -212,7 +225,7 @@ class policeAccs extends Component {
                                         <div><span title="账号数量"><span className="iconfont icon-ai-connection" /> 4545</span></div>
                                     </Row>
                                 </div>
-                                <div className="areaitem">
+                                {/* <div className="areaitem">
                                     <Row className="areaconLine">
                                         <div><span>管辖设备：</span> <span>56</span></div>
                                         <div><span>管辖用户：</span> <span>89</span></div>
@@ -221,7 +234,7 @@ class policeAccs extends Component {
                                         <div><span>报警数    ：</span> <span>56</span></div>
                                         <div><span>未处理报警数：</span> <span style={{color:'red'}}>40</span></div>
                                     </Row>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                         <div className="areabtit">
@@ -276,7 +289,10 @@ class policeAccs extends Component {
                     </FormItem>
                     <FormItem label="联系人电话">
                         {getFieldDecorator('linktel', {
-                            rules: [{ required: false, message: '请输入联系人电话!' }],
+                            rules: [
+                                { required: false,message: "请输入用户名(手机号)!"},
+                                {pattern: new RegExp(/^1(3|4|5|6|7|8|9)\d{9}$/, "g"), message: "请输入联系人电话!"}
+                            ]
                         })(
                             <Input />
                         )}
