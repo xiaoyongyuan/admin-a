@@ -63,7 +63,6 @@ class policeAccs extends Component {
             })
         }
     }
-
     addblock=()=>{
       this.props.form.resetFields() //清空
       this.setState({
