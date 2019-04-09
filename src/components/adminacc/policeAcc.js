@@ -63,30 +63,7 @@ class policeAccs extends Component {
         disable:false,//禁止input输入关闭
       });
     }
-    delblock=(e)=>{ //删除
-        this.setState({
-            delblock:true,
-            delcode:e,
-          });
-    }
 
-    delCancel= (e) => {//关闭删除弹框
-        this.setState({
-            delblock:false,
-        });
-    }
-    delOk= (e) => {//关闭删除弹框
-        
-        this.setState({
-            delblock:false,
-        });
-        post({url:"/api/usercop/del",data:{zonecode: this.state.delcode}},(res)=>{
-            if(res.success){
-                this.requestdata();
-            }
-        })
-        message.success('删除成功');
-    }
     selectobjCancel = (e) => {//关闭弹框
         this.setState({
           addblock:false,
@@ -241,11 +218,7 @@ class policeAccs extends Component {
                             <div className="areaContentBottom" onClick={()=>this.editblock(item.account,item.companycode)}>
                                <span><Icon type="form" /> 编辑</span>   
                             </div>
-                            <div className="areaContentBottom" onClick={()=>this.delblock(item.companycode)}>
-                               <span><Icon type="delete" /> 删除</span>   
-                            </div>
                         </div>
-                        
                     </div>
                   ))
                 }

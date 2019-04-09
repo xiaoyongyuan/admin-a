@@ -502,10 +502,9 @@
 }
 .areabtit{
     background: #313653;
-    padding-left: 30%
 }
 .areaContentBottom{
-    width: 30%;
+    width: 100%;
     height: 36px;
     line-height: 36px;
     text-align: center;
