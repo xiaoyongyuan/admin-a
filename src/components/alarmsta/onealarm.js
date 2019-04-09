@@ -281,6 +281,7 @@ class OneAlarm extends React.Component{
         this.setState({
           ifmis:false,
         })
+        this.misinf();
       }
       selectobjOk =(key)=>{ //误报删除
         const _this=this;
