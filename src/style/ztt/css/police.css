@@ -2,9 +2,7 @@
     Alarmlist.js报警
 */
 
-.Alarmlist .alarmitem{
-    
-}
+
 .handle{
     width:100%;
     height: 56px;
@@ -475,17 +473,30 @@
 .updownmargin20{
     margin: 20px 0;
 }
-
-@media only screen and (min-width: 1000px) and (max-width: 1599px) {
+@media only screen and (min-width: 700px) and (max-width: 1200px) {
     .areaContent {
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
         justify-content: space-between;
-        width: 29%;
+        width: 30%;
         border: 1px solid #313653;
         float: left;
         margin: 0 20px 30px 0;
+        overflow: hidden;
+    }    	
+}
+@media only screen and (min-width: 1200px) and (max-width: 1599px) {
+    .areaContent {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        width: 30%;
+        border: 1px solid #313653;
+        float: left;
+        margin: 0 20px 30px 0;
+        overflow: hidden;
     }    	
 }
 @media only screen and (min-width: 1600px) and (max-width: 2200px) {
@@ -494,10 +505,11 @@
         flex-direction: column;
         flex-wrap: wrap;
         justify-content: space-between;
-        width: 22%;
+        width: 23%;
         border: 1px solid #313653;
         float: left;
         margin: 0 20px 30px 0;
+        overflow: hidden;
     }    	
 }
 .areabtit{
@@ -512,13 +524,16 @@
     float: left;
 }
 .areatit{
-    width: 100%;
+    width: 320px;
     height: 36px;
     line-height: 36px;
     text-align: left;
     color: #444;
     padding: 0 8px;
-    font-size: 17px;
+    font-size: 15px;
+    overflow: hidden;/*超出部分隐藏*/
+    white-space: nowrap;/*不换行*/
+    text-overflow:ellipsis;/*超出部分文字以...显示*/
 }
 .areacon{
     display: flex;

@@ -191,7 +191,7 @@ class selectDev extends React.Component{
                                 this.state.listequmpent.map((item)=> (
                                         
                                             <div key={item.code} className="cardbodyitem">
-                                                <a className="itemlink" href={"#/app/alarmsta/onealarm?ccode="+item.ccode+"&cid="+item.cid+"&eid="+item.ecode}  > 
+                                                <a className="itemlink" href={"#/app/alarmsta/onealarm?ccode="+item.ccode+"&cid="+item.cid+"&eid="+item.ecode} > 
                                                     <span>{item.ecode}</span>
                                                     <span>{item.name}</span>
                                                 </a>

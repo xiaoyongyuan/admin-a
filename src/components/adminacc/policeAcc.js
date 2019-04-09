@@ -1,5 +1,5 @@
 import React, { Component} from 'react';
-import {Form, Row, Col, Button,Icon,Modal,Input,message} from 'antd';
+import {Form, Row, Button,Icon,Modal,Input,message,Pagination} from 'antd';
 import {post} from "../../axios/tools";
 import "../../style/sjg/icon/iconfont.css";
 import CascaderModule from '../common/CascaderModule';
@@ -18,11 +18,21 @@ class policeAccs extends Component {
           delblock:false,//删除弹框
           list:[],
           disab:true,//input框禁用
+          page:1, //当前页数
+          pageSize:12, //每页显示数量
+          totalcount:0, //数据总量
         };
     }
     componentDidMount() {
         this.requestdata();
     }
+    hanlePageSize = (page) => { //翻页
+        this.setState({
+            page:page,
+        },()=>{
+            this.requestdata();
+        })
+    };
     editblock=(account,ccode,code)=>{
         // console.log('****************33**',account,ccode);
         this.setState({
@@ -144,7 +154,11 @@ class policeAccs extends Component {
         this.requestdata();
       }
     searchsure=()=>{
-       this.requestdata();
+        this.setState({
+            page:1,
+            },()=>{
+                this.requestdata();
+            })
     }
     sear=(e)=>{
        this.setState({
@@ -156,12 +170,15 @@ class policeAccs extends Component {
             loading:true,
         })
         const searchvalue={
-            zonename:this.state.searchvalue
+            zonename:this.state.searchvalue,
+            pageindex:this.state.page,
+            pagesize:12,
         }
         post({url:"/api/usercop/getlist",data:searchvalue}, (res)=>{
             if(res.success){
                 this.setState({
                     list: res.data,
+                    totalcount:res.totalcount,
                 })
             }
         })
@@ -221,7 +238,6 @@ class policeAccs extends Component {
                     </div>
                   ))
                 }
-           
               <Modal visible={this.state.addblock} 
                       title={this.state.modeltype?"新增":"编辑"}
                       okText="确认"
@@ -281,6 +297,7 @@ class policeAccs extends Component {
               >
                <div>是否确认删除？</div>
               </Modal>
+              <Pagination hideOnSinglePage={true} style={{float:"left"}} defaultCurrent={this.state.page} current={this.state.page} total={this.state.totalcount} pageSize={this.state.pageSize} onChange={this.hanlePageSize} className="pageSize" />
           </div>
         )
     }
