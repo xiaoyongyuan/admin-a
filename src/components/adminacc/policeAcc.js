@@ -182,7 +182,7 @@ class policeAccs extends Component {
             <div className="policeAcc">
              <Row className="updownmargin20">
                 <div className="polsurch">
-                    <div style={{float:"left",height:"34px",lineHeight:"34px"}}> 选择区域：</div> 
+                    <div style={{float:"left",height:"34px",lineHeight:"34px"}}> 区域：</div> 
                     <span style={{float:"left"}}> 
                     {/* <CascaderModule style={{width:'100%'}} onRef={this.onRef} /> */}
                     <Input onBlur={(e)=>this.sear(e)} />
