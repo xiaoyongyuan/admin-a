@@ -405,6 +405,7 @@ class OneAlarm extends React.Component{
                       title="信息"
                       onCancel={() => this.selectobjCancel()}
                       onOk={() => this.queren()}
+                      footer={null}
                 >
                      <div>
                         <div className="alarmflex">
