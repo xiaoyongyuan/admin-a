@@ -278,7 +278,6 @@ class policeAccs extends Component {
                             <Input />
                         )}
                     </FormItem>
-                   
                 </Form>
               </Modal>
               <Modal visible={this.state.delblock} 
