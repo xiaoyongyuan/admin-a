@@ -263,7 +263,7 @@ class policeAccs extends Component {
                     </FormItem>
                     <FormItem label="编号">
                         {getFieldDecorator('copID', {
-                            rules: [{ required: true, message: "请输入正确格式编号!"},{pattern: new RegExp("^[0-9]*$"), message: "请输入正确格式编号!"}],
+                            rules: [{ required: true, message: '请输入编号!' }],
                         })(
                             <Input />
                         )}
