@@ -213,12 +213,12 @@ class policeAccs extends Component {
                             <div className="areacon">
                                 <div className="areaitem">
                                     <Row className="areaconLine">
-                                        <div> <span title="姓名"> <span className="iconfont icon-ren" /> {item.realname?item.realname:" 空"}</span></div>
-                                        <div> <span title="编码"><Icon type="qrcode" /> {item.copID?item.copID:" 无"} </span> </div>
+                                        <div> <span title="联系人"> <span className="iconfont icon-ren" /> {item.realname?item.realname:" 空"}</span></div>
+                                        <div> <span title="编号"><Icon type="qrcode" /> {item.copID?item.copID:" 无"} </span> </div>
                                     </Row>
                                     <Row className="areaconLine">
-                                        <div><span title="账号"><span className="iconfont icon-renyuanguanli" /> {item.account}</span> </div>
-                                        <div><span title="账号数量"><span className="iconfont icon-ai-connection" /> {item.usercount}</span></div>
+                                        <div><span title="管理员账号"><span className="iconfont icon-renyuanguanli" /> {item.account}</span> </div>
+                                        <div><span title="用户数量"><span className="iconfont icon-ai-connection" /> {item.usercount}</span></div>
                                     </Row>
                                 </div>
                             </div>
