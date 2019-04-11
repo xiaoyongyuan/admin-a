@@ -56,7 +56,7 @@ class CascaderModule extends Component {
       const targetOption = selectedOptions[selectedOptions.length - 1];
       targetOption.loading = true;
       var params={};
-      if(targetOption.grade==0){
+      if(targetOption.grade===0){
         params={
           url:"/api/zonecode/gets_city",
           data:{province_id:targetOption.value},
@@ -65,7 +65,7 @@ class CascaderModule extends Component {
           sub:true,
           grade:1
         }
-      }else if(targetOption.grade==1){
+      }else if(targetOption.grade===1){
         params={
           url:"/api/zonecode/gets_county",
           data:{city_id:targetOption.value},
@@ -107,7 +107,8 @@ class CascaderModule extends Component {
               loadData={this.loadData}
               onChange={this.onChange}
               placeholder="请选择区域"
-              changeOnSelect />
+              changeOnSelect 
+              />
             </div>
         )
     }

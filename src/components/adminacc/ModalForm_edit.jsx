@@ -13,6 +13,7 @@ class ModalForm extends Component {
             form:false
         };
     }
+   
     componentDidMount() {
         //编辑  数据回填
         this.setState({
@@ -21,11 +22,17 @@ class ModalForm extends Component {
         console.log('dddd',this.props.code)
         this.updatedata()
     }
-    
-    formref = () => { //将form传给父组件由父组件控制表单提交
+    componentDidUpdate = () => {
+        if(this.props.code && this.props.code!==this.state.code){
+            this.setState({
+                code:this.props.code
+            }, () => {this.updatedata() });
+        }      
+    }
+  formref = () => { //将form传给父组件由父组件控制表单提交
         const aa=this.props.form.getFieldsValue();
         return this.props.form;
-    };
+    };  
     updatedata = () => {
         if(this.state.code){
             axios.get("table.json").then((res)=>{
@@ -43,25 +50,15 @@ class ModalForm extends Component {
             })
         }
     }; 
-    componentDidUpdate = () => {
-        if(this.props.code && this.props.code!=this.state.code){
-            this.setState({
-                code:this.props.code
-            }, () => {this.updatedata() });
-            
-        }      
-    }
-
     render() {
         const { getFieldDecorator } = this.props.form;
-
         return (
             <Form layout="vertical" onSubmit={this.handleSubmit}>
                     <FormItem label="名称">
                         {getFieldDecorator('title', {
                             rules: [{ required: true, message: '请输入名称!' }],
                         })(
-                            <Input/>
+                            <Input />
                         )}
                     </FormItem>
 

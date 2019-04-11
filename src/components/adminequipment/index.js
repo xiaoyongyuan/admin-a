@@ -419,6 +419,7 @@ class AdminEquipment extends Component {
                         <Spin spinning={this.state.loading} size="large" className="spin" tip="加载中...">
                             <Table
                                 rowKey={record => record.code}
+                                // eslint-disable-next-line react/jsx-boolean-value
                                 bordered={true}
                                 dataSource={this.state.list}
                                 columns={columns}

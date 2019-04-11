@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import {Form,Input,} from 'antd';
 // import '../../style/sjg/home.css';
-import axios from 'axios';
 import {post} from "../../axios/tools";
 const FormItem = Form.Item;
-
-
-
 class ModalForm extends Component {
     constructor(props){
         super(props);
@@ -22,7 +18,13 @@ class ModalForm extends Component {
         });
         this.updatedata()
     }
-    
+    componentDidUpdate = () => {
+        if(this.props.code && this.props.code!==this.state.code){
+            this.setState({
+                code:this.props.code
+            }, () => {this.updatedata() });
+        }      
+    }
     formref = () => { //将form传给父组件由父组件控制表单提交
         const aa=this.props.form.getFieldsValue();
         return this.props.form;
@@ -44,16 +46,7 @@ class ModalForm extends Component {
                 });
             }) 
         }
-        
     }; 
-    componentDidUpdate = () => {
-        if(this.props.code && this.props.code!=this.state.code){
-            this.setState({
-                code:this.props.code
-            }, () => {this.updatedata() });
-        }      
-    }
-
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
@@ -62,10 +55,9 @@ class ModalForm extends Component {
                         {getFieldDecorator('title', {
                             rules: [{ required: true, message: '请输入名称!' }],
                         })(
-                            <Input/>
+                            <Input />
                         )}
                     </FormItem>
-
                     <FormItem label="经度">
                         {getFieldDecorator('clng', {
                             rules: [{ 
@@ -105,11 +97,7 @@ class ModalForm extends Component {
                         )}
                     </FormItem>
                 </Form>
-
         )
     }
-
-
 }
-
 export default ModalForm = Form.create({})(ModalForm);

@@ -150,6 +150,7 @@ selectopt = (e) => { //检索search
                     <Row>
                         <Spin spinning={this.state.loading} size="large" className="spin" tip="加载中...">
                             <Table style={{marginTop:'24px'}}
+                                // eslint-disable-next-line react/jsx-boolean-value
                                 bordered={true}
                                 dataSource={this.state.list}
                                 columns={columns}
