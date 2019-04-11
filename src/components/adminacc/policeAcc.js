@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-boolean-value */
 import React, { Component} from 'react';
 import {Form, Row, Button,Icon,Modal,Input,message,Pagination} from 'antd';
 import {post} from "../../axios/tools";
@@ -275,6 +276,7 @@ class policeAccs extends Component {
               >
                <div>是否确认删除？</div>
               </Modal>
+             
               <Pagination hideOnSinglePage={true} style={{float:"left"}} defaultCurrent={this.state.page} current={this.state.page} total={this.state.totalcount} pageSize={this.state.pageSize} onChange={this.hanlePageSize} className="pageSize" />
           </div>
         )
