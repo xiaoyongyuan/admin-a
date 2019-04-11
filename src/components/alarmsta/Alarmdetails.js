@@ -216,7 +216,7 @@ class Alarmdetails extends React.Component{
         _this.draw();
       }
      })
-    
+     document.getElementById("memo").value="";
   }
 
   memo =(e)=>{ 
@@ -233,7 +233,7 @@ class Alarmdetails extends React.Component{
       this.draw();
       notification.close(key);
     })
-    
+    document.getElementById("memo").value="";  
   }
   
   

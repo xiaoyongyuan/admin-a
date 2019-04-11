@@ -281,7 +281,7 @@ class OneAlarm extends React.Component{
         this.setState({
           ifmis:false,
         })
-        this.misinf();
+        this.drawtwo();
       }
       selectobjOk =(key)=>{ //误报删除
         const _this=this;
@@ -403,10 +403,9 @@ class OneAlarm extends React.Component{
                 <Modal visible={this.state.ifkai} 
                       width={900}
                       title="信息"
-                      okText="确认"
-                      cancelText="取消"
                       onCancel={() => this.selectobjCancel()}
                       onOk={() => this.queren()}
+                      footer={null}
                 >
                      <div>
                         <div className="alarmflex">

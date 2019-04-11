@@ -25,7 +25,7 @@ class Onlineeq extends React.Component{
         }
         const option = {
             title: {
-                text: ((this.props.equipmentEtotal/this.props.equipmentcount).toFixed(2))*100+"%",
+                text: ((this.props.equipmentEtotal/this.props.equipmentcount*100).toFixed(2))+"%",
                 x: 'center',
                 y: 'center',
                 textStyle: {
