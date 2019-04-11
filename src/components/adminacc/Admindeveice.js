@@ -66,7 +66,6 @@ class Admindeveices extends Component {
 
     }
     changePage=(page,pageSize)=>{ //分页  页码改变的回调，参数是改变后的页码及每页条数
-        console.log("page",page);
         this.setState({
             page: page,
         },()=>{
@@ -103,8 +102,6 @@ class Admindeveices extends Component {
     onSelectChange = (rowKeys,selectedRows) => { //多选
         let codelist=[];
         selectedRows.map((item) => {
-            console.log('item.code',item.code)
-            console.log('item.ecode',item.ecode)
             codelist.push(item.code)
             return ""
         })
@@ -112,13 +109,10 @@ class Admindeveices extends Component {
         codelist.push(selectedRows.map((item,index)=>{
            return item.code
         }))
-            console.log('selectedcode',this.state.codelist)
-        console.log('ecode',this.state.codelist)
             this.setState({
                 selectedRowKeys:rowKeys,
                 selectedcode:selectedRows
             });
-            console.log('selectedcode',this.state.selectedcode)
     }
 
     handleOk = (e) => {
@@ -127,7 +121,6 @@ class Admindeveices extends Component {
             if (err) {
                 return;
             }
-            console.log('Received values of form: ', values);
             form.resetFields();
             this.setState({ visible: false });
         });
@@ -136,7 +129,6 @@ class Admindeveices extends Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                console.log('提交的值: ', values);
             }
         });
     };
@@ -163,7 +155,6 @@ class Admindeveices extends Component {
         e.preventDefault();
         const forms=this.formRef.formref();
         forms.validateFields((err, values) => {
-            console.log('值',values)
             if (!err) {
                 if(this.state.type){
                     let codelist=[]
@@ -210,7 +201,6 @@ class Admindeveices extends Component {
         });
     };
     handleCancel = (e) => {
-        console.log(e);
         this.setState({
             visible: false,
         });
