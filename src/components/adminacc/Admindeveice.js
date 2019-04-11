@@ -283,10 +283,10 @@ class Admindeveices extends Component {
                 switch(text){
                     case 0:
                     return `未绑定`;
-                    break;
                     case 1:
                     return `已绑定`;
-                    break;
+                    default:
+                    return"";
                 }
             },
         },{
@@ -388,7 +388,7 @@ class Admindeveices extends Component {
                     <div>
                     <Spin spinning={this.state.loading} size="large"tip="加载中..." >
                         <Table
-                            bordered={true}
+                            bordered={ true }
                             rowSelection={rowSelection}
                             columns={columns}
                             dataSource={this.state.list}

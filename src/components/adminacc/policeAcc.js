@@ -4,10 +4,6 @@ import {post} from "../../axios/tools";
 import "../../style/sjg/icon/iconfont.css";
 import CascaderModule from '../common/CascaderModule';
 const FormItem = Form.Item;
-var province
-var utype
-var zcode
-var zonename
 class policeAccs extends Component {
     constructor(props){
         super(props);
@@ -134,16 +130,6 @@ class policeAccs extends Component {
       this.child = ref
     }
     sure=()=>{
-         province=this.child.formref()
-        if(province.usertype===-1){
-            utype=""
-            zcode=province.zonecode;
-            zonename=province.zonecode;
-        }else{
-            utype=province.usertype;
-            zcode=province.zonecode;
-            zonename=province.zonecode;
-        }
         this.requestdata();
       }
     searchsure=()=>{
