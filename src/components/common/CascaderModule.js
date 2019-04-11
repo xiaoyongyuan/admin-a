@@ -2,23 +2,12 @@ import React, { Component } from 'react';
 import {Cascader} from "antd";
 import {post} from "../../axios/tools";
 
-const options = [{
-  value: 'zhejiang',
-  label: 'Zhejiang',
-  isLeaf: false,
-
-}, {
-  value: 'jiangsu',
-  label: 'Jiangsu',
-  isLeaf: false,
-
-}];
 
 class CascaderModule extends Component {
     constructor(props){
         super(props);
         this.state={
-           options
+           options:[]
         };
     }
     componentDidMount() {
@@ -50,13 +39,17 @@ class CascaderModule extends Component {
     formref = () => { //将form传给父组件由父组件控制表单提交
         return {
           zonecode:this.state.zonecode,
-          usertype:this.state.usertype
+          usertype:this.state.usertype,
+          zonename:this.state.zonename
         };
     };
     onChange = (value, selectedOptions) => {
+      var zonename='';
+      selectedOptions.map((el,i)=>{zonename=zonename+el.label})
       this.setState({
         zonecode:value.length?value[value.length-1]:'',
-        usertype:value.length-1
+        usertype:value.length-1,
+        zonename:zonename
       })   
     }
     loadData = (selectedOptions) => {
@@ -113,6 +106,7 @@ class CascaderModule extends Component {
               <Cascader options={this.state.options}
               loadData={this.loadData}
               onChange={this.onChange}
+              placeholder="请选择区域"
               changeOnSelect />
             </div>
         )

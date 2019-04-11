@@ -1,5 +1,5 @@
 import React from 'react';
-import {Icon,message,Spin} from "antd";
+import {Icon,message,Spin,Input} from "antd";
 import "../../style/ztt/css/police.css";
 import "../../style/publicStyle/publicStyle.css";
 import 'moment/locale/zh-cn';
@@ -15,6 +15,7 @@ class selectDev extends React.Component{
             isrequest:true,//是否请求接口
             loading:true,//加载中的状态
             load:false,//右边加载中的状态
+            kong:false,//左边是否为空
         };
     }
     componentDidMount() {
@@ -82,7 +83,9 @@ class selectDev extends React.Component{
                     list: res.data,
                     total:res.totalcount,
                     unitcode:res.data[0].code,
+                    fistcode:res.data[0].code,
                     loading:false,
+                    fistcname:res.data[0].cname
                 },()=>{
                     this.requestequmpent();
                 })
@@ -97,41 +100,84 @@ class selectDev extends React.Component{
         }
         post({url:'/api/equipment/getlistforadmin',data:params},(res)=>{
             if(res){
-                this.setState({
-                    load:false,
-                    listequmpent:res.data,
-                    totaleq:res.totalcount,
-                }); 
+                if(this.state.kong){
+                    this.setState({
+                        listequmpent:[],
+                        load:false,
+                    }); 
+                }else{
+                    this.setState({
+                        load:false,
+                        listequmpent:res.data,
+                        totaleq:res.totalcount,
+                    }); 
+                }
+                 
             }   
         })
-
     }
-    unitcode=(code) =>{ //点击获取设备code
+    unitcode=(code,cnamee) =>{ //点击获取设备code
         this.setState({
             unitcode: code,
+            cnamee:cnamee,
+            bgcolors:"bgcolors",
         },()=>{
             this.requestequmpent();
         });
     }
-
+    
+    myonSearch=(e) =>{ //点击获取设备code
+        let searchvalue=e.target.value
+        this.setState({ loading:true })
+        const Searchdata={cname:searchvalue,}
+        post({url:"/api/company/getlist_user",data:Searchdata}, (res)=>{
+            if(res.success){
+                this.setState({
+                    list: res.data,
+                    total:res.totalcount,
+                    loading:false,
+                })
+                if(res.data.length){
+                    this.setState({
+                        unitcode:res.data[0].code,
+                        kong:false,
+                    },()=>{
+                        this.requestequmpent();
+                    })
+                }else{
+                    this.setState({
+                        kong:true,
+                    },()=>{
+                        this.requestequmpent();
+                    })
+                }
+            }
+        })
+    }
     render(){
         return(
             <div className="selectDev">
                 <div className="selectcontent">
-                    <div className="devtittle"><span>已选择:</span><span>1</span>><span>12</span> </div>
+                    <div className="devtittle"><span>已选择 : </span><span> {this.state.cnamee?this.state.cnamee:this.state.fistcname}</span></div>
                     <div className="selectframe">
                         <div className="selectcard">
                             <div className="cardtit">选择单位（{this.state.total}）</div>
+                                    <div className="searcht">  
+                                        <Input placeholder="请输入搜索内容" onChange={this.myonSearch} />
+                                    </div>
                                 <div className="cardbody"id="scorll">
                                     <Spin spinning={this.state.loading} size="large" className="spin" tip="加载中..." >
+                                    <div>
                                         {
                                         this.state.list.map((item)=>(
-                                            <div key={item.code} className="cardbodyitem"onClick={ ()=>this.unitcode(item.code) } >
-                                                <span>{item.adminname}</span>
-                                                <span></span> 
+                                            <div key={item.code} className={this.state.unitcode===item.code?this.state.bgcolors:""} onClick={ ()=>this.unitcode(item.code,item.cname) } >
+                                                <div className="cardbodyitem">
+                                                    <span>{item.cname}</span>
+                                                </div>
                                             </div>
                                         ))
                                         }
+                                        </div>
                                     </Spin>
                                 </div>
                         </div>
@@ -145,9 +191,9 @@ class selectDev extends React.Component{
                                 this.state.listequmpent.map((item)=> (
                                         
                                             <div key={item.code} className="cardbodyitem">
-                                                <a className="itemlink" href={"#/app/alarmsta/onealarm?ccode="+item.ccode+"&cid="+item.cid+"&eid="+item.ecode}  > 
+                                                <a className="itemlink" href={"#/app/alarmsta/onealarm?ccode="+item.ccode+"&cid="+item.cid+"&eid="+item.ecode} > 
                                                     <span>{item.ecode}</span>
-                                                    <span></span>
+                                                    <span>{item.name}</span>
                                                 </a>
                                             </div>
                                     

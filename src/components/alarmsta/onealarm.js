@@ -1,12 +1,12 @@
 import React from 'react';
-import { DatePicker, Row, Col, Button, Modal, Pagination, Form,LocaleProvider,Spin,Input,notification,message} from "antd";
+import { DatePicker, Row, Col, Button, Modal, Pagination, Form,LocaleProvider,Spin,notification,message} from "antd";
 import "../../style/ztt/css/police.css";
 import "../../style/publicStyle/publicStyle.css";
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import 'moment/locale/zh-cn';
 import {post} from "../../axios/tools";
 import Alarmdetails from "./Alarmdetails";
-import nodata from "../../style/imgs/nopic.png";
+import nodata from "../../style/imgs/nodata.png";
 const { RangePicker } = DatePicker ;
 class OneAlarm extends React.Component{
     constructor(props){
@@ -196,7 +196,7 @@ class OneAlarm extends React.Component{
         const objs=this.state.data;
           if( objs.length>0){
           //计算缩放比例
-          objs.map((el,i)=>{
+          objs.map((el,i) => {
             this.setState({ x:604/el.pic_width,y:476/el.pic_height});	
             const x=604/el.pic_width, y=476/el.pic_height;
             let fangquarr = []
@@ -209,7 +209,6 @@ class OneAlarm extends React.Component{
                 area.rect(parseInt(item.x*x),parseInt(item.y*y),parseInt(item.w*x),parseInt(item.h*y));
                 area.stroke();
                 area.closePath();
-                return ''; 
             })
           })
           }
@@ -262,7 +261,7 @@ class OneAlarm extends React.Component{
         for( var j=0; j<= objssa.length; j++){
          //点击是否在 objssa[j].finalarea
          let finalareastring=objssa[j]!==undefined?objssa[j].finalarea:'';
-         let zhuanhou= JSON.parse(finalareastring);
+         let zhuanhou=finalareastring!==""?JSON.parse(finalareastring):'';
           if(zhuanhou.x<=x && x<=(zhuanhou.x+zhuanhou.w) && zhuanhou.y<=y && y<=(zhuanhou.y+zhuanhou.h) ){
            return objssa[j]
           }
@@ -275,7 +274,15 @@ class OneAlarm extends React.Component{
                 ifmis:true,
             })
       };
-  
+      queren=(key)=>{ //误报删除
+        this.setState({ ifkai:false,})
+      }
+      delCancel =(key)=>{ //误报删除取消
+        this.setState({
+          ifmis:false,
+        })
+        this.drawtwo();
+      }
       selectobjOk =(key)=>{ //误报删除
         const _this=this;
         const data={
@@ -303,6 +310,7 @@ class OneAlarm extends React.Component{
           notification.close(key);
         })
       }
+    
     render(){
         const { getFieldDecorator } = this.props.form;
         return(
@@ -379,7 +387,7 @@ class OneAlarm extends React.Component{
                 </Row>
                 </Spin>
               
-                <Pagination defaultCurrent={this.state.page} current={this.state.page} total={this.state.totalcount} pageSize={this.state.pageSize} onChange={this.hanlePageSize} className="pageSize" style={{display:this.state.type===1?"block":"none"}} />
+                <Pagination hideOnSinglePage={true} defaultCurrent={this.state.page} current={this.state.page} total={this.state.totalcount} pageSize={this.state.pageSize} onChange={this.hanlePageSize} className="pageSize" style={{display:this.state.type===1?"block":"none"}} />
                 <div>
                     <Modal
                         width={900}
@@ -395,10 +403,9 @@ class OneAlarm extends React.Component{
                 <Modal visible={this.state.ifkai} 
                       width={900}
                       title="信息"
-                      okText="确认"
-                      cancelText="取消"
                       onCancel={() => this.selectobjCancel()}
-                      onOk={() => this.selectobjOk()}
+                      onOk={() => this.queren()}
+                      footer={null}
                 >
                      <div>
                         <div className="alarmflex">
@@ -406,7 +413,7 @@ class OneAlarm extends React.Component{
                             <canvas id="canvasobjt"onClick={this.clickgetcorrd} width="604px" height="476px" style={{backgroundImage:'url('+this.state.srct+')',backgroundSize:"100% 100%",}} /> 
                             </div>	
                         <div className="flexright">
-                                <p><label>设备名称：<span>{this.state.eid}</span></label></p>
+                                <p><label>设备名称：<span>{this.state.eidt}</span></label></p>
                                 <p><label>误报数量：<span>{this.state.data?this.state.data.length:'0'}</span></label></p>
                             </div> 
                         </div>
@@ -416,7 +423,7 @@ class OneAlarm extends React.Component{
                     title="信息"
                     okText="确认"
                     cancelText="取消"
-                    onCancel={() => this.selectobjCancel('newalarm')}
+                    onCancel={() => this.delCancel('newalarm')}
                     onOk={() => this.selectobjOk('newalarm')}
               >
                     <div style={{marginLeft:"60px"}}>
