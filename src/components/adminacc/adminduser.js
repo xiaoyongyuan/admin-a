@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-boolean-value */
 
 import React, { Component } from 'react';
 import '../../style/sjg/home.css';

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { Component} from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom';
 import ModalForm from './ModalForm';
@@ -253,9 +254,9 @@ class Adminteam extends Component {
                         })
                         : 
                             <Col offset={10} span={4}>
-                                <p style={{marginTop:"150px"}}></p>
-                                <img src={nodata} width="200px"/>
-                                <p style={{marginTop:"150px"}}></p>
+                                <p style={{marginTop:"150px"}} />
+                                <img src={nodata} width="200px" />
+                                <p style={{marginTop:"150px"}} />
                             </Col>
                          
                         }

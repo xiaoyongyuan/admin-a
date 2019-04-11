@@ -388,6 +388,7 @@ class Admindeveices extends Component {
                     <div>
                     <Spin spinning={this.state.loading} size="large"tip="加载中..." >
                         <Table
+                            // eslint-disable-next-line react/jsx-boolean-value
                             bordered={ true }
                             rowSelection={rowSelection}
                             columns={columns}
