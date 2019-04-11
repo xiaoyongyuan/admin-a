@@ -25,9 +25,9 @@ class AdmindUser extends Component {
         pageset={
         };
         this.requestdata();
-        this.state={
+        this.setState({
             loading:true,
-        };
+        })
     }
     requestdata=(params) => { //取数据
         this.setState({
