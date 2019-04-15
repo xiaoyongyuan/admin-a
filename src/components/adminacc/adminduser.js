@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import '../../style/sjg/home.css';
-import {Form,Table, DatePicker,Input, Row, Col, Button,LocaleProvider,Spin} from 'antd';
+import {Form,Table, DatePicker,Input, Row, Col, Button,LocaleProvider,Spin,Pagination} from 'antd';
 import BreadcrumbCustom from "../BreadcrumbCustom";
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import 'moment/locale/zh-cn';
@@ -30,10 +30,14 @@ class AdmindUser extends Component {
         })
     }
     requestdata=(params) => { //取数据
+        const datapage={
+            pagesize:10,
+            pageindex:this.state.page,
+        }
         this.setState({
             loading:true,
         })
-        post({url:"/api/company/getlist_user",data:pageset}, (res)=>{
+        post({url:"/api/company/getlist_user",data:datapage}, (res)=>{
             if(res.success){
                 this.setState({
                     loading:false,
@@ -86,10 +90,13 @@ onChangeDate = (field, value) => {
            
        })
     }
-    changePage=(page,pageSize)=>{ //分页  页码改变的回调，参数是改变后的页码及每页条数
+    changePage=(page)=>{ //分页  页码改变的回调，参数是改变后的页码及每页条数
+        console.log('11111',page);
         this.setState({
             page: page,
         },()=>{
+            console.log('******************',this.state.page);
+            
             this.requestdata()  
         })
     }
@@ -191,9 +198,10 @@ searchCancel = () =>{//删除取消
                 <Spin spinning={this.state.loading} size="large"tip="加载中..." >
                     <Table
                          columns={columns} dataSource={this.state.list} bordered={true}
-                         pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage,hideOnSinglePage:true}}
                          rowKey={record => record.code}
+                         pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total, onChange:this.changePage,hideOnSinglePage:true}}
                     />
+                    {/* <Pagination hideOnSinglePage={true} defaultPageSize={10} current={this.state.page} total={this.state.total} onChange={this.changePage} className="pageSize" /> */}
                 </Spin>
                 </div>
                 
