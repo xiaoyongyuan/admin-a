@@ -130,6 +130,7 @@ class AdminEquipment extends Component {
     }
     canequip = (text,record) =>{ 
         //获取设备信息接口
+        var _this=this;
         this.setState({
             coded:record.code,
             loading: true,//加载状态
@@ -140,7 +141,7 @@ class AdminEquipment extends Component {
             })
             if(res.success){
                 //获取异步任务列表
-                const _this=this;
+                // const _this=this;
                 let inter=setInterval(function(){
                     post({url:"/api/smptaskresult/getone",data:{code:_this.state.adta}}, (res)=>{
                         if(moment()-moment(res.data.createon)>10000){ //点名10秒无结果
