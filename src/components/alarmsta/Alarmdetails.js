@@ -4,7 +4,6 @@ import {post} from "../../axios/tools";
 import "../../style/ztt/css/police.css";
 const ButtonGroup = Button.Group;
 let vis=false;
-
 class Alarmdetails extends React.Component{
 	constructor(props){
       super(props);
@@ -17,7 +16,6 @@ class Alarmdetails extends React.Component{
             atime:'',
       		field:[],
           finalresult:[],
-      
       	},
       	field:true, //是否显示围界信息
       	obj:true, //是否显示报警对象
@@ -61,7 +59,6 @@ class Alarmdetails extends React.Component{
   request=()=>{
     post({url:"/api/alarm/getone_foradmin",data:this.state.faths},(res)=>{        
       let data={
-         
           cid:res.data.cid,
           src:res.data.picpath,
           field:res.data.field,
@@ -86,7 +83,6 @@ class Alarmdetails extends React.Component{
       });
     })
   }
-
   onChange=(checked,text)=>{ //控制显示围界与对象
   	this.setState({
         [text]: checked,
@@ -141,7 +137,6 @@ class Alarmdetails extends React.Component{
         area.closePath();
         return '';
       })
-  		
   	}
   }
   drawSelectObj=(el)=>{ //画出当前选中的围界
@@ -235,15 +230,12 @@ class Alarmdetails extends React.Component{
     })
     document.getElementById("memo").value="";  
   }
-  
-  
   baojing=()=>{
     this.setState({
       ifall:false,
     });
     this.componentDidMount()
   }
- 
     render(){      
         return(
             <div className="alarmDetails">

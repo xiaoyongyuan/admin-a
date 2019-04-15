@@ -107,7 +107,6 @@ class policeAccs extends Component {
                     }
                     
                 }else{
-                      //编辑接口');
                             const datab={
                                 realname:values.realname,
                                 copID:values.copID,
