@@ -59,7 +59,7 @@ class ModaEquipDetail extends Component{
                     lasttwice:res.data.lasttwice,
                     cname:res.data.cname,
                     temp:res.data.lastheart.temp,
-                    hardware:res.data.login.version,
+                    hardware:res.data.hardware,
                     software:res.data.software,
                     comid:res.data.cid,
                     upgrade:res.data.upgrade.time
@@ -131,7 +131,7 @@ class ModaEquipDetail extends Component{
                             硬件版本：
                         </Col>
                         <Col span={10} className="t_l">
-                            {}
+                            {this.state.software}
                         </Col>
                     </Row>
                     <Row className="equ_row">
