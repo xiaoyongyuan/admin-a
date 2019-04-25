@@ -1,7 +1,7 @@
 import React, { Component} from 'react';
 import {post} from "../../axios/tools";
 import BreadcrumbCustom from "../BreadcrumbCustom";
-import {Table, Row, Col, Form, Input, Button ,LocaleProvider ,message,Spin} from 'antd';
+import {Table, Row, Col, Form, Input, Button ,LocaleProvider ,message,Spin,DatePicker} from 'antd';
 import '../../style/yal/home.css';
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 const FormItem = Form.Item;
@@ -23,7 +23,7 @@ class Alarmsta extends Component {
             pagesize:10,
             cname:this.state.cname,
             pageindex:this.state.page,
-
+            date:this.state.bdate,
         };
         post({url:"/api/alarm/getlist_report",data:params}, (res)=>{
             if(res.success){
@@ -99,6 +99,7 @@ class Alarmsta extends Component {
         this.props.form.validateFields((err, values) => {
             if(!err){
                 this.setState({
+                    bdate:values.date?values.date.format('YYYY-MM-DD'):"",
                     cname:values.cname,
                     page:1,
                 },()=>{
@@ -152,7 +153,6 @@ class Alarmsta extends Component {
             }
             ];
 
-
         return (
             <LocaleProvider locale={zh_CN}>
                 <div className="Alarmsta">
@@ -171,6 +171,11 @@ class Alarmsta extends Component {
                                                 <Input />
                                             )}
                                         </FormItem>
+                                        <FormItem label="日期" >
+                                        {getFieldDecorator('date')(
+                                          <DatePicker />
+                                        )}
+                                    </FormItem>
                                         <FormItem>
                                             <Button type="primary" htmlType="submit">
                                                 查询
@@ -183,7 +188,7 @@ class Alarmsta extends Component {
                             <Row style={{marginTop:"20px"}}>
                                 <Spin size="large" spinning={this.state.loading} tip="加载中......">
                                     <Table
-                                        bordered={true}
+                                        bordered
                                         dataSource={this.state.list}
                                         onRow={this.onRowSelect}
                                         columns={columns}
