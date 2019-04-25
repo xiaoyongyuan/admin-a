@@ -99,7 +99,7 @@ class AdminEquipment extends Component {
         const params = {
             ecode:this.state.ecode
         };
-        return;
+   console.log('this.state.ecode',this.state.ecode);
    
         post({url:"/api/equipment/e_getinfo",data:params}, (res)=>{
             if(res.success){
@@ -126,7 +126,10 @@ class AdminEquipment extends Component {
     }
     
     viewdetails = (text,record) =>{ //查看设备信息
-        this.showModalEdit(record.code)
+        this.showModalEdit(record.code);
+        this.setState({
+            ecode:record.ecode,
+        })
     }
     canequip = (text,record) =>{ 
         //获取设备信息接口
