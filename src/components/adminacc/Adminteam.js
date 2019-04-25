@@ -18,17 +18,6 @@ class Adminteam extends Component {
             page:1, //当前页数
         };
     }
-    state = {
-        selectedRowKeys: [], 
-        style:{
-            backgroundColor:'#313653'
-        },
-        bordercol:{
-            borderColor:'#313653'
-        },
-        visible: false,
-
-    };
 
     componentDidMount() {
         const color=localStorage.getItem('@primary-color') || '#313653';
@@ -207,12 +196,13 @@ class Adminteam extends Component {
                                         <Row className="tit" style={titstyle}>
                                             <Col span={22}>
                                                 <span>{item.cname}</span>
+                                                <i style={{position:'absolute',right:'0',height:'45px',lineHeight:'45px'}}> {item.code}</i>
                                             </Col>
                                             <Col span={1} className="del">
-                                                <Icon className="del_con" onClick={_this.showModalEdit.bind(item,item.code,index)} type="edit" />
+                                                <Icon className="del_con"  type="edit" />
                                             </Col>
                                             <Col span={1} className="del">
-                                                <Icon className="del_con" type="delete" onClick={()=>_this.showModaldelete(item.code)} />
+                                                <Icon className="del_con" type="delete" />
                                             </Col>
                                         </Row>
                                         <Row className="item_f">
