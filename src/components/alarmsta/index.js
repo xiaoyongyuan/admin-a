@@ -192,7 +192,7 @@ class Alarmsta extends Component {
                                         dataSource={this.state.list}
                                         onRow={this.onRowSelect}
                                         columns={columns}
-                                        pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage}}
+                                        pagination={{defaultPageSize:10,current:this.state.page, total:this.state.total,onChange:this.changePage,hideOnSinglePage:true}}
                                         rowKey={record =>record.companycode}
                                     />
                                 </Spin>
