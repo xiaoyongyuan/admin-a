@@ -23,7 +23,7 @@ class Alarmsta extends Component {
             pagesize:10,
             cname:this.state.cname,
             pageindex:this.state.page,
-            date:this.state.bdate,
+            adate:this.state.adate,
         };
         post({url:"/api/alarm/getlist_report",data:params}, (res)=>{
             if(res.success){
@@ -99,7 +99,7 @@ class Alarmsta extends Component {
         this.props.form.validateFields((err, values) => {
             if(!err){
                 this.setState({
-                    bdate:values.date?values.date.format('YYYY-MM-DD'):"",
+                    adate:values.date?values.date.format('YYYY-MM-DD'):"",
                     cname:values.cname,
                     page:1,
                 },()=>{
@@ -130,23 +130,23 @@ class Alarmsta extends Component {
             },
             {   
                 title:'报警总数',
-                dataIndex:'alarmcount',
-                key:'alarmcount'
+                dataIndex:'num_rq',
+                key:'num_rq'
             },
             {   
                 title:'二次确认报警数',
-                dataIndex:'confirmcount',
-                key:'confirmcount'
+                dataIndex:'num_comfirm',
+                key:'num_comfirm'
             },
             {   
                 title:'报警确认百分比（%）',
                 dataIndex:'',
                 key:'sure',
                 render: (text, record,index) => {
-                let bili = (record.confirmcount/record.alarmcount)*100;
+                let bili = (record.num_comfirm/record.num_rq)*100;
                     return(
                         <div>
-                            {bili.toFixed(0)}
+                            {bili.toFixed(0)}%
                         </div>
                     )
                 }
