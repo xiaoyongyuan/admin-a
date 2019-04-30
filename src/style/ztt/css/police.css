@@ -157,6 +157,9 @@
     height: 61px;
     line-height: 61px;
     margin: 0 !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .fontstyletime{
     font-size: 12px!important;
