@@ -7,6 +7,7 @@ import 'moment/locale/zh-cn';
 import {post} from "../../axios/tools";
 import Alarmdetails from "./Alarmdetails";
 import nodata from "../../style/imgs/nopic.png";
+import moment from 'moment';
 const { RangePicker } = DatePicker ;
 class OneAlarm extends React.Component{
     constructor(props){
@@ -21,8 +22,8 @@ class OneAlarm extends React.Component{
             alermType:[],
             loadding:true,
             alarmImgType:false,
-            bdate:'',//检索的开始时间
-            edate:'',//检索的结束时间
+            bdate:moment().format('YYYY-MM-DD 00:00:00'),//检索的开始时间
+            edate:moment().format('YYYY-MM-DD 23:59:59'),//检索的结束时间
             cid:"", //检索选中的设备
             endOpen: false,
             page:1, //当前页数
@@ -37,7 +38,8 @@ class OneAlarm extends React.Component{
             nodatapic:true,
             ifkai:false,//误报确认弹框
             ifmis:false,
-            miscode:''
+            miscode:'',
+         
         };
     }
     componentWillMount=()=>{
@@ -49,6 +51,9 @@ class OneAlarm extends React.Component{
     }
     componentDidMount() {
         this.handleAlerm();//报警信息列表
+        this.props.form.setFieldsValue({
+            date:[moment(moment().format('YYYY-MM-DD 00:00:00')),moment(moment().format('YYYY-MM-DD 23:59:59'))]
+        });
     }
     handleCancelAlarmImg =()=>{
         this.setState({
@@ -87,7 +92,7 @@ class OneAlarm extends React.Component{
             edate:this.state.edate,
             pagesize:18,
             pageindex:this.state.page,
-            eid:this.state.eidt,
+            cid:this.state.cidt,
         }
         post({url:'/api/alarm/getlist_foradmin',data:alarmmdata},(res)=>{
             if(res.success){
@@ -359,7 +364,7 @@ class OneAlarm extends React.Component{
                                                             <Col span={18}>
                                                                 <Row>
                                                                     <Col span={14} style={{marginLeft:'5px'}} push={1}>
-                                                                        <p className="fontstyle">{v.name}</p>
+                                                                        <p className="fontstyle">{v.cid}</p>
                                                                     </Col>
                                                                     <Col span={9} push={4} style={{textAlign:'right' }}>
                                                                         <p className="fontstyle time-col">{v.atype===1?"入侵检测":""}</p>
@@ -372,7 +377,14 @@ class OneAlarm extends React.Component{
                                                                 <p className="time-col fontstyle fontstyletime">{v.atime}</p>
                                                             </Col>
                                                             <Col span={9} push={1} style={{marginLeft:'13px'}}>
-                                                                <p className="fontstyle time-col">报警对象：{v.tags===""?"无":v.tags}</p>
+                                                                {/* <p className="fontstyle time-col">报警对象：{v.tags===""?"无":v.tags}</p> */}
+                                                                <p className="fontstyle time-col">
+                                                                {v.atype===1? <span> 　  
+                                                                     <span> {v.s_est===-1?"误报":""}</span>
+                                                                        <span>{v.s_est===0?"未处理":""}</span>
+                                                                        <span>{v.s_est===1?"报警":""}</span>
+                                                                     </span> : ""
+                                                                }</p>
                                                             </Col>
                                                         </Row>
                                                     </Col>
