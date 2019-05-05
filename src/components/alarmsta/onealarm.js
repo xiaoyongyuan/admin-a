@@ -6,7 +6,7 @@ import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import 'moment/locale/zh-cn';
 import {post} from "../../axios/tools";
 import Alarmdetails from "./Alarmdetails";
-import nodata from "../../style/imgs/nopic.png";
+import nodata from "../../style/imgs/nodata.png";
 import moment from 'moment';
 const { RangePicker } = DatePicker ;
 class OneAlarm extends React.Component{
@@ -326,8 +326,8 @@ class OneAlarm extends React.Component{
                                 <Form.Item label="日期" >
                                     {getFieldDecorator('date')(
                                         <RangePicker
-                                            showTime={{ format: 'HH:00:00' }}
-                                            format="YYYY-MM-DD HH:00:00"
+                                            showTime={{ format: 'HH:mm:ss' }}
+                                            format="YYYY-MM-DD HH:mm:ss"
                                             placeholder={['开始时间', '结束时间']}
                                         />
                                     )}
