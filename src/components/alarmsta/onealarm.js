@@ -135,26 +135,28 @@ class OneAlarm extends React.Component{
     * 开始时间、结束时间
     * */
     handleSubmit =(e)=>{
-        e.preventDefault();
         this.props.form.validateFields((err, values) => {
-            this.setState({
-                bdate:values.date&&values.date.length?values.date[0].format('YYYY-MM-DD HH:mm:ss'):'',
-                edate:values.date&&values.date.length?values.date[1].format('YYYY-MM-DD HH:mm:ss'):'',
-                pageindex:this.state.page,
-            })
-            if(!err){
-                this.setState({
-                    page:1,
-                    loadding:true,
-                },()=>{
-                    this.handleAlerm()
-                })
+            if(values.date&&values.date.length){
+                if(Date.parse(values.date[1].format('YYYY-MM-DD HH:mm:ss'))-Date.parse(values.date[0].format('YYYY-MM-DD HH:mm:ss'))<86400000){
+                    this.setState({
+                        bdate:values.date&&values.date.length?values.date[0].format('YYYY-MM-DD HH:mm:ss'):'',
+                        edate:values.date&&values.date.length?values.date[1].format('YYYY-MM-DD HH:mm:ss'):'',
+                        pageindex:this.state.page,
+                    })
+                    if(!err){
+                        this.setState({
+                            page:1,
+                            loadding:true,
+                            displaysearch:false,
+                        },()=>{
+                            this.handleAlerm()
+                        })
+                    }
+                }else{
+                    message.error('最多选择24小时');
+                }
             }
        })
-        this.setState({
-            displaysearch:false,
-        })
-        
     };
     handleStartOpenChange = (open) => {
         if (!open) {
@@ -315,7 +317,7 @@ class OneAlarm extends React.Component{
           notification.close(key);
         })
       }
-    
+  
     render(){
         const { getFieldDecorator } = this.props.form;
         return(
