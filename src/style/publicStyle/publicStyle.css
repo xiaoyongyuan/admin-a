@@ -2,3 +2,17 @@
 .titleFont{
     color: #5693F6;
 }
+/* .ant-table-thead > tr */
+.ant-table-tbody > tr:nth-child(odd) {
+    
+}
+.ant-table-tbody > tr:nth-child(even) {
+    background: #FAFAFA
+}
+
+.ant-table-thead > tr {
+    background: #F1F1F1 
+}
+/* table thead{
+    background: red !important
+} */
