@@ -41,7 +41,9 @@ class Alarmdetails extends React.Component{
        this.setState({
         loadding:true,
       });
+      this.misinf()
     } ;
+
   componentWillReceiveProps(nextProps){ //此处修改父页面参数
       if( nextProps.visible !== vis){
           vis=nextProps.visible;
@@ -55,6 +57,20 @@ class Alarmdetails extends React.Component{
                   this.componentDidMount()});
           }
       }        
+  }
+  misinf=()=>{
+    const data={
+      ccode:this.props.toson.ccode,
+      cid: this.props.toson.cid,
+      eid: this.props.toson.eidt,
+    }
+    post({url:"/api/misinformation/gets_misinfo",data:data},(res)=>{  
+      if(res){
+          this.setState({
+            wubaolength:res.data.length
+          })
+      }  
+    })
   }
   request=()=>{
     post({url:"/api/alarm/getone_foradmin",data:this.state.faths},(res)=>{        
@@ -204,13 +220,17 @@ class Alarmdetails extends React.Component{
       pic_height:_this.state.data.pic_height,
       memo:_this.state.memo,
     }
-     post({url:"/api/Misinformation/add",data:data},(res)=>{
-      if(res.success){
-        notification.close(key);
-        message.success('操作成功');
-        _this.draw();
-      }
-     })
+    if(this.state.wubaolength<3){
+       post({url:"/api/Misinformation/add",data:data},(res)=>{
+        if(res.success){
+          notification.close(key);
+          message.success('操作成功');
+          _this.draw();
+        }
+       })
+    }else{
+      message.error('最多只能添加3条误报');
+    }
      document.getElementById("memo").value="";
   }
 

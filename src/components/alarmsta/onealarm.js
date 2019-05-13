@@ -70,6 +70,7 @@ class OneAlarm extends React.Component{
                 edate:this.state.edate,   
                 ccode:v.companycode,
                 cid:v.cid,
+                eidt:this.props.query.eid,
             };
         }
         this.setState({
