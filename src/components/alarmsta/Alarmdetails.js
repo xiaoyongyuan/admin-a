@@ -97,6 +97,7 @@ class Alarmdetails extends React.Component{
       },()=>{
         this.draw();
       });
+      this.draw();
     })
   }
   onChange=(checked,text)=>{ //控制显示围界与对象
