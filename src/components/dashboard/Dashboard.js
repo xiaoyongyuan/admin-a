@@ -201,7 +201,7 @@ class Dashboard extends React.Component {
                                             <Col xl={3} xxl={2}><div className="sandian"><img src={baojingIcon} alt="" /></div></Col>
                                             <Col xl={10} xxl={12}><span className="titleFont">报警统计</span></Col>
                                         </Row>
-                                        <Calpolice falseNumber={this.state.falseNumber} alarmNumber={this.state.alarmNumber} />
+                                        <span style={{visibility:this.state.falseNumber.length===0?"hidden":"visible"}}> <Calpolice falseNumber={this.state.falseNumber} alarmNumber={this.state.alarmNumber} /></span>
                                         <div style={{width:"100%",textAlign:"center"}}><span>虚报数:{this.state.falseNumber}</span>&nbsp;&nbsp;&nbsp;
                                         <span>报警总数:{this.state.alarmNumber}</span></div>
                                     </Card>
