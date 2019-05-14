@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 /**
  * http通用工具函数
  */
@@ -24,6 +25,7 @@ export const post = async({url, msg = '接口异常',data={}},callback) =>{
   const comid=localStorage.getItem('admincomid');
   const account=localStorage.getItem('adminaccount');
 
+  // eslint-disable-next-line eqeqeq
   if(!account||account=='undefined'||!token||!comid || token=='undefined' || comid=='undefined'){
     window.location.href="#/login"
     return callback(false);

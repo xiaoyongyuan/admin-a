@@ -33,13 +33,7 @@ class Calpolice extends React.Component{
             var rate =this.props.falseNumber;
             var alarmNumber=this.props.alarmNumber;
         }
-        const linear_color = {
-            type: 'linear',
-            x: 0,
-            y: 0,
-            x2: 0,
-            y2: 1
-        };
+
         const option = {
             title: {
                 text: (rate/alarmNumber*100).toFixed(2)+"%",

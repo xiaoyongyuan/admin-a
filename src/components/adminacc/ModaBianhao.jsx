@@ -30,6 +30,7 @@ class ModaBianhao extends Component {
 
 
     componentDidUpdate = () => {
+        // eslint-disable-next-line eqeqeq
         if(this.props.code && this.props.code!=this.state.code){
             this.setState({
                 code:this.props.code
@@ -41,7 +42,6 @@ class ModaBianhao extends Component {
         }
     }
     formref = () => { //将form传给父组件由父组件控制表单提交
-        const aa=this.props.form.getFieldsValue();
         return this.props.form;
     };
     render() {

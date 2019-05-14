@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 /**
  * Created by 叶子 on 2017/7/30.
  */
@@ -24,7 +25,7 @@ export const receiveData = (data, category) => ({
  */
 
 
-export const fetchData = ({funcName, url, params, stateName}) => dispatch => {   //lff  登录在用
+export const fetchData = ({funcName, url, params, stateName}) => dispatch => { //lff  登录在用
     !stateName && (stateName = funcName); 
     dispatch(requestData(stateName));
 
