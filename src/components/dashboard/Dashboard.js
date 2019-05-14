@@ -103,7 +103,7 @@ class Dashboard extends React.Component {
                                       <div className="clear y-center">
                                           <Col xl={10} lg={8}>
                                              <div className="noBorder weiHuBackround">
-                                                 <img src={weihutuandui} />
+                                                 <img src={weihutuandui} alt="" />
                                              </div>
                                           </Col>
                                           <Col xl={10} lg={5} offset={1}>

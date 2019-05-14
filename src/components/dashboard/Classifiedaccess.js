@@ -57,7 +57,7 @@ class Classifiedaccess extends React.Component{
             option={option}
             style={{height: '167px', width: '100%'}}
             className={'react_for_echarts'}
-        />
+            />
         )
     }
 }

@@ -194,6 +194,7 @@ class Alarmdetails extends React.Component{
   selectObj=(x,y)=>{
     var crut='';
     const finalresult=this.state.data.finalresult;
+    // eslint-disable-next-line array-callback-return
     finalresult.some((el,i)=>{
       if(el.x<=x && x<=(el.x+el.w) && el.y<=y && y<=(el.y+el.h) ){
         return crut=el;

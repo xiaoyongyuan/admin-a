@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import React from 'react';
 import { DatePicker, Row, Col, Button, Modal, Pagination, Form,LocaleProvider,Spin,notification,message} from "antd";
 import "../../style/ztt/css/police.css";
