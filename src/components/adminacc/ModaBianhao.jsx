@@ -41,6 +41,7 @@ class ModaBianhao extends Component {
 
         }
     }
+    
     formref = () => { //将form传给父组件由父组件控制表单提交
         return this.props.form;
     };
